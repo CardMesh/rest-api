@@ -100,7 +100,7 @@ router.put('/:id/vcard-options', verifyToken, checkUserAccess, async (req, res) 
   res.json({ data: { vCardOptionsSchema: user.vCardOptions } });
 });
 
-router.get('/:id/vcard-options', checkUserAccess,async (req, res) => {
+router.get('/:id/vcard-options', checkUserAccess, async (req, res) => {
   const user = await User.findOne({ uuid: req.params.id })
     .exec();
   res.json({ data: user.vCardOptions });
