@@ -3,24 +3,25 @@
   "version": "1.0.0",
   "main": "app.js",
   "type": "module",
-  "scripts": {
-    "db:init": "node database/ddl.js",
-    "dev": "cross-env nodemon app.js",
-    "start": "node app.js --omit=dev",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --fix --ext .js .",
-    "deploy": "flyctl secrets import < .env-prod && flyctl deploy --build-arg NODE_ENV=production --remote-only"
-  },
+  "license": "MIT",
+  "author": "Mathias Reker",
   "repository": {
     "type": "git",
     "url": "git@github.com:meishi-project/rest-api.git"
   },
-  "author": "Mathias Reker",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/meishi-project/rest-api/issues"
   },
   "homepage": "https://meishi-rest-api.fly.dev",
+  "scripts": {
+    "db:init": "node database/ddl.js",
+    "deploy": "flyctl secrets import < .env.production && flyctl deploy --build-arg NODE_ENV=production --remote-only",
+    "dev": "cross-env nodemon app.js",
+    "format": "eslint . --fix --ext .js",
+    "lint": "eslint . --ext .js",
+    "start": "node app.js --omit=dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
@@ -29,14 +30,14 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
-    "helmet": "^6.1.5",
+    "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.1.0",
     "nodemailer": "^6.9.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "eslint": "^8.39.0",
+    "eslint": "^8.40.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5"
   }

@@ -1,6 +1,8 @@
+fly.toml
+Dockerfile
+.dockerignore
 node_modules
-.env
-.env-prod
-dist
+.git
 .idea
-public\cache
+.env
+.env.production

@@ -1,5 +1,3 @@
-# fly.toml file generated for meishi-rest-api on 2023-05-07T10:13:42+02:00
-
 app = "meishi-rest-api"
 kill_signal = "SIGINT"
 kill_timeout = 5
