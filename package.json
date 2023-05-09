@@ -1,5 +1,5 @@
 {
-  "name": "meishi-rest-api",
+  "name": "cardmesh-rest-api",
   "version": "1.0.0",
   "main": "app.js",
   "type": "module",
@@ -7,12 +7,12 @@
   "author": "Mathias Reker",
   "repository": {
     "type": "git",
-    "url": "git@github.com:meishi-project/rest-api.git"
+    "url": "git@github.com:CardMesh/rest-api.git"
   },
   "bugs": {
-    "url": "https://github.com/meishi-project/rest-api/issues"
+    "url": "https://github.com/cardmesh/rest-api/issues"
   },
-  "homepage": "https://meishi-rest-api.fly.dev",
+  "homepage": "https://cardmesh-rest-api.fly.dev",
   "scripts": {
     "db:init": "node database/ddl.js",
     "deploy": "flyctl secrets import < .env.production && flyctl deploy --build-arg NODE_ENV=production --remote-only",

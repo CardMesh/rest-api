@@ -97,9 +97,9 @@ router.post('/recover', validate(recoverRules), async (req, res) => {
 
   const resetLink = `${process.env.CORS_ALLOWED_ORIGIN}/set-new-password?email=${user.email}&token=${token}`;
 
-  const text = `You have just requested a password reset for the meishi account associated with this email address.\n\n
+  const text = `You have just requested a password reset for the cardmesh account associated with this email address.\n\n
   Reset password using the following link: \n${resetLink}\n\nIf you continue to have issues login, please
-contact support. Thank you for meishi project!`;
+contact support. Thank you for cardmesh project!`;
 
   const from = `"${process.env.DEFAULT_MAIL_SENDER}"`;
 
