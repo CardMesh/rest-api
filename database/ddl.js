@@ -6,18 +6,14 @@ dotenv.config();
 
 connection();
 
-const themes = [];
+try {
+  const defaultTheme = new Theme({
+    fontColor: 'blue',
+    backgroundColor: 'white',
+    displayMap: true,
+  });
 
-(async () => {
-  try {
-    await Theme.collection.drop();
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const theme of themes) {
-      // eslint-disable-next-line no-await-in-loop
-      await new Theme(theme).save();
-    }
-  } finally {
-    process.exit(0);
-  }
-})();
+  defaultTheme.save();
+} finally {
+  process.exit(0);
+}
