@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import fileUpload from 'express-fileupload';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
@@ -19,6 +20,8 @@ connection();
 const app = express();
 const ddos = new Ddos(ddosConfig);
 
+app.use('/uploads', express.static('uploads'));
+app.use(fileUpload());
 app.use(ddos.express);
 app.use(cors(corsOptions));
 app.use(compression());
