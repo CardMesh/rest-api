@@ -19,6 +19,7 @@ const theme = {
   displayAddress: true,
   displayMap: true,
   displayContactBtn: true,
+  logoHeight: 10
 };
 
 (async () => {

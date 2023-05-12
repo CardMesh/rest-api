@@ -39,10 +39,11 @@ router.put('/', verifyToken, roles('admin'), async (req, res) => {
 
 // TODO move endpoint
 router.post('/upload', async (req, res) => {
-  if (!req.files.logo || Object.keys(req.files.logo).length === 0) {
+  if (!req.files.file || req.files.file.size === 0) {
     return res.status(400)
       .send('No files were uploaded.');
   }
+
   const webpPath = `${path.resolve()}/uploads/${req.body.name}.webp`;
 
   fs.unlink(webpPath, (err) => {
@@ -52,7 +53,7 @@ router.post('/upload', async (req, res) => {
     }
   });
 
-  const sampleFile = req.files.logo;
+  const sampleFile = req.files.file;
   const uploadPath = `${path.resolve()}/uploads/${sampleFile.name}`;
 
   sampleFile.mv(uploadPath, (err) => {
@@ -68,16 +69,16 @@ router.post('/upload', async (req, res) => {
       .then(() => {
         fs.unlink(uploadPath, (err) => {
           if (err) {
-            res.status(500)
+            return res.status(500)
               .send('Error.');
           } else {
-            res.send('Success!');
+            return res.send('Success!');
           }
         });
       })
       .catch((err) => {
         console.error(err);
-        res.status(500)
+        return res.status(500)
           .send('Error converting and resizing file to webp.');
       });
   });
