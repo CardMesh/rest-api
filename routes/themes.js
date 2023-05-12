@@ -44,17 +44,24 @@ router.post('/upload', async (req, res) => {
       .send('No files were uploaded.');
   }
 
-  const webpPath = `${path.resolve()}/uploads/${req.body.name}.webp`;
+  const uploadsDirectory = path.resolve('uploads');
+  if (!fs.existsSync(uploadsDirectory)) {
+    fs.mkdirSync(uploadsDirectory, { recursive: true });
+  }
 
-  fs.unlink(webpPath, (err) => {
-    if (err) {
-      return res.status(500)
-        .send('Error.');
-    }
-  });
+  const webpPath = path.join(uploadsDirectory, `${req.body.name}.webp`);
+
+  console.log('test', webpPath);
+  if (fs.existsSync(webpPath)) {
+    fs.unlink(webpPath, (err) => {
+      if (err) {
+        console.error(`Error deleting file: ${err}`);
+      }
+    });
+  }
 
   const sampleFile = req.files.file;
-  const uploadPath = `${path.resolve()}/uploads/${sampleFile.name}`;
+  const uploadPath = path.join(uploadsDirectory, sampleFile.name);
 
   sampleFile.mv(uploadPath, (err) => {
     if (err) {
@@ -71,9 +78,8 @@ router.post('/upload', async (req, res) => {
           if (err) {
             return res.status(500)
               .send('Error.');
-          } else {
-            return res.send('Success!');
           }
+          return res.send('Success!');
         });
       })
       .catch((err) => {

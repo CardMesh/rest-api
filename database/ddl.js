@@ -7,6 +7,11 @@ dotenv.config();
 const theme = {
   fontColor: '#000000',
   backgroundColor: '#FFFFFF',
+  secondaryFontColor: '#FFFFFF',
+  socialIconFontColor: '#FFFFFF',
+  socialIconBackgroundColor: '#FFFFFF',
+  btnFontColor: '#FFFFFF',
+  btnBackgroundColor: '#FFFFFF',
   twitter: '',
   linkedin: '',
   facebook: '',
@@ -19,7 +24,7 @@ const theme = {
   displayAddress: true,
   displayMap: true,
   displayContactBtn: true,
-  logoHeight: 10
+  logoHeight: 10,
 };
 
 (async () => {

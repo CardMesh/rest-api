@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 const themeSchema = new mongoose.Schema({
   fontColor: String,
   backgroundColor: String,
+  secondaryFontColor: String,
+  socialIconFontColor: String,
+  socialIconBackgroundColor: String,
+  btnFontColor: String,
+  btnBackgroundColor: String,
   twitter: String,
   linkedin: String,
   facebook: String,
