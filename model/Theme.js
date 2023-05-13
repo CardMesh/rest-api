@@ -21,6 +21,7 @@ const themeSchema = new mongoose.Schema({
   displayMap: Boolean,
   displayContactBtn: Boolean,
   logoHeight: Number,
+  timeZone: String,
 });
 
 export default mongoose.model('Theme', themeSchema);

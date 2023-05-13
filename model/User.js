@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 
 const vCardOptionsSchema = new mongoose.Schema({
   firstName: String,
+  middleName: String,
   lastName: String,
   title: String,
   pronouns: String,
@@ -20,6 +21,11 @@ const vCardOptionsSchema = new mongoose.Schema({
   timeZone: String,
   gender: String,
   birthday: String,
+  role: String,
+  language: String,
+  latitude: Number,
+  longitude: Number,
+  suffix: String,
 });
 
 // Define main schema

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import saveVCard from '../util/vcard.js';
 import User from '../model/User.js';
 import validate from '../middleware/validate.js';
 import { userRules, userStatisticsLookupsRules } from './validations/users.js';
@@ -39,7 +40,8 @@ router.put('/:id/statistics/clicks', verifyToken, checkUserAccess, validate(user
 });
 
 router.get('/:id/statistics/clicks', verifyToken, checkUserAccess, async (req, res) => {
-  const user = await User.findOne({ uuid: req.params.id }).exec();
+  const user = await User.findOne({ uuid: req.params.id })
+    .exec();
   const { entryPoint } = user.statistics;
 
   res.json({ data: { entryPoint } });
@@ -77,7 +79,8 @@ router.put('/:id/settings/:setting', verifyToken, checkUserAccess, async (req, r
         .json({ error: `Invalid setting: ${setting}` });
   }
 
-  const user = await User.findOneAndUpdate({ uuid: req.params.id }, updateField, { new: true }).exec();
+  const user = await User.findOneAndUpdate({ uuid: req.params.id }, updateField, { new: true })
+    .exec();
 
   if (!user) {
     return res.status(404)
@@ -89,21 +92,31 @@ router.put('/:id/settings/:setting', verifyToken, checkUserAccess, async (req, r
 
 router.put('/:id/vcard-options', verifyToken, checkUserAccess, async (req, res) => {
   const vCardOptions = req.body;
+  const uuid = req.params.id;
 
   const user = await User.findOneAndUpdate(
-    { uuid: req.params.id },
+    { uuid },
     { vCardOptions },
     { new: true },
   )
     .exec();
 
+  saveVCard(vCardOptions, uuid);
+
   res.json({ data: { vCardOptionsSchema: user.vCardOptions } });
 });
 
 router.get('/:id/vcard-options', checkUserAccess, async (req, res) => {
-  const user = await User.findOne({ uuid: req.params.id })
+  const uuid = req.params.id;
+  const user = await User.findOne({ uuid })
     .exec();
-  res.json({ data: user.vCardOptions });
+
+  const vCardOptions = {
+    ...user.vCardOptions.toObject(),
+    uuid
+  };
+
+  res.json({ data: vCardOptions });
 });
 
 router.delete('/:id', verifyToken, roles('admin'), async (req, res) => {
