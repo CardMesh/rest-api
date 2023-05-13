@@ -26,6 +26,11 @@ const vCardOptionsSchema = new mongoose.Schema({
   latitude: Number,
   longitude: Number,
   suffix: String,
+  twitter: String,
+  linkedin: String,
+  facebook: String,
+  instagram: String,
+  pinterest: String,
 });
 
 // Define main schema
