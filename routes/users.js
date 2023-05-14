@@ -101,7 +101,8 @@ router.put('/:id/vcard-options', verifyToken, checkUserAccess, async (req, res) 
   )
     .exec();
 
-  saveVCard(vCardOptions, uuid);
+  await saveVCard(vCardOptions, uuid, '3');
+  await saveVCard(vCardOptions, uuid, '4');
 
   res.json({ data: { vCardOptionsSchema: user.vCardOptions } });
 });
