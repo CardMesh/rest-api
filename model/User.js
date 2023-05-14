@@ -14,6 +14,7 @@ const vCardOptionsSchema = new mongoose.Schema({
   email: String,
   web: String,
   street: String,
+  storey: String,
   state: String,
   city: String,
   postalCode: String,
