@@ -72,11 +72,12 @@ const user = {
       },
     },
     socialMedia: {
-      twitter: 'john_doe',
-      linkedin: 'john-doe',
-      facebook: 'johndoe',
-      instagram: 'johndoe',
-      pinterest: 'johndoe',
+      twitter: '',
+      linkedin: '',
+      facebook: '',
+      instagram: '',
+      pinterest: '',
+      github: '',
     },
     personal: {
       birthday: '1990-01-01',

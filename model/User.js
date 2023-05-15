@@ -42,6 +42,7 @@ const vCardOptionsSchema = new mongoose.Schema({
     facebook: String,
     instagram: String,
     pinterest: String,
+    github: String,
   },
   personal: {
     birthday: String, // TODO use in frontend
