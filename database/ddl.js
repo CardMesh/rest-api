@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 import Theme from '../model/Theme.js';
+import User from '../model/User.js'; // Import the User model
 import connectToDatabase from './connection.js';
 
 dotenv.config();
@@ -22,14 +24,86 @@ const theme = {
   logoHeight: 10,
 };
 
+const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
+const hashedPassword = await bcrypt.hash('Demodemo!', salt);
+
+const user = {
+  name: 'Test User',
+  email: 'demo@demo.com',
+  password: hashedPassword,
+  settings: {
+    theme: 'auto',
+    language: 'en',
+  },
+  role: 'admin',
+  vCardOptions: {
+    name: {
+      firstName: 'John',
+      middleName: 'D',
+      lastName: 'Doe',
+      suffix: 'Jr',
+    },
+    professional: {
+      title: 'Software Engineer',
+      company: 'Example Company',
+      role: 'Developer',
+      bio: 'A software engineer with a passion for code.',
+    },
+    contact: {
+      phone: {
+        number: '1234567890',
+        countryCode: '+1',
+        extension: '123',
+      },
+      email: 'john.doe@example.com',
+      web: 'https://www.example.com',
+    },
+    location: {
+      street: '123 Example Street',
+      storey: '2nd Floor',
+      city: 'New York',
+      state: 'NY',
+      postalCode: '10001',
+      country: 'USA',
+      timeZone: 'Eastern Time (US & Canada)',
+      coordinates: {
+        latitude: 40.712776,
+        longitude: -74.005974,
+      },
+    },
+    socialMedia: {
+      twitter: 'john_doe',
+      linkedin: 'john-doe',
+      facebook: 'johndoe',
+      instagram: 'johndoe',
+      pinterest: 'johndoe',
+    },
+    personal: {
+      birthday: '1990-01-01',
+      pronouns: 'He/Him',
+    },
+  },
+  statistics: {
+    entryPoint: {
+      qr: 0,
+      nfc: 0,
+      url: 0,
+    },
+  },
+};
+
 (async () => {
   try {
     await connectToDatabase();
 
     const ThemeCollection = Theme.collection;
+    const UserCollection = User.collection;
+
     await ThemeCollection.drop();
+    await UserCollection.drop(); // Drop the User collection if it exists
 
     await new Theme(theme).save();
+    await new User(user).save(); // Save the new User
 
     console.log('Database setup completed.');
   } catch (error) {

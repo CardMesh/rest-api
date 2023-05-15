@@ -37,24 +37,24 @@ const saveVCard = async (vCardOptions, uuid, version = '3') => {
 
   const card = new vCard();
 
-  card.set('fn', `${vCardOptions.title} ${vCardOptions.firstName} ${vCardOptions.lastName}`);
-  card.set('n', `${vCardOptions.lastName};${vCardOptions.firstName};${vCardOptions.middleName};${vCardOptions.title};${vCardOptions.suffix}`);
+  card.set('fn', `${vCardOptions.professional.title} ${vCardOptions.name.firstName} ${vCardOptions.name.lastName}`);
+  card.set('n', `${vCardOptions.name.lastName};${vCardOptions.name.firstName};${vCardOptions.name.middleName};${vCardOptions.professional.title};${vCardOptions.name.suffix}`);
   card.set('org', 'Example, Inc.'); // TODO
-  card.set('title', vCardOptions.title);
-  card.set('email', vCardOptions.email, version === '4' ? { type: 'work' } : undefined);
-  card.set('url', vCardOptions.web, version === '4' ? { type: 'work' } : undefined);
+  card.set('title', vCardOptions.professional.title);
+  card.set('email', vCardOptions.contact.email, version === '4' ? { type: 'work' } : undefined);
+  card.set('url', vCardOptions.contact.web, version === '4' ? { type: 'work' } : undefined);
   card.set('rev', getCurrentTime());
   card.set('uid', `urn:uuid:${uuid}`);
-  card.set('note', vCardOptions.bio);
-  card.set('tz', vCardOptions.timeZone);
-  card.set('adr', `;;${vCardOptions.street}${vCardOptions.storey ? `, ${vCardOptions.storey}` : ''} ;${vCardOptions.city};${vCardOptions.state};${vCardOptions.postalCode};${vCardOptions.country}`, version === '4' ? { type: 'work' } : undefined);
+  card.set('note', vCardOptions.professional.bio);
+  card.set('tz', vCardOptions.location.timeZone);
+  card.set('adr', `;;${vCardOptions.location.street}${vCardOptions.location.storey ? `, ${vCardOptions.location.storey}` : ''} ;${vCardOptions.location.city};${vCardOptions.location.state};${vCardOptions.location.postalCode};${vCardOptions.location.country}`, version === '4' ? { type: 'work' } : undefined);
   card.set('source', `/${uuid}/profile.vcf`);
   card.set('photo', `/${uuid}/profile.webp`, { type: 'webp' }); // TODO
   card.set('logo', '/logo.webp', { type: 'webp' }); // TODO
-  card.set('geo', `geo:${vCardOptions.latitude},${vCardOptions.longitude}`);
-  card.set('bday', vCardOptions.birthday);
+  card.set('geo', `geo:${vCardOptions.location.coordinates.latitude},${vCardOptions.location.coordinates.longitude}`);
+  card.set('bday', vCardOptions.personal.birthday);
   card.set('kind', 'organization');
-  card.set('tel', vCardOptions.phone, version === '4' ? { type: 'work' } : undefined);
+  card.set('tel', vCardOptions.contact.phone.number, version === '4' ? { type: 'work' } : undefined);
   if (version === '3') {
     card.set('profile', 'vcard');
   }
@@ -115,6 +115,5 @@ export default saveVCard;
 };
 
  export default saveVCard;
-
 
  */

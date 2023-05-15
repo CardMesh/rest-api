@@ -2,34 +2,51 @@ import mongoose from 'mongoose';
 import { randomUUID } from 'crypto';
 
 const vCardOptionsSchema = new mongoose.Schema({
-  firstName: String,
-  middleName: String,
-  lastName: String,
-  title: String,
-  pronouns: String,
-  company: String,
-  bio: String,
-  phone: String,
-  cell: String,
-  email: String,
-  web: String,
-  street: String,
-  storey: String,
-  state: String,
-  city: String,
-  postalCode: String,
-  country: String,
-  timeZone: String,
-  birthday: String,
-  role: String,
-  latitude: Number,
-  longitude: Number,
-  suffix: String,
-  twitter: String,
-  linkedin: String,
-  facebook: String,
-  instagram: String,
-  pinterest: String,
+  name: {
+    firstName: String,
+    middleName: String,
+    lastName: String,
+    suffix: String,
+  },
+  professional: {
+    title: String,
+    company: String,
+    role: String,
+    bio: String,
+  },
+  contact: {
+    phone: {
+      number: String,
+      countryCode: String,
+      extension: String,
+    },
+    email: String,
+    web: String,
+  },
+  location: {
+    street: String,
+    storey: String,
+    city: String,
+    state: String,
+    postalCode: String,
+    country: String,
+    timeZone: String,
+    coordinates: {
+      latitude: Number,
+      longitude: Number,
+    },
+  },
+  socialMedia: {
+    twitter: String,
+    linkedin: String,
+    facebook: String,
+    instagram: String,
+    pinterest: String,
+  },
+  personal: {
+    birthday: String, // TODO use in frontend
+    pronouns: String,
+  },
 });
 
 // Define main schema

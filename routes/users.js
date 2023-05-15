@@ -94,6 +94,8 @@ router.put('/:id/vcard-options', verifyToken, checkUserAccess, async (req, res) 
   const vCardOptions = req.body;
   const uuid = req.params.id;
 
+  // return res.json({ data: { vCardOptionsSchema: req.body } });
+  // console.log('res',vCardOptions);
   const user = await User.findOneAndUpdate(
     { uuid },
     { vCardOptions },
@@ -114,7 +116,7 @@ router.get('/:id/vcard-options', checkUserAccess, async (req, res) => {
 
   const vCardOptions = {
     ...user.vCardOptions.toObject(),
-    uuid
+    uuid,
   };
 
   res.json({ data: vCardOptions });
