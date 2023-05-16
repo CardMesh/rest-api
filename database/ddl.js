@@ -7,13 +7,13 @@ import connectToDatabase from './connection.js';
 dotenv.config();
 
 const theme = {
-  fontColor: '#000000',
-  backgroundColor: '#FFFFFF',
-  secondaryFontColor: '#FFFFFF',
-  socialIconFontColor: '#FFFFFF',
-  socialIconBackgroundColor: '#FFFFFF',
-  btnFontColor: '#FFFFFF',
-  btnBackgroundColor: '#FFFFFF',
+  fontColor: '#182d30',
+  backgroundColor: '#dee1dd',
+  secondaryFontColor: '#2f575d',
+  socialIconFontColor: '#182d30',
+  socialIconBackgroundColor: '#dee1dd',
+  btnFontColor: '#dee1dd',
+  btnBackgroundColor: '#182d30',
   displayPhone: true,
   displaySms: true,
   displayEmail: true,
@@ -21,7 +21,7 @@ const theme = {
   displayAddress: true,
   displayMap: true,
   displayContactBtn: true,
-  logoHeight: 10,
+  logoHeight: 15,
 };
 
 const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
