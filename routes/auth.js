@@ -12,7 +12,7 @@ import sendMail from '../util/mail.js';
 const router = Router();
 
 router.post('/signup', validate(signupRules), async (req, res) => {
-  const { email, name } = req.body;
+  const { email, name, sendMail } = req.body;
 
   const isEmailExist = await User.findOne({ email });
   if (isEmailExist) {
@@ -35,8 +35,12 @@ router.post('/signup', validate(signupRules), async (req, res) => {
     name,
     email,
     password: hashedPassword,
-    vCardOptions: {} // TODO it should be possible without this..
+    vCardOptions: {}, // TODO it should be possible without this..
   });
+
+  if (sendMail) {
+    // TODO send mail
+  }
 
   try {
     const savedUser = await user.save();
@@ -92,27 +96,29 @@ router.post('/login', validate(loginRules), async (req, res) => {
 });
 
 router.post('/recover', validate(recoverRules), async (req, res) => {
-  const { email } = req.body;
+  const { uuid } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ uuid });
 
   if (!user) {
-    res.status(400).json({ errors: ['Email does not exists'] });
-    return;
+    return res.status(400).json({ errors: ['User does not exists'] });
   }
 
   const token = createHash('sha256').update(user.password).digest('hex');
 
-  const resetLink = `${process.env.CORS_ALLOWED_ORIGIN}/set-new-password?email=${user.email}&token=${token}`;
+  const resetLink = `${process.env.CORS_ALLOWED_ORIGIN}/reset?uuid=${user.uuid}&token=${token}&email=${user.email}`;
 
   const text = `You have just requested a password reset for the cardmesh account associated with this email address.\n\n
   Reset password using the following link: \n${resetLink}\n\nIf you continue to have issues login, please
 contact support. Thank you for cardmesh project!`;
 
-  const from = `"${process.env.DEFAULT_MAIL_SENDER}"`;
+  const from = `"${process.env.DEFAULT_MAIL_SENDER || 'mathias@reker.dk'}"`;
+
+  // Log the email content
+  console.log('Subject:', 'Reset password');
+  console.log('Email Text:', text);
 
   try {
-    // eslint-disable-next-line no-shadow
     const mail = await sendMail(from, user.email, 'Reset password', text);
     res.json({
       data: {
@@ -126,9 +132,11 @@ contact support. Thank you for cardmesh project!`;
 
 router.put('/reset', validate(resetRules), async (req, res) => {
   const { email, token, password } = req.body;
+  console.log(email);
 
   const user = await User.findOne({ email });
 
+  console.log(user);
   if (!user) {
     res.status(400).json({ errors: ['Email does not exists'] });
     return;
@@ -137,10 +145,9 @@ router.put('/reset', validate(resetRules), async (req, res) => {
   const hashedToken = createHash('sha256').update(user.password).digest('hex');
 
   if (token !== hashedToken) {
-    res.status(400).json({
+    return res.status(400).json({
       errors: ['The token is invalid'],
     });
-    return;
   }
 
   const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
