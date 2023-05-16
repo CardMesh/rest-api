@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { createHash } from 'crypto';
+import { createHash, randomBytes } from 'crypto';
 import User from '../model/User.js';
 import {
   loginRules, recoverRules, resetRules, signupRules,
@@ -12,13 +12,20 @@ import sendMail from '../util/mail.js';
 const router = Router();
 
 router.post('/signup', validate(signupRules), async (req, res) => {
-  const { email, name, password } = req.body;
+  const { email, name } = req.body;
 
   const isEmailExist = await User.findOne({ email });
   if (isEmailExist) {
     res.status(400).json({ errors: ['Email already exists'] });
     return;
   }
+
+  // Generate random password
+  const generatePassword = (length) => randomBytes(length)
+    .toString('base64')
+    .slice(0, length);
+
+  const password = generatePassword(10);
 
   // hash the password
   const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
@@ -28,6 +35,7 @@ router.post('/signup', validate(signupRules), async (req, res) => {
     name,
     email,
     password: hashedPassword,
+    vCardOptions: {} // TODO it should be possible without this..
   });
 
   try {

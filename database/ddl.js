@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import Theme from '../model/Theme.js';
-import User from '../model/User.js'; // Import the User model
+import User from '../model/User.js';
 import connectToDatabase from './connection.js';
 
 dotenv.config();
