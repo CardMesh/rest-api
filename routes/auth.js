@@ -2,6 +2,7 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { createHash, randomBytes } from 'crypto';
+import mjml from 'mjml';
 import User from '../model/User.js';
 import {
   loginRules, recoverRules, resetRules, signupRules,
@@ -106,20 +107,37 @@ router.post('/recover', validate(recoverRules), async (req, res) => {
 
   const token = createHash('sha256').update(user.password).digest('hex');
 
-  const resetLink = `${process.env.CORS_ALLOWED_ORIGIN}/reset?uuid=${user.uuid}&token=${token}&email=${user.email}`;
+  const resetLink = `${process.env.BASE_URL_FRONT}/reset?uuid=${user.uuid}&token=${token}&email=${user.email}`;
 
-  const text = `You have just requested a password reset for the cardmesh account associated with this email address.\n\n
-  Reset password using the following link: \n${resetLink}\n\nIf you continue to have issues login, please
-contact support. Thank you for cardmesh project!`;
+  const mjmlContent = `<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-text color="#183b56"></mj-text>
+      <mj-font name="Work Sans" href="https://fonts.googleapis.com/css?family=Work+Sans:400,300,600"></mj-font>
+      <mj-all font-size="14px" line-height="26px" font-family="Work Sans,sans-serif,Arial"></mj-all>
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#ebf2fa">
+    <mj-section></mj-section>
+    <mj-section full-width="full-width">
+      <mj-column background-color="#fff" css-class="body-section" border-top="4px solid #1c4e80" padding="15px">
+        <mj-text font-size="24px" align="left">Hello Mathias</mj-text>
+        <mj-text>Welcome! Your account has been created. To complete your registration, please create a password by following the link below:</mj-text>
+        <mj-button href="${resetLink}" background-color="#1c4e80">Create Password</mj-button>
+        <mj-divider border-width="1px" border-color="#1c4e80" border-style="dashed"></mj-divider>
+        <mj-text>Best regards,<br />
+          The CardMesh Team</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>`;
+
+  const htmlOutput = mjml(mjmlContent).html;
 
   const from = `"${process.env.DEFAULT_MAIL_SENDER || 'mathias@reker.dk'}"`;
 
-  // Log the email content
-  console.log('Subject:', 'Reset password');
-  console.log('Email Text:', text);
-
   try {
-    const mail = await sendMail(from, user.email, 'Reset password', text);
+    const mail = await sendMail(from, user.email, 'Reset password', htmlOutput);
     res.json({
       data: {
         mail,

@@ -4,7 +4,7 @@ const getAuth = async (testAccount, NODE_ENV, SMTP_USER, SMTP_PASSWORD) => (NODE
   ? { user: testAccount.user, pass: testAccount.pass }
   : { user: SMTP_USER, pass: SMTP_PASSWORD });
 
-const sendMail = async (from, to, subject, text) => {
+const sendMail = async (from, to, subject, html) => {
   const testAccount = await nodemailer.createTestAccount();
 
   const {
@@ -28,7 +28,7 @@ const sendMail = async (from, to, subject, text) => {
     from,
     to,
     subject,
-    text,
+    html,
   });
 
   if (NODE_ENV === 'development') {
