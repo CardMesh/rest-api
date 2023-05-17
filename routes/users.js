@@ -10,7 +10,7 @@ import checkUserAccess from '../middleware/checkUserAccess.js';
 const router = Router();
 
 // TODO make it possible to edit the whole admin object
-router.put('/:id', roles('admin'), verifyToken, checkUserAccess, validate(userRules), async (req, res) => {
+router.put('/:id', verifyToken, roles(['admin']), checkUserAccess, validate(userRules), async (req, res) => {
   const { name } = req.body;
   const { id } = req.params.id;
 
@@ -24,7 +24,7 @@ router.put('/:id', roles('admin'), verifyToken, checkUserAccess, validate(userRu
   res.json({ data: { name: user.name } });
 });
 
-router.put('/:id/statistics/clicks', verifyToken, checkUserAccess, validate(userStatisticsLookupsRules), async (req, res) => {
+router.put('/:id/statistics/clicks', validate(userStatisticsLookupsRules), async (req, res) => {
   const { entryPoint } = req.body;
   const update = {};
   update[`statistics.entryPoint.${entryPoint}`] = 1;
@@ -90,7 +90,7 @@ router.put('/:id/settings/:setting', verifyToken, checkUserAccess, async (req, r
   res.json({ data: responseData });
 });
 
-router.put('/:id/vcard-options', verifyToken, checkUserAccess, async (req, res) => {
+router.put('/:id/vcard-options',verifyToken, checkUserAccess, async (req, res) => {
   const vCardOptions = req.body;
   const uuid = req.params.id;
 
@@ -120,7 +120,7 @@ router.get('/:id/vcard-options', async (req, res) => {
   res.json({ data: vCardOptions });
 });
 
-router.delete('/:id', verifyToken, roles('admin'), async (req, res) => {
+router.delete('/:id', verifyToken, roles(['admin']), async (req, res) => {
   const { id } = req.params;
 
   const user = await User.findOneAndDelete({ uuid: id })

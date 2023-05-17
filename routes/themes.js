@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.put('/', verifyToken, roles('admin'), async (req, res) => {
+router.put('/', verifyToken, roles(['admin', 'editor']), async (req, res) => {
   try {
     const options = req.body;
 

@@ -9,10 +9,12 @@ import {
 } from './validations/auth.js';
 import validate from '../middleware/validate.js';
 import sendMail from '../util/mail.js';
+import roles from '../middleware/roles.js';
+import verifyToken from '../middleware/verify-token.js';
 
 const router = Router();
 
-router.post('/signup', validate(signupRules), async (req, res) => {
+router.post('/signup', verifyToken, roles(['admin']), validate(signupRules), async (req, res) => {
   const {
     email,
     name,
@@ -22,9 +24,8 @@ router.post('/signup', validate(signupRules), async (req, res) => {
 
   const isEmailExist = await User.findOne({ email });
   if (isEmailExist) {
-    res.status(400)
+    return res.status(400)
       .json({ errors: ['Email already exists'] });
-    return;
   }
 
   // Generate random password
@@ -102,13 +103,13 @@ router.post('/login', validate(loginRules), async (req, res) => {
         email: user.email,
         uuid: user.uuid,
         token,
-        // eslint-disable-next-line no-underscore-dangle
         createdAt: user._id.getTimestamp(),
+        role: user.role
       },
     });
 });
 
-router.post('/recover', validate(recoverRules), async (req, res) => {
+router.post('/recover', verifyToken, roles(['admin']), validate(recoverRules), async (req, res) => {
   const { uuid } = req.body;
 
   const user = await User.findOne({ uuid });
