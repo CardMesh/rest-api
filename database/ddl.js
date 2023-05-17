@@ -52,7 +52,7 @@ const user = {
     contact: {
       phone: {
         number: '1234567890',
-        countryCode: '+1',
+        countryCode: '1',
         extension: '123',
       },
       email: 'john.doe@example.com',

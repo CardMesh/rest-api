@@ -13,11 +13,17 @@ import sendMail from '../util/mail.js';
 const router = Router();
 
 router.post('/signup', validate(signupRules), async (req, res) => {
-  const { email, name, sendMail } = req.body;
+  const {
+    email,
+    name,
+    role,
+    sendMail,
+  } = req.body;
 
   const isEmailExist = await User.findOne({ email });
   if (isEmailExist) {
-    res.status(400).json({ errors: ['Email already exists'] });
+    res.status(400)
+      .json({ errors: ['Email already exists'] });
     return;
   }
 
@@ -36,6 +42,7 @@ router.post('/signup', validate(signupRules), async (req, res) => {
     name,
     email,
     password: hashedPassword,
+    role,
     vCardOptions: {}, // TODO it should be possible without this..
   });
 
@@ -47,31 +54,35 @@ router.post('/signup', validate(signupRules), async (req, res) => {
     const savedUser = await user.save();
     res.json({ data: { userId: savedUser.uuid } });
   } catch (err) {
-    res.status(400).json({ errors: [err] });
+    res.status(400)
+      .json({ errors: [err] });
   }
 });
 
 router.post('/login', validate(loginRules), async (req, res) => {
-  const { email, password } = req.body;
+  const {
+    email,
+    password,
+  } = req.body;
 
   const user = await User.findOne({ email });
 
   const loginError = 'A user with this combination of credentials was not found.';
 
   if (!user) {
-    res.status(400).json({
-      errors: [loginError],
-    });
-    return;
+    return res.status(400)
+      .json({
+        errors: [loginError],
+      });
   }
 
   const validPassword = await bcrypt.compare(password, user.password);
 
   if (!validPassword) {
-    res.status(400).json({
-      errors: [loginError],
-    });
-    return;
+    return res.status(400)
+      .json({
+        errors: [loginError],
+      });
   }
 
   // create token
@@ -84,16 +95,17 @@ router.post('/login', validate(loginRules), async (req, res) => {
     { expiresIn: +process.env.JWT_EXPIRATION_INTERVAL },
   );
 
-  res.header('Authorization', token).json({
-    data: {
-      name: user.name,
-      email: user.email,
-      uuid: user.uuid,
-      token,
-      // eslint-disable-next-line no-underscore-dangle
-      createdAt: user._id.getTimestamp(),
-    },
-  });
+  res.header('Authorization', token)
+    .json({
+      data: {
+        name: user.name,
+        email: user.email,
+        uuid: user.uuid,
+        token,
+        // eslint-disable-next-line no-underscore-dangle
+        createdAt: user._id.getTimestamp(),
+      },
+    });
 });
 
 router.post('/recover', validate(recoverRules), async (req, res) => {
@@ -102,10 +114,13 @@ router.post('/recover', validate(recoverRules), async (req, res) => {
   const user = await User.findOne({ uuid });
 
   if (!user) {
-    return res.status(400).json({ errors: ['User does not exists'] });
+    return res.status(400)
+      .json({ errors: ['User does not exists'] });
   }
 
-  const token = createHash('sha256').update(user.password).digest('hex');
+  const token = createHash('sha256')
+    .update(user.password)
+    .digest('hex');
 
   const resetLink = `${process.env.BASE_URL_FRONT}/reset?uuid=${user.uuid}&token=${token}&email=${user.email}`;
 
@@ -144,28 +159,37 @@ router.post('/recover', validate(recoverRules), async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(404).json({ errors: [err] });
+    res.status(404)
+      .json({ errors: [err] });
   }
 });
 
 router.put('/reset', validate(resetRules), async (req, res) => {
-  const { email, token, password } = req.body;
+  const {
+    email,
+    token,
+    password,
+  } = req.body;
   console.log(email);
 
   const user = await User.findOne({ email });
 
   console.log(user);
   if (!user) {
-    res.status(400).json({ errors: ['Email does not exists'] });
+    res.status(400)
+      .json({ errors: ['Email does not exists'] });
     return;
   }
 
-  const hashedToken = createHash('sha256').update(user.password).digest('hex');
+  const hashedToken = createHash('sha256')
+    .update(user.password)
+    .digest('hex');
 
   if (token !== hashedToken) {
-    return res.status(400).json({
-      errors: ['The token is invalid'],
-    });
+    return res.status(400)
+      .json({
+        errors: ['The token is invalid'],
+      });
   }
 
   const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
