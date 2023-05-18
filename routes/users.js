@@ -47,7 +47,7 @@ router.get('/:id/statistics/clicks', verifyToken, checkUserAccess, async (req, r
   res.json({ data: { entryPoint } });
 });
 
-router.get('/', verifyToken, roles('admin'), async (req, res) => {
+/* router.get('/', verifyToken, roles('admin'), async (req, res) => {
   try {
     const users = await User.find()
       .select('email name role uuid');
@@ -57,6 +57,66 @@ router.get('/', verifyToken, roles('admin'), async (req, res) => {
     console.error('Error fetching users:', err);
     res.status(500)
       .json({ error: 'Error fetching users' });
+  }
+}); */
+router.get('/', verifyToken, roles('admin'), async (req, res) => {
+  try {
+    const page = +req.query.page || 1;
+    const limit = +req.query.limit || 10;
+    const searchQuery = req.query.search || '';
+
+    // Calculate the number of documents to skip
+    const skipDocs = (page - 1) * limit;
+
+    // Create a regex pattern to perform case-insensitive search
+    const searchPattern = new RegExp(searchQuery, 'i');
+
+    // Find users with pagination and search
+    const query = User.find()
+      .select('email name role uuid')
+      .skip(skipDocs)
+      .limit(limit);
+
+    if (searchQuery) {
+      query.or([
+        { email: searchPattern },
+        { name: searchPattern },
+        { role: searchPattern },
+        { uuid: searchPattern }
+      ]);
+    }
+
+    const users = await query;
+
+    // Get the total count of documents matching the search query
+    const totalUsers = await User.countDocuments({
+      $or: [
+        { email: searchPattern },
+        { name: searchPattern },
+        { role: searchPattern },
+        { uuid: searchPattern }
+      ]
+    });
+
+    // Prepare pagination metadata
+    const totalPages = Math.ceil(totalUsers / limit);
+    const nextPage = page < totalPages ? page + 1 : null;
+    const prevPage = page > 1 ? page - 1 : null;
+
+    res.status(200).json({
+      data: users,
+      pagination: {
+        page,
+        limit,
+        totalUsers,
+        totalPages,
+        nextPage,
+        prevPage,
+      },
+    });
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    res.status(500).json({ error: 'Error fetching users' });
   }
 });
 
@@ -90,7 +150,7 @@ router.put('/:id/settings/:setting', verifyToken, checkUserAccess, async (req, r
   res.json({ data: responseData });
 });
 
-router.put('/:id/vcard-options',verifyToken, checkUserAccess, async (req, res) => {
+router.put('/:id/vcard-options', verifyToken, checkUserAccess, async (req, res) => {
   const vCardOptions = req.body;
   const uuid = req.params.id;
 
