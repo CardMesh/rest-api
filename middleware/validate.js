@@ -8,6 +8,7 @@ export default (validations) => async (req, res, next) => {
   if (errors.isEmpty()) {
     next();
   } else {
-    res.status(422).json({ errors: errors.array() });
+    res.status(422)
+      .json({ errors: errors.array() });
   }
 };

@@ -104,7 +104,7 @@ router.post('/login', validate(loginRules), async (req, res) => {
         uuid: user.uuid,
         token,
         createdAt: user._id.getTimestamp(),
-        role: user.role
+        role: user.role,
       },
     });
 });

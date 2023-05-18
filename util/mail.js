@@ -1,8 +1,14 @@
 import nodemailer from 'nodemailer';
 
 const getAuth = async (testAccount, NODE_ENV, SMTP_USER, SMTP_PASSWORD) => (NODE_ENV === 'development'
-  ? { user: testAccount.user, pass: testAccount.pass }
-  : { user: SMTP_USER, pass: SMTP_PASSWORD });
+  ? {
+    user: testAccount.user,
+    pass: testAccount.pass,
+  }
+  : {
+    user: SMTP_USER,
+    pass: SMTP_PASSWORD,
+  });
 
 const sendMail = async (from, to, subject, html) => {
   const testAccount = await nodemailer.createTestAccount();

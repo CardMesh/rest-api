@@ -47,18 +47,6 @@ router.get('/:id/statistics/clicks', verifyToken, checkUserAccess, async (req, r
   res.json({ data: { entryPoint } });
 });
 
-/* router.get('/', verifyToken, roles('admin'), async (req, res) => {
-  try {
-    const users = await User.find()
-      .select('email name role uuid');
-    res.status(200)
-      .json({ data: users });
-  } catch (err) {
-    console.error('Error fetching users:', err);
-    res.status(500)
-      .json({ error: 'Error fetching users' });
-  }
-}); */
 router.get('/', verifyToken, roles('admin'), async (req, res) => {
   try {
     const page = +req.query.page || 1;
@@ -82,7 +70,7 @@ router.get('/', verifyToken, roles('admin'), async (req, res) => {
         { email: searchPattern },
         { name: searchPattern },
         { role: searchPattern },
-        { uuid: searchPattern }
+        { uuid: searchPattern },
       ]);
     }
 
@@ -94,8 +82,8 @@ router.get('/', verifyToken, roles('admin'), async (req, res) => {
         { email: searchPattern },
         { name: searchPattern },
         { role: searchPattern },
-        { uuid: searchPattern }
-      ]
+        { uuid: searchPattern },
+      ],
     });
 
     // Prepare pagination metadata
@@ -103,20 +91,22 @@ router.get('/', verifyToken, roles('admin'), async (req, res) => {
     const nextPage = page < totalPages ? page + 1 : null;
     const prevPage = page > 1 ? page - 1 : null;
 
-    res.status(200).json({
-      data: users,
-      pagination: {
-        page,
-        limit,
-        totalUsers,
-        totalPages,
-        nextPage,
-        prevPage,
-      },
-    });
+    res.status(200)
+      .json({
+        data: users,
+        pagination: {
+          page,
+          limit,
+          totalUsers,
+          totalPages,
+          nextPage,
+          prevPage,
+        },
+      });
   } catch (err) {
     console.error('Error fetching users:', err);
-    res.status(500).json({ error: 'Error fetching users' });
+    res.status(500)
+      .json({ error: 'Error fetching users' });
   }
 });
 
