@@ -176,7 +176,7 @@ const userSchema = new mongoose.Schema({
     theme: {
       type: String,
       required: true,
-      default: 'auto',
+      default: 'dark',
     },
     language: {
       type: String,

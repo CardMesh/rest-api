@@ -32,7 +32,7 @@ const user = {
   email: 'demo@demo.com',
   password: hashedPassword,
   settings: {
-    theme: 'auto',
+    theme: 'dark',
     language: 'en',
   },
   role: 'admin',
@@ -65,7 +65,7 @@ const user = {
       state: 'NY',
       postalCode: '10001',
       country: 'USA',
-      timeZone: 'Eastern Time (US & Canada)',
+      timeZone: 'Europe/Copenhagen',
       coordinates: {
         latitude: 40.712776,
         longitude: -74.005974,

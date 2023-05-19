@@ -21,6 +21,11 @@ router.put('/:id', verifyToken, roles(['admin']), checkUserAccess, validate(user
   )
     .exec();
 
+  if (!user) {
+    return res.status(404)
+      .json({ message: 'User not found' });
+  }
+
   res.json({ data: { name: user.name } });
 });
 
@@ -42,6 +47,11 @@ router.post('/:id/statistics/clicks', async (req, res) => {
 router.get('/:id/statistics/clicks', async (req, res) => {
   const user = await User.findOne({ uuid: req.params.id })
     .exec();
+
+  if (!user) {
+    return res.status(404)
+      .json({ message: 'User not found' });
+  }
 
   const today = new Date();
 
@@ -96,6 +106,12 @@ router.get('/:id/statistics/clicks', async (req, res) => {
 router.get('/:id/statistics/clicks', verifyToken, checkUserAccess, async (req, res) => {
   const user = await User.findOne({ uuid: req.params.id })
     .exec();
+
+  if (!user) {
+    return res.status(404)
+      .json({ message: 'User not found' });
+  }
+
   const { source } = user.statistics;
 
   res.json({ data: { source } });
@@ -205,6 +221,11 @@ router.put('/:id/vcard-options', verifyToken, checkUserAccess, async (req, res) 
   )
     .exec();
 
+  if (!user) {
+    return res.status(404)
+      .json({ message: 'User not found' });
+  }
+
   await saveVCard(vCardOptions, uuid, '3');
   await saveVCard(vCardOptions, uuid, '4');
 
@@ -213,8 +234,14 @@ router.put('/:id/vcard-options', verifyToken, checkUserAccess, async (req, res) 
 
 router.get('/:id/vcard-options', async (req, res) => {
   const uuid = req.params.id;
+
   const user = await User.findOne({ uuid })
     .exec();
+
+  if (!user) {
+    return res.status(404)
+      .json({ message: 'User not found' });
+  }
 
   const vCardOptions = {
     ...user.vCardOptions.toObject(),
@@ -229,6 +256,7 @@ router.delete('/:id', verifyToken, roles(['admin']), async (req, res) => {
 
   const user = await User.findOneAndDelete({ uuid: id })
     .exec();
+
   if (!user) {
     return res.status(404)
       .json({ message: 'User not found' });
