@@ -2,7 +2,7 @@ import { Router } from 'express';
 import saveVCard from '../util/vcard.js';
 import User from '../model/User.js';
 import validate from '../middleware/validate.js';
-import { userRules, userStatisticsLookupsRules } from './validations/users.js';
+import { userRules } from './validations/users.js';
 import roles from '../middleware/roles.js';
 import verifyToken from '../middleware/verify-token.js';
 import checkUserAccess from '../middleware/checkUserAccess.js';
@@ -24,27 +24,81 @@ router.put('/:id', verifyToken, roles(['admin']), checkUserAccess, validate(user
   res.json({ data: { name: user.name } });
 });
 
-router.put('/:id/statistics/clicks', validate(userStatisticsLookupsRules), async (req, res) => {
-  const { entryPoint } = req.body;
-  const update = {};
-  update[`statistics.entryPoint.${entryPoint}`] = 1;
+router.post('/:id/statistics/clicks', async (req, res) => {
+  let { source } = req.body;
 
-  const user = await User.findOneAndUpdate(
+  if (!['nfc', 'qr'].includes(source)) {
+    source = 'web';
+  }
+
+  await User.updateOne(
     { uuid: req.params.id },
-    { $inc: update },
-    { new: true },
-  )
+    { $push: { clicks: { source } } },
+  );
+
+  res.sendStatus(200);
+});
+
+router.get('/:id/statistics/clicks', async (req, res) => {
+  const user = await User.findOne({ uuid: req.params.id })
     .exec();
 
-  res.json({ data: { clicks: user.statistics.entryPoint[entryPoint] } });
+  const today = new Date();
+
+  const clickCountsByDate = {};
+  const totalClicksByType = {
+    qr: 0,
+    nfc: 0,
+    web: 0,
+  };
+
+  for (let i = 0; i < 7; i++) {
+    const currentDate = new Date(today);
+    currentDate.setDate(currentDate.getDate() - i);
+    const dateString = currentDate.toISOString()
+      .split('T')[0];
+
+    clickCountsByDate[dateString] = {
+      qr: 0,
+      nfc: 0,
+      web: 0,
+    };
+  }
+
+  user.clicks.forEach((click) => {
+    const {
+      source,
+      timestamp,
+    } = click;
+    const clickDate = new Date(timestamp);
+    clickDate.setUTCHours(0, 0, 0, 0);
+    const dateString = clickDate.toISOString()
+      .split('T')[0];
+
+    if (dateString in clickCountsByDate) {
+      clickCountsByDate[dateString][source]++;
+    }
+
+    totalClicksByType[source]++;
+  });
+
+  const totalClicks = user.clicks.length;
+
+  const data = {
+    clickCountsByDate,
+    totalClicks,
+    totalClicksByType,
+  };
+
+  res.json({ data });
 });
 
 router.get('/:id/statistics/clicks', verifyToken, checkUserAccess, async (req, res) => {
   const user = await User.findOne({ uuid: req.params.id })
     .exec();
-  const { entryPoint } = user.statistics;
+  const { source } = user.statistics;
 
-  res.json({ data: { entryPoint } });
+  res.json({ data: { source } });
 });
 
 router.get('/', verifyToken, roles('admin'), async (req, res) => {

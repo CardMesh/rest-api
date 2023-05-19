@@ -140,6 +140,11 @@ const vCardOptionsSchema = new mongoose.Schema({
   },
 });
 
+const clickSchema = new mongoose.Schema({
+  timestamp: { type: Date, default: Date.now },
+  source: { type: String },
+});
+
 // Define main schema
 const userSchema = new mongoose.Schema({
   name: {
@@ -165,23 +170,8 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  statistics: {
-    entryPoint: {
-      qr: {
-        type: Number,
-        default: 0,
-      },
-      nfc: {
-        type: Number,
-        default: 0,
-      },
-      url: {
-        type: Number,
-        default: 0,
-      },
-    }, // use sub-schema as property
-  },
-  vCardOptions: vCardOptionsSchema, // use sub-schema as property
+  clicks: [clickSchema],
+  vCardOptions: vCardOptionsSchema,
   settings: {
     theme: {
       type: String,
