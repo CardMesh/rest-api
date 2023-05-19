@@ -40,8 +40,7 @@ router.put('/', verifyToken, roles(['admin', 'editor']), async (req, res) => {
 // TODO move endpoint
 router.post('/upload', async (req, res) => {
   if (!req.files.file || req.files.file.size === 0) {
-    return res.status(400)
-      .send('No files were uploaded.');
+    return res.status(400).send('No files were uploaded.');
   }
 
   const uploadsDirectory = path.resolve('uploads');
@@ -51,43 +50,25 @@ router.post('/upload', async (req, res) => {
 
   const webpPath = path.join(uploadsDirectory, `${req.body.name}.webp`);
 
-  console.log('test', webpPath);
   if (fs.existsSync(webpPath)) {
-    fs.unlink(webpPath, (err) => {
-      if (err) {
-        console.error(`Error deleting file: ${err}`);
-      }
-    });
+    fs.unlinkSync(webpPath); // Synchronously delete the file
   }
 
   const sampleFile = req.files.file;
   const uploadPath = path.join(uploadsDirectory, sampleFile.name);
 
-  sampleFile.mv(uploadPath, (err) => {
-    if (err) {
-      return res.status(500)
-        .send(err);
-    }
-
-    sharp(uploadPath)
+  try {
+    await sampleFile.mv(uploadPath);
+    await sharp(uploadPath)
       .resize({ height: +req.body.height })
       .webp()
-      .toFile(webpPath)
-      .then(() => {
-        fs.unlink(uploadPath, (err) => {
-          if (err) {
-            return res.status(500)
-              .send('Error.');
-          }
-          return res.send('Success!');
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        return res.status(500)
-          .send('Error converting and resizing file to webp.');
-      });
-  });
+      .toFile(webpPath);
+    fs.unlinkSync(uploadPath); // Synchronously delete the file
+    return res.send('Success!');
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Error uploading and converting file to webp.');
+  }
 });
 
 export default router;

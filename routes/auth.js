@@ -171,11 +171,9 @@ router.put('/reset', validate(resetRules), async (req, res) => {
     token,
     password,
   } = req.body;
-  console.log(email);
 
   const user = await User.findOne({ email });
 
-  console.log(user);
   if (!user) {
     res.status(400)
       .json({ errors: ['Email does not exists'] });
