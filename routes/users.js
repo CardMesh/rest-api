@@ -41,10 +41,10 @@ router.post('/:id/statistics/clicks', async (req, res) => {
     { $push: { clicks: { source } } },
   );
 
-  res.sendStatus(200);
+  res.json({ });
 });
 
-router.get('/:id/statistics/clicks', async (req, res) => {
+router.get('/:id/statistics/clicks', verifyToken, async (req, res) => {
   const user = await User.findOne({ uuid: req.params.id })
     .exec();
 
