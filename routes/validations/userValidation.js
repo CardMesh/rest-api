@@ -12,11 +12,3 @@ export const userStatisticsLookupsRules = [
   body('entryPoint')
     .isString(),
 ];
-
-export const userSettingsLanguageRules = [
-  body('language')
-    .isLength({
-      min: 2,
-      max: 2,
-    }),
-];

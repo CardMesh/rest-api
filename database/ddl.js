@@ -33,7 +33,6 @@ const user = {
   password: hashedPassword,
   settings: {
     theme: 'dark',
-    language: 'en',
   },
   role: 'admin',
   vCardOptions: {

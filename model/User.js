@@ -141,7 +141,10 @@ const vCardOptionsSchema = new mongoose.Schema({
 });
 
 const clickSchema = new mongoose.Schema({
-  timestamp: { type: Date, default: Date.now },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },
   source: { type: String },
 });
 
@@ -177,11 +180,6 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: true,
       default: 'dark',
-    },
-    language: {
-      type: String,
-      required: true,
-      default: 'en',
     },
   },
   uuid: {

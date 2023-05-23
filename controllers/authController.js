@@ -1,20 +1,11 @@
-import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { createHash, randomBytes } from 'crypto';
 import mjml from 'mjml';
 import User from '../model/User.js';
-import {
-  loginRules, recoverRules, resetRules, signupRules,
-} from './validations/auth.js';
-import validate from '../middleware/validate.js';
 import sendMail from '../util/mail.js';
-import roles from '../middleware/roles.js';
-import verifyToken from '../middleware/verify-token.js';
 
-const router = Router();
-
-router.post('/signup', verifyToken, roles(['admin']), validate(signupRules), async (req, res) => {
+export const signup = async (req, res) => {
   const {
     email,
     name,
@@ -58,9 +49,9 @@ router.post('/signup', verifyToken, roles(['admin']), validate(signupRules), asy
     res.status(400)
       .json({ errors: [err] });
   }
-});
+};
 
-router.post('/login', validate(loginRules), async (req, res) => {
+export const login = async (req, res) => {
   const {
     email,
     password,
@@ -72,18 +63,14 @@ router.post('/login', validate(loginRules), async (req, res) => {
 
   if (!user) {
     return res.status(400)
-      .json({
-        errors: [loginError],
-      });
+      .json({ errors: [loginError] });
   }
 
   const validPassword = await bcrypt.compare(password, user.password);
 
   if (!validPassword) {
     return res.status(400)
-      .json({
-        errors: [loginError],
-      });
+      .json({ errors: [loginError] });
   }
 
   // create token
@@ -96,7 +83,8 @@ router.post('/login', validate(loginRules), async (req, res) => {
     { expiresIn: +process.env.JWT_EXPIRATION_INTERVAL },
   );
 
-  res.header('Authorization', token)
+  res
+    .header('Authorization', token)
     .json({
       data: {
         name: user.name,
@@ -107,16 +95,16 @@ router.post('/login', validate(loginRules), async (req, res) => {
         role: user.role,
       },
     });
-});
+};
 
-router.post('/recover', verifyToken, roles(['admin']), validate(recoverRules), async (req, res) => {
+export const recover = async (req, res) => {
   const { uuid } = req.body;
 
   const user = await User.findOne({ uuid });
 
   if (!user) {
     return res.status(400)
-      .json({ errors: ['User does not exists'] });
+      .json({ errors: ['User does not exist'] });
   }
 
   const token = createHash('sha256')
@@ -150,22 +138,18 @@ router.post('/recover', verifyToken, roles(['admin']), validate(recoverRules), a
 
   const htmlOutput = mjml(mjmlContent).html;
 
-  const from = `"${process.env.DEFAULT_MAIL_SENDER || 'mathias@reker.dk'}"`;
+  const from = `"${process.env.DEFAULT_MAIL_SENDER}"`;
 
   try {
     const mail = await sendMail(from, user.email, 'Reset password', htmlOutput);
-    res.json({
-      data: {
-        mail,
-      },
-    });
+    res.json({ data: { mail } });
   } catch (err) {
     res.status(404)
       .json({ errors: [err] });
   }
-});
+};
 
-router.put('/reset', validate(resetRules), async (req, res) => {
+export const reset = async (req, res) => {
   const {
     email,
     token,
@@ -176,7 +160,7 @@ router.put('/reset', validate(resetRules), async (req, res) => {
 
   if (!user) {
     res.status(400)
-      .json({ errors: ['Email does not exists'] });
+      .json({ errors: ['Email does not exist'] });
     return;
   }
 
@@ -185,10 +169,9 @@ router.put('/reset', validate(resetRules), async (req, res) => {
     .digest('hex');
 
   if (token !== hashedToken) {
-    return res.status(400)
-      .json({
-        errors: ['The token is invalid'],
-      });
+    return res
+      .status(400)
+      .json({ errors: ['The token is invalid'] });
   }
 
   const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
@@ -201,6 +184,4 @@ router.put('/reset', validate(resetRules), async (req, res) => {
   );
 
   res.json({ data: newUser });
-});
-
-export default router;
+};
