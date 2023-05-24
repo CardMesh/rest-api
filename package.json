@@ -20,7 +20,7 @@
     "format": "eslint . --fix --ext .js",
     "lint": "eslint . --ext .js",
     "start": "node app.js --omit=dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -34,15 +34,16 @@
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "mjml": "^4.14.1",
-    "mongoose": "^7.1.1",
+    "mongoose": "^7.2.0",
     "nodemailer": "^6.9.2",
     "sharp": "^0.32.1",
     "vcf": "^2.1.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "eslint": "^8.40.0",
+    "eslint": "^8.41.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.27.5"
+    "eslint-plugin-import": "^2.27.5",
+    "mocha": "^10.2.0"
   }
 }

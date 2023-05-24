@@ -20,15 +20,3 @@ const themeSchema = new mongoose.Schema({
 });
 
 export default mongoose.model('Theme', themeSchema);
-
-/*
- * TODO:
- * const themeSchema = new mongoose.Schema({
- *   settings: {
- *     fontColor: String,
- *     backgroundColor: String,
- *     displayMap: Boolean,
- *   },
- *   isActive: Boolean,
- * });
- */

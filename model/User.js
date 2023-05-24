@@ -148,7 +148,6 @@ const clickSchema = new mongoose.Schema({
   source: { type: String },
 });
 
-// Define main schema
 const userSchema = new mongoose.Schema({
   name: {
     type: String,

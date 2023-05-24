@@ -1,8 +1,8 @@
-import path from 'path';
-import { promises as fs } from 'fs';
+import { mkdir, unlink, writeFile } from 'fs/promises';
+import { join, resolve } from 'path';
 import vCard from 'vcf';
 
-const getCurrentTime = () => {
+export const getCurrentTime = () => {
   const now = new Date();
   const year = now.getUTCFullYear();
   const month = (now.getUTCMonth() + 1).toString()
@@ -22,19 +22,23 @@ const getCurrentTime = () => {
   return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
 };
 
-const saveVCard = async (vCardOptions, uuid, version = '3') => {
-  const uploadsDirectory = path.resolve(`uploads/${uuid}`);
-  await fs.mkdir(uploadsDirectory, { recursive: true });
+const createUploadsDirectory = async (uuid) => {
+  const uploadsDirectory = resolve(`uploads/${uuid}`);
+  await mkdir(uploadsDirectory, { recursive: true });
+  return uploadsDirectory;
+};
 
-  const vcardPath = path.join(uploadsDirectory, `profile${version}.vcf`);
+const deleteFile = async (filePath) => {
   try {
-    await fs.unlink(vcardPath);
+    await unlink(filePath);
   } catch (err) {
     if (err.code !== 'ENOENT') {
       console.error(`Error deleting file: ${err}`);
     }
   }
+};
 
+export const generateVCard = (vCardOptions, version, uuid) => {
   const card = new vCard();
 
   card.set('fn', `${vCardOptions.professional.title} ${vCardOptions.name.firstName} ${vCardOptions.name.lastName}`);
@@ -59,7 +63,18 @@ const saveVCard = async (vCardOptions, uuid, version = '3') => {
     card.set('profile', 'vcard');
   }
 
-  await fs.writeFile(vcardPath, card.toString(version === 4 ? '4.0' : '3.0', 'UTF-8'), { encoding: 'utf8' });
+  return card.toString(version === '4' ? '4.0' : '3.0', 'UTF-8');
 };
 
-export default saveVCard;
+export const saveVCard = async (vCardOptions, uuid, version = '3') => {
+  const uploadsDirectory = await createUploadsDirectory(uuid);
+
+  const vcardPath = join(uploadsDirectory, `profile${version}.vcf`);
+  await deleteFile(vcardPath);
+
+  const vCardData = generateVCard(vCardOptions, version, uuid);
+
+  await writeFile(vcardPath, vCardData, { encoding: 'utf8' });
+};
+
+export default saveVCard; // todo refactor
