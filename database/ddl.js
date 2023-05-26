@@ -21,6 +21,7 @@ const theme = {
   displayAddress: true,
   displayMap: true,
   displayContactBtn: true,
+  buttonText: 'Add to contacts',
   logoHeight: 15,
 };
 

@@ -15,6 +15,7 @@ const themeSchema = new mongoose.Schema({
   displayAddress: Boolean,
   displayMap: Boolean,
   displayContactBtn: Boolean,
+  buttonText: String,
   logoHeight: Number,
   timeZone: String,
 });
