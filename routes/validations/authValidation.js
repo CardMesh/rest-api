@@ -21,11 +21,11 @@ export const loginRules = [
 ];
 
 export const recoverRules = [
-  // body('uuid').isUUID(),
+   body('uuid').isUUID(),
 ];
 
 export const resetRules = [
-  // body('email').isEmail(),
-  // body('password').isLength({ min: 8, max: 255 }),
-  // body('token').isLength({ min: 59, max: 59 }),
+   body('email').isEmail(),
+   body('password').isLength({ min: 8, max: 255 }),
+   body('token').isUUID(),
 ];
