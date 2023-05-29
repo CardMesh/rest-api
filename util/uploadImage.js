@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 
-const uploadAndConvertImage = async (image, directory = 'uploads', imageName, imageHeight) => {
+// TODO refactor into two functions
+const uploadAndConvertImage = async (image, directory, imageName, imageHeight) => {
   if (!image || image.size === 0) {
     throw new Error('No files were uploaded.');
   }
@@ -34,7 +35,6 @@ const uploadAndConvertImage = async (image, directory = 'uploads', imageName, im
       .toFile(imagePath);
     fs.unlinkSync(uploadPath); // Synchronously delete the file
   } catch (error) {
-    console.error(error);
     throw new Error('Error uploading and converting file to webp.');
   }
 };

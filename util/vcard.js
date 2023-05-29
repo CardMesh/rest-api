@@ -45,31 +45,31 @@ export const generateVCard = (vCardOptions, version, uuid) => {
   card.set('n', `${vCardOptions.name.lastName};${vCardOptions.name.firstName};${vCardOptions.name.middleName};${vCardOptions.professional.title};${vCardOptions.name.suffix}`);
   card.set('org', 'Example, Inc.'); // TODO
   card.set('title', vCardOptions.professional.title);
-  card.set('email', vCardOptions.contact.email, version === '4' ? { type: 'work' } : undefined);
-  card.set('url', vCardOptions.contact.web, version === '4' ? { type: 'work' } : undefined);
+  card.set('email', vCardOptions.contact.email, version === 4 ? { type: 'work' } : undefined);
+  card.set('url', vCardOptions.contact.web, version === 4 ? { type: 'work' } : undefined);
   card.set('rev', getCurrentTime());
   card.set('uid', `urn:uuid:${uuid}`);
   card.set('note', vCardOptions.professional.bio);
   card.set('tz', vCardOptions.location.timeZone);
-  card.set('adr', `;;${vCardOptions.location.street}${vCardOptions.location.storey ? `, ${vCardOptions.location.storey}` : ''} ;${vCardOptions.location.city};${vCardOptions.location.state};${vCardOptions.location.postalCode};${vCardOptions.location.country}`, version === '4' ? { type: 'work' } : undefined);
-  card.set('source', `/${uuid}/profile.vcf`);
+  card.set('adr', `;;${vCardOptions.location.street}${vCardOptions.location.storey ? `, ${vCardOptions.location.storey}` : ''} ;${vCardOptions.location.city};${vCardOptions.location.state};${vCardOptions.location.postalCode};${vCardOptions.location.country}`, version === 4 ? { type: 'work' } : undefined);
+  card.set('source', `/${uuid}/vcard${version}.vcf`); // TODO use absolute paths
   card.set('photo', `/${uuid}/profile.webp`, { type: 'webp' }); // TODO
   card.set('logo', '/logo.webp', { type: 'webp' }); // TODO
   card.set('geo', `geo:${vCardOptions.location.coordinates.latitude},${vCardOptions.location.coordinates.longitude}`);
   card.set('bday', vCardOptions.personal.birthday);
   card.set('kind', 'organization');
-  card.set('tel', vCardOptions.contact.phone.number, version === '4' ? { type: 'work' } : undefined);
-  if (version === '3') {
+  card.set('tel', vCardOptions.contact.phone.number, version === 4 ? { type: 'work' } : undefined);
+  if (version === 3) {
     card.set('profile', 'vcard');
   }
 
-  return card.toString(version === '4' ? '4.0' : '3.0', 'UTF-8');
+  return card.toString(version === 4 ? '4.0' : '3.0', 'UTF-8');
 };
 
-export const saveVCard = async (vCardOptions, uuid, version = '3') => {
-  const uploadsDirectory = await createUploadsDirectory(uuid);
+export const saveVCard = async (vCardOptions, uuid, version = 3) => {
+  const uploadsDirectory = await createUploadsDirectory(`users/${uuid}`);
 
-  const vcardPath = join(uploadsDirectory, `profile${version}.vcf`);
+  const vcardPath = join(uploadsDirectory, `vcard${version}.vcf`);
   await deleteFile(vcardPath);
 
   const vCardData = generateVCard(vCardOptions, version, uuid);

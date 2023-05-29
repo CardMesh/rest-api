@@ -38,7 +38,7 @@ describe('generateVCard', () => {
         birthday: '1990-01-01',
       },
     };
-    const version = '4';
+    const version = 4;
     const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
 
     const result = generateVCard(vCardOptions, version, uuid);
@@ -54,7 +54,7 @@ describe('generateVCard', () => {
     assert.ok(result.includes('NOTE:Experienced software engineer'));
     assert.ok(result.includes('TZ:UTC'));
     assert.ok(result.includes('ADR;TYPE=work:;;123 Main Street ;City;State;12345;Country'));
-    assert.ok(result.includes('SOURCE:/ac7171f3-9e6b-4099-9812-9ebad504bad5/profile.vcf'));
+    assert.ok(result.includes('SOURCE:/ac7171f3-9e6b-4099-9812-9ebad504bad5/vcard4.vcf'));
     assert.ok(result.includes('PHOTO;TYPE=webp:/ac7171f3-9e6b-4099-9812-9ebad504bad5/profile.webp'));
     assert.ok(result.includes('LOGO;TYPE=webp:/logo.webp'));
     assert.ok(result.includes('GEO:geo:40.7128,-74.006'));
@@ -102,7 +102,7 @@ describe('generateVCard', () => {
         birthday: '1990-01-01',
       },
     };
-    const version = '3';
+    const version = 3;
     const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
 
     const result = generateVCard(vCardOptions, version, uuid);
@@ -118,7 +118,7 @@ describe('generateVCard', () => {
     assert.ok(result.includes('NOTE:Experienced software engineer'));
     assert.ok(result.includes('TZ:UTC'));
     assert.ok(result.includes('ADR:;;123 Main Street ;City;State;12345;Country'));
-    assert.ok(result.includes('SOURCE:/ac7171f3-9e6b-4099-9812-9ebad504bad5/profile.vcf'));
+    assert.ok(result.includes('SOURCE:/ac7171f3-9e6b-4099-9812-9ebad504bad5/vcard3.vcf'));
     assert.ok(result.includes('PHOTO;TYPE=WEBP:/ac7171f3-9e6b-4099-9812-9ebad504bad5/profile.webp'));
     assert.ok(result.includes('LOGO;TYPE=WEBP:/logo.webp'));
     assert.ok(result.includes('GEO:geo:40.7128,-74.006'));

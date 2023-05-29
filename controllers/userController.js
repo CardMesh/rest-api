@@ -194,8 +194,8 @@ export const updateUserVCardOptions = async (req, res) => {
       .json({ message: 'User not found' });
   }
 
-  await saveVCard(vCardOptions, uuid, '3');
-  await saveVCard(vCardOptions, uuid, '4');
+  await saveVCard(vCardOptions, uuid, 3);
+  await saveVCard(vCardOptions, uuid, 4);
 
   res.json({ data: { vCardOptionsSchema: user.vCardOptions } });
 };
