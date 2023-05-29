@@ -242,6 +242,7 @@ export const uploadImage = async (req, res) => {
   } = req.body;
   const { id } = req.params;
 
+  console.log(image);
   try {
     await uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);
 
