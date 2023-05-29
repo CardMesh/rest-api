@@ -182,13 +182,13 @@ const generateFakeUser = () => {
     await new Theme(theme).save();
     await new User(adminUser).save(); // Save the admin user
 
-    const users = Array.from({ length: 100 }, () => new User(generateFakeUser()));
+    const users = Array.from({ length: 999 }, () => new User(generateFakeUser()));
     await User.insertMany(users);
 
     console.log('Database setup completed.');
   } catch (error) {
     console.error('Error setting up database:', error);
   } finally {
-    process.exit(0);
+    process.exit();
   }
 })();
