@@ -125,10 +125,10 @@ export const recover = async (req, res) => {
   <mj-body background-color="#ebf2fa">
     <mj-section></mj-section>
     <mj-section full-width="full-width">
-      <mj-column background-color="#fff" css-class="body-section" border-top="4px solid #1c4e80" padding="15px">
+      <mj-column background-color="#ffffff" css-class="body-section" border-top="4px solid #1c4e80" padding="15px">
         <mj-text font-size="24px" align="left">Hello ${user.name}</mj-text>
         <mj-text>Welcome! Your account has been created. To complete your registration, please create a password by following the link below:</mj-text>
-        <mj-button href="${resetLink}" background-color="#1c4e80">Create Password</mj-button>
+        <mj-button href="${resetLink}" background-color="#1c4e80" color="#ffffff">Create Password</mj-button>
         <mj-divider border-width="1px" border-color="#1c4e80" border-style="dashed"></mj-divider>
         <mj-text>Best regards,<br />
           The CardMesh Team</mj-text>
@@ -139,10 +139,8 @@ export const recover = async (req, res) => {
 
   const htmlOutput = mjml(mjmlContent).html;
 
-  const from = `"${process.env.DEFAULT_MAIL_SENDER}"`;
-
   try {
-    const mail = await sendMail(from, user.email, 'Reset password', htmlOutput);
+    const mail = await sendMail(user.email, 'Reset password', htmlOutput);
     res.json({ data: { mail } });
   } catch (err) {
     res.status(404)

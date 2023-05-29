@@ -1,46 +1,35 @@
 import nodemailer from 'nodemailer';
 
-const getAuth = async (testAccount, NODE_ENV, SMTP_USER, SMTP_PASSWORD) => (NODE_ENV === 'development'
-  ? {
-    user: testAccount.user,
-    pass: testAccount.pass,
-  }
-  : {
-    user: SMTP_USER,
-    pass: SMTP_PASSWORD,
-  });
+const {
+  SMTP_SERVICE,
+  SMTP_HOST,
+  SMTP_PORT,
+  SMTP_USER,
+  SMTP_PASSWORD,
+  FROM_EMAIL,
+  FROM_NAME,
+} = process.env;
 
-const sendMail = async (from, to, subject, html) => {
-  const testAccount = await nodemailer.createTestAccount();
-
-  const {
-    NODE_ENV,
-    SMTP_HOST,
-    SMTP_PORT,
-    SMTP_USER,
-    SMTP_PASSWORD,
-  } = process.env;
-
-  const auth = await getAuth(testAccount, NODE_ENV, SMTP_USER, SMTP_PASSWORD);
-
+const sendMail = async (to, subject, html) => {
   const transporter = nodemailer.createTransport({
+    service: SMTP_SERVICE,
     host: SMTP_HOST,
-    port: +SMTP_PORT,
-    secure: +SMTP_PORT === 465,
-    auth,
+    port: SMTP_PORT,
+    secure: [465, 587].includes(+process.env.SMTP_PORT),
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASSWORD,
+    },
   });
 
-  const info = await transporter.sendMail({
+  const from = `"${FROM_NAME}" <${FROM_EMAIL}>"`;
+
+  await transporter.sendMail({
     from,
     to,
     subject,
     html,
   });
-
-  if (NODE_ENV === 'development') {
-    console.log('Message send: %s', info.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-  }
 };
 
 export default sendMail;
