@@ -9,11 +9,11 @@ import connection from './database/connection.js';
 import auth from './routes/authRoute.js';
 import theme from './routes/themeRoute.js';
 import users from './routes/userRoute.js';
-import images from './routes/imageRoute.js';
 import { notFound } from './middleware/error.js';
 import { corsOptions } from './config/cors-config.js';
 import { ddosConfig } from './config/ddos-config.js';
 import { jsonOptions, urlEncodedOptions } from './config/express-config.js';
+import roles from './middleware/roles.js';
 
 dotenv.config();
 connection();
@@ -32,7 +32,6 @@ app.use(express.json(jsonOptions));
 app.use('/api/auth', auth);
 app.use('/api/users', users);
 app.use('/api/themes', theme);
-app.use('/api/images', images);
 app.use(notFound);
 
 app.listen(+process.env.PORT);

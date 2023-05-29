@@ -30,7 +30,7 @@ const uploadAndConvertImage = async (image, directory, imageName, imageHeight) =
   try {
     await image.mv(uploadPath);
     await sharp(uploadPath)
-      .resize({ height: imageHeight })
+      .resize({ height: +imageHeight })
       .webp()
       .toFile(imagePath);
     fs.unlinkSync(uploadPath); // Synchronously delete the file

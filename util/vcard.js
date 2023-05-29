@@ -73,7 +73,6 @@ export const saveVCard = async (vCardOptions, uuid, version = 3) => {
   await deleteFile(vcardPath);
 
   const vCardData = generateVCard(vCardOptions, version, uuid);
-
   await writeFile(vcardPath, vCardData, { encoding: 'utf8' });
 };
 

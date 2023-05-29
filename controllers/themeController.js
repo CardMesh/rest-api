@@ -1,6 +1,3 @@
-import * as path from 'path';
-import sharp from 'sharp';
-import * as fs from 'fs';
 import Theme from '../model/Theme.js';
 import uploadAndConvertImage from '../util/uploadImage.js';
 
@@ -21,7 +18,7 @@ export const getThemeById = async (req, res) => {
   try {
     const theme = await Theme.findOne({ themeId })
       .exec();
-    console.log(theme);
+
     if (!theme) {
       return res.status(404)
         .json({ error: 'Theme not found' });
@@ -39,7 +36,7 @@ export const updateThemeOptionsById = async (req, res) => {
 
   try {
     const options = req.body;
-    const theme = await Theme.findByIdAndUpdate(id, options, { new: true })
+    const theme = await Theme.findOneAndUpdate({ id }, options, { new: true })
       .exec();
 
     if (!theme) {
@@ -55,47 +52,14 @@ export const updateThemeOptionsById = async (req, res) => {
 };
 
 export const uploadImage = async (req, res) => {
-  const image = req.files.file;
-  const imageName = req.body.name;
-  const themeId = req.params.id;
+  const { image } = req.files;
+  const {
+    imageName,
+    imageHeight,
+  } = req.body;
+  const { id } = req.params;
 
-  await uploadAndConvertImage(image, `uploads/themes/${themeId}`, imageName, 50);
+  await uploadAndConvertImage(image, `uploads/themes/${id}`, imageName, imageHeight);
 
   res.json('Success');
-};
-
-export const uploadImage2 = async (req, res) => {
-  if (!req.files.file || req.files.file.size === 0) {
-    return res.status(400)
-      .send('No files were uploaded.');
-  }
-
-  const uploadsDirectory = path.resolve('uploads');
-
-  if (!fs.existsSync(uploadsDirectory)) {
-    fs.mkdirSync(uploadsDirectory, { recursive: true });
-  }
-
-  const imagePath = path.join(uploadsDirectory, `${req.body.name}.webp`);
-
-  if (fs.existsSync(imagePath)) {
-    fs.unlinkSync(imagePath); // Synchronously delete the file
-  }
-
-  const sampleFile = req.files.file;
-  const uploadPath = path.join(uploadsDirectory, sampleFile.name);
-
-  try {
-    await sampleFile.mv(uploadPath);
-    await sharp(uploadPath)
-      .resize({ height: +req.body.height })
-      .webp()
-      .toFile(imagePath);
-    fs.unlinkSync(uploadPath); // Synchronously delete the file
-    return res.send('Success!');
-  } catch (error) {
-    console.error(error);
-    return res.status(500)
-      .send('Error uploading and converting file to webp.');
-  }
 };

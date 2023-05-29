@@ -1,5 +1,6 @@
 import saveVCard from '../util/vcard.js';
 import User from '../model/User.js';
+import uploadAndConvertImage from '../util/uploadImage.js';
 
 export const updateUser = async (req, res) => {
   const { name } = req.body;
@@ -231,4 +232,17 @@ export const deleteUser = async (req, res) => {
   }
 
   res.json({ data: { message: 'User deleted successfully' } });
+};
+
+export const uploadImage = async (req, res) => {
+  const { image } = req.files;
+  const {
+    imageName,
+    imageHeight,
+  } = req.body;
+  const { id } = req.params;
+
+  await uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);
+
+  res.json('Success');
 };
