@@ -32,7 +32,7 @@ const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
 const hashPassword = (password) => bcrypt.hashSync(password, salt);
 
 const adminUser = {
-  name: 'Test User',
+  name: 'Mathias Reker',
   email: 'demo@demo.com',
   password: hashPassword('Demodemo!'),
   settings: {
@@ -41,37 +41,37 @@ const adminUser = {
   role: 'admin',
   vCardOptions: {
     name: {
-      firstName: 'John',
-      middleName: 'D',
-      lastName: 'Doe',
-      suffix: 'Jr',
+      firstName: 'Mathias',
+      middleName: '',
+      lastName: 'Reker',
+      suffix: '',
     },
     professional: {
-      title: 'Software Engineer',
-      company: 'Example Company',
-      role: 'Developer',
-      bio: 'A software engineer with a passion for code.',
+      title: '',
+      company: 'KEA',
+      role: 'Full-stack web developer',
+      bio: 'I love IT Security. I believe in sharing knowledge, tools and value open source software development. 🚀',
     },
     contact: {
       phone: {
-        number: '1234567890',
-        countryCode: '1',
-        extension: '123',
+        number: '12345678',
+        countryCode: '45',
+        extension: '',
       },
-      email: 'john.doe@example.com',
-      web: 'https://www.example.com',
+      email: 'demo@demo.com',
+      web: 'https://reker.dk',
     },
     location: {
-      street: '123 Example Street',
-      storey: '2nd Floor',
-      city: 'New York',
-      state: 'NY',
-      postalCode: '10001',
-      country: 'USA',
+      street: 'Rådhuspladsen 1',
+      storey: '',
+      city: 'København K',
+      state: '',
+      postalCode: '1599',
+      country: 'Denmark',
       timeZone: 'Europe/Copenhagen',
       coordinates: {
-        latitude: 40.712776,
-        longitude: -74.005974,
+        latitude: 55.6760441,
+        longitude: 12.5687669,
       },
     },
     socialMedia: {
@@ -83,7 +83,7 @@ const adminUser = {
       github: '',
     },
     personal: {
-      birthday: '1990-01-01',
+      birthday: '1992-10-09',
       pronouns: 'He/Him',
     },
   },

@@ -60,7 +60,7 @@ export const uploadImage = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);
+    await uploadAndConvertImage(image, `uploads/themes/${id}`, imageName, imageHeight);
 
     res.json('Success');
   } catch (error) {
