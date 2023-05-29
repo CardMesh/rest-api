@@ -242,7 +242,14 @@ export const uploadImage = async (req, res) => {
   } = req.body;
   const { id } = req.params;
 
-  await uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);
+  try {
+    await uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);
 
-  res.json('Success');
+    res.json('Success');
+  } catch (error) {
+    res.status(404)
+      .json({
+        errors: ['Error'],
+      });
+  }
 };

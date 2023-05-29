@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
+import { faker } from '@faker-js/faker';
 import Theme from '../model/Theme.js';
 import User from '../model/User.js';
 import connectToDatabase from './connection.js';
@@ -27,12 +28,13 @@ const theme = {
 };
 
 const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
-const hashedPassword = await bcrypt.hash('Demodemo!', salt);
 
-const user = {
+const hashPassword = (password) => bcrypt.hashSync(password, salt);
+
+const adminUser = {
   name: 'Test User',
   email: 'demo@demo.com',
-  password: hashedPassword,
+  password: hashPassword('Demodemo!'),
   settings: {
     theme: 'dark',
   },
@@ -85,13 +87,86 @@ const user = {
       pronouns: 'He/Him',
     },
   },
-  statistics: {
-    entryPoint: {
-      qr: 0,
-      nfc: 0,
-      url: 0,
+};
+
+const generateFakeUser = () => {
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const email = faker.internet.email();
+  const hashedPassword = hashPassword(faker.internet.password());
+
+  /**
+   * Docs to fakerjs.
+   *
+   * https://next.fakerjs.dev/api/
+   */
+  return {
+    name: `${firstName} ${lastName}`,
+    email,
+    password: hashedPassword,
+    settings: {
+      theme: 'dark',
     },
-  },
+    role: 'user',
+    vCardOptions: {
+      name: {
+        firstName,
+        middleName: faker.person.middleName(),
+        lastName,
+        suffix: faker.person.suffix(),
+      },
+      professional: {
+        title: faker.person.prefix(),
+        company: faker.company.name(),
+        role: faker.person.jobTitle(),
+        bio: faker.lorem.sentences(),
+      },
+      contact: {
+        phone: {
+          number: faker.phone.number('## ## ## ##'),
+          countryCode: '45',
+          extension: faker.number.int({
+            min: 100,
+            max: 999,
+          })
+            .toString(),
+        },
+        email,
+        web: faker.internet.url(),
+      },
+      location: {
+        street: faker.location.streetAddress(),
+        storey: faker.number.int({
+          min: 1,
+          max: 10,
+        })
+          .toString(),
+        city: faker.location.city(),
+        state: faker.location.state(),
+        postalCode: faker.location.zipCode(),
+        country: faker.location.country(),
+        timeZone: faker.location.timeZone(),
+        coordinates: {
+          latitude: parseFloat(faker.location.latitude()),
+          longitude: parseFloat(faker.location.longitude()),
+        },
+      },
+      socialMedia: {
+        twitter: '',
+        linkedin: '',
+        facebook: '',
+        instagram: '',
+        pinterest: '',
+        github: '',
+      },
+      personal: {
+        birthday: faker.date.past()
+          .toISOString()
+          .split('T')[0],
+        pronouns: ['He/Him', 'She/Her', 'They/Them'][Math.floor(Math.random() * 3)],
+      },
+    },
+  };
 };
 
 (async () => {
@@ -105,7 +180,10 @@ const user = {
     await UserCollection.drop(); // Drop the User collection if it exists
 
     await new Theme(theme).save();
-    await new User(user).save(); // Save the new User
+    await new User(adminUser).save(); // Save the admin user
+
+    const users = Array.from({ length: 100 }, () => new User(generateFakeUser()));
+    await User.insertMany(users);
 
     console.log('Database setup completed.');
   } catch (error) {
