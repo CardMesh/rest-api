@@ -23,6 +23,7 @@ const theme = {
   displayContactBtn: true,
   buttonText: 'Add to contacts',
   logoHeight: 15,
+  themeId: 1,
 };
 
 const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);

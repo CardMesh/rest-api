@@ -93,6 +93,7 @@ export const login = async (req, res) => {
         token,
         createdAt: user._id.getTimestamp(),
         role: user.role,
+        themeId: user.themeId,
       },
     });
 };
@@ -125,7 +126,7 @@ export const recover = async (req, res) => {
     <mj-section></mj-section>
     <mj-section full-width="full-width">
       <mj-column background-color="#fff" css-class="body-section" border-top="4px solid #1c4e80" padding="15px">
-        <mj-text font-size="24px" align="left">Hello Mathias</mj-text>
+        <mj-text font-size="24px" align="left">Hello ${user.name}</mj-text>
         <mj-text>Welcome! Your account has been created. To complete your registration, please create a password by following the link below:</mj-text>
         <mj-button href="${resetLink}" background-color="#1c4e80">Create Password</mj-button>
         <mj-divider border-width="1px" border-color="#1c4e80" border-style="dashed"></mj-divider>

@@ -18,6 +18,11 @@ const themeSchema = new mongoose.Schema({
   buttonText: String,
   logoHeight: Number,
   timeZone: String,
+  themeId: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
 });
 
 export default mongoose.model('Theme', themeSchema);

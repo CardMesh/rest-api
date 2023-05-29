@@ -168,10 +168,6 @@ const userSchema = new mongoose.Schema({
     minlength: 6,
     maxlength: 1024,
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
   clicks: [clickSchema],
   vCardOptions: vCardOptionsSchema,
   settings: {
@@ -185,11 +181,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: () => randomUUID(),
+    unique: true,
   },
   role: {
     type: String,
     enum: ['user', 'admin', 'editor'],
     default: 'user',
+  },
+  themeId: {
+    type: Number,
+    default: 1,
+    required: true,
   },
 });
 

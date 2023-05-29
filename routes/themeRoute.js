@@ -1,10 +1,16 @@
 import express from 'express';
-import { getAllThemes, updateThemeOptions, uploadImage } from '../controllers/themeController.js';
+import {
+  getAllThemes,
+  getThemeById,
+  updateThemeOptionsById,
+  uploadImage,
+} from '../controllers/themeController.js';
 
 const router = express.Router();
 
 router.get('/', getAllThemes);
-router.post('/upload', uploadImage);
-router.put('/', updateThemeOptions);
+router.get('/:id', getThemeById);
+router.post('/:id/images', uploadImage);
+router.put('/:id', updateThemeOptionsById);
 
 export default router;
