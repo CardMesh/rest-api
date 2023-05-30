@@ -62,7 +62,7 @@ const adminUser = {
       web: 'https://reker.dk',
     },
     location: {
-      street: 'Rådhuspladsen 1',
+      street: 'Rådhuspladsen',
       storey: '',
       city: 'København K',
       state: '',
@@ -93,7 +93,6 @@ const generateFakeUser = () => {
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
   const email = faker.internet.email();
-  const hashedPassword = hashPassword(faker.internet.password());
 
   /**
    * Docs to fakerjs.
@@ -103,7 +102,7 @@ const generateFakeUser = () => {
   return {
     name: `${firstName} ${lastName}`,
     email,
-    password: hashedPassword,
+    password: hashPassword(faker.internet.password()),
     settings: {
       theme: 'dark',
     },
