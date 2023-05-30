@@ -1,6 +1,6 @@
 import { mkdir, unlink, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
-import vCard from 'vcf';
+import { readFileSync } from 'fs';
 
 export const getCurrentTime = () => {
   const now = new Date();
@@ -39,31 +39,92 @@ const deleteFile = async (filePath) => {
 };
 
 export const generateVCard = (vCardOptions, version, uuid) => {
-  const card = new vCard();
+  let workProp = '';
+  let vCardVersion = '3.0';
 
-  card.set('fn', `${vCardOptions.professional.title} ${vCardOptions.name.firstName} ${vCardOptions.name.lastName}`);
-  card.set('n', `${vCardOptions.name.lastName};${vCardOptions.name.firstName};${vCardOptions.name.middleName};${vCardOptions.professional.title};${vCardOptions.name.suffix}`);
-  card.set('org', 'Example, Inc.'); // TODO
-  card.set('title', vCardOptions.professional.title);
-  card.set('email', vCardOptions.contact.email, version === 4 ? { type: 'work' } : undefined);
-  card.set('url', vCardOptions.contact.web, version === 4 ? { type: 'work' } : undefined);
-  card.set('rev', getCurrentTime());
-  card.set('uid', `urn:uuid:${uuid}`);
-  card.set('note', vCardOptions.professional.bio);
-  card.set('tz', vCardOptions.location.timeZone);
-  card.set('adr', `;;${vCardOptions.location.street}${vCardOptions.location.storey ? `, ${vCardOptions.location.storey}` : ''} ;${vCardOptions.location.city};${vCardOptions.location.state};${vCardOptions.location.postalCode};${vCardOptions.location.country}`, version === 4 ? { type: 'work' } : undefined);
-  card.set('source', `/${uuid}/vcard${version}.vcf`); // TODO use absolute paths
-  card.set('photo', `/${uuid}/profile.webp`, { type: 'webp' }); // TODO
-  card.set('logo', '/logo.webp', { type: 'webp' }); // TODO
-  card.set('geo', `geo:${vCardOptions.location.coordinates.latitude},${vCardOptions.location.coordinates.longitude}`);
-  card.set('bday', vCardOptions.personal.birthday);
-  card.set('kind', 'organization');
-  card.set('tel', vCardOptions.contact.phone.number, version === 4 ? { type: 'work' } : undefined);
-  if (version === 3) {
-    card.set('profile', 'vcard');
+  if (version === 4) {
+    workProp = ';TYPE=work';
+    vCardVersion = '4.0';
   }
 
-  return card.toString(version === 4 ? '4.0' : '3.0', 'UTF-8');
+  let avatarData;
+  const avatarPath = `./uploads/users/${uuid}/avatar.png`;
+  try {
+    avatarData = readFileSync(avatarPath, { encoding: 'base64' });
+  } catch (err) {
+    avatarData = '';
+  }
+
+  let logoData;
+  const logoPath = './uploads/themes/1/logo.png';
+  try {
+    logoData = readFileSync(logoPath, { encoding: 'base64' });
+  } catch (err) {
+    logoData = '';
+  }
+
+  const vCardOptionsName = vCardOptions.name;
+  const vCardOptionsProfessional = vCardOptions.professional;
+  const vCardOptionsLocation = vCardOptions.location;
+  const vCardOptionsContact = vCardOptions.contact;
+  const vCardOptionsPersonal = vCardOptions.personal;
+
+  const {
+    title,
+    company,
+    bio,
+  } = vCardOptionsProfessional;
+
+  const {
+    firstName,
+    lastName,
+    middleName,
+    suffix,
+  } = vCardOptionsName;
+
+  const {
+    email,
+    web,
+    phone,
+  } = vCardOptionsContact;
+
+  const {
+    countryCode,
+    number,
+  } = phone;
+
+  const {
+    street,
+    storey,
+    city,
+    state,
+    postalCode,
+    country,
+    coordinates,
+    timeZone,
+  } = vCardOptionsLocation;
+
+  return `BEGIN:VCARD
+VERSION:${vCardVersion}
+FN:${title} ${firstName} ${lastName}
+N:${lastName};${firstName};${middleName};${title};${suffix}
+ORG:${company}
+TITLE:${title}
+EMAIL${workProp}:${email}
+URL${workProp}:${web}
+REV:${getCurrentTime()}
+UID:urn:uuid:${uuid}
+NOTE:${bio}
+TZ:${timeZone}
+ADR${workProp}:;;${street}${storey ? `, ${storey}` : ''};${city};${state};${postalCode};${country}
+PHOTO;${version === 3 ? `TYPE=PNG;ENCODING=b:${avatarData}` : `ENCODING=BASE64;TYPE=PNG:${avatarData}`}
+LOGO;${version === 3 ? `TYPE=PNG;ENCODING=b:${logoData}` : `ENCODING=BASE64;TYPE=PNG:${logoData}`}
+GEO:geo:${coordinates.latitude},${coordinates.longitude}
+BDAY:${vCardOptionsPersonal.birthday}
+KIND:organization
+TEL${workProp}:+${countryCode}${number}
+${version === 3 ? 'PROFILE:vcard' : ''}
+END:VCARD`;
 };
 
 export const saveVCard = async (vCardOptions, uuid, version = 3) => {
@@ -76,4 +137,4 @@ export const saveVCard = async (vCardOptions, uuid, version = 3) => {
   await writeFile(vcardPath, vCardData, { encoding: 'utf8' });
 };
 
-export default saveVCard; // todo refactor
+export default saveVCard;

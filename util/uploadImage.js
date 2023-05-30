@@ -2,8 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 
-// TODO refactor into two functions
-const uploadAndConvertImage = async (image, directory, imageName, imageHeight) => {
+const saveImage = async (image, directory, imageName, imageHeight) => {
   if (!image || image.size === 0) {
     throw new Error('No files were uploaded.');
   }
@@ -19,24 +18,36 @@ const uploadAndConvertImage = async (image, directory, imageName, imageHeight) =
     fs.mkdirSync(uploadsDirectory, { recursive: true });
   }
 
-  const imagePath = path.join(uploadsDirectory, `${imageName}.webp`);
+  const webpImagePath = path.join(uploadsDirectory, `${imageName}.webp`);
+  const pngImagePath = path.join(uploadsDirectory, `${imageName}.png`);
 
-  if (fs.existsSync(imagePath)) {
-    fs.unlinkSync(imagePath); // Synchronously delete the file
+  if (fs.existsSync(webpImagePath)) {
+    fs.unlinkSync(webpImagePath);
+  }
+
+  if (fs.existsSync(pngImagePath)) {
+    fs.unlinkSync(pngImagePath);
   }
 
   const uploadPath = path.join(uploadsDirectory, image.name);
 
   try {
     await image.mv(uploadPath);
+
     await sharp(uploadPath)
       .resize({ height: +imageHeight })
       .webp()
-      .toFile(imagePath);
+      .toFile(webpImagePath);
+
+    await sharp(uploadPath)
+      .resize({ height: +imageHeight })
+      .png()
+      .toFile(pngImagePath);
+
     fs.unlinkSync(uploadPath); // Synchronously delete the file
   } catch (error) {
-    throw new Error('Error uploading and converting file to webp.');
+    throw new Error('Error uploading and converting file.');
   }
 };
 
-export default uploadAndConvertImage;
+export default saveImage;
