@@ -13,7 +13,6 @@ import { notFound } from './middleware/error.js';
 import { corsOptions } from './config/cors-config.js';
 import { ddosConfig } from './config/ddos-config.js';
 import { jsonOptions, urlEncodedOptions } from './config/express-config.js';
-import roles from './middleware/roles.js';
 
 dotenv.config();
 connection();
@@ -23,13 +22,12 @@ const ddos = new Ddos(ddosConfig);
 
 app.use('/uploads', express.static('uploads'));
 app.use(fileUpload());
-app.use(ddos.express);
 app.use(cors(corsOptions));
 app.use(compression());
 app.use(helmet());
 app.use(express.urlencoded(urlEncodedOptions));
 app.use(express.json(jsonOptions));
-app.use('/api/auth', auth);
+app.use('/api/auth', ddos.express, auth);
 app.use('/api/users', users);
 app.use('/api/themes', theme);
 app.use(notFound);

@@ -1,10 +1,11 @@
 {
   "name": "cardmesh-rest-api",
   "version": "1.0.0",
+  "description": "",
+  "author": "Mathias Reker",
+  "license": "MIT",
   "main": "app.js",
   "type": "module",
-  "license": "MIT",
-  "author": "Mathias Reker",
   "repository": {
     "type": "git",
     "url": "git@github.com:CardMesh/rest-api.git"
@@ -14,12 +15,12 @@
   },
   "homepage": "https://cardmesh-rest-api.fly.dev",
   "scripts": {
+    "start": "node app.js --omit=dev",
+    "dev": "cross-env nodemon app.js",
     "db:init": "node database/ddl.js",
     "deploy": "flyctl secrets import < .env.production && flyctl deploy --build-arg NODE_ENV=production --remote-only",
-    "dev": "cross-env nodemon app.js",
     "format": "eslint . --fix --ext .js",
     "lint": "eslint . --ext .js",
-    "start": "node app.js --omit=dev",
     "test": "mocha"
   },
   "dependencies": {
@@ -27,14 +28,14 @@
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "ddos": "^0.2.1",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.1.1",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
     "express-validator": "^7.0.1",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "mjml": "^4.14.1",
-    "mongoose": "^7.2.1",
+    "mongoose": "^7.2.2",
     "nodemailer": "^6.9.3",
     "sharp": "^0.32.1"
   },
