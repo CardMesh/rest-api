@@ -26,7 +26,7 @@ export const signup = async (req, res) => {
 
   const password = generatePassword(10);
 
-  // hash the password
+  // Hash the password
   const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
   const hashedPassword = await bcrypt.hash(password, salt);
 
