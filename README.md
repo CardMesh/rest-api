@@ -10,6 +10,14 @@
 CardMesh is an app aimed at modernizing the sharing of business cards within a company. It displays digital business
 cards in a web browser, accessible via NFC tags, QR codes, or direct URLs.
 
+### Tech Stack
+
+[![Node.Js](https://img.shields.io/badge/Node.js-339933.svg?style=flat&logo=nodedotjs&logoColor=white)](#)
+[![Express](https://img.shields.io/badge/Express-000?logo=express&logoColor=fff&style=flat)](#)
+[![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=fff&style=flat)](#)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=fff&style=flat)](#)
+[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](#)
+
 ### Versions & Dependencies
 
 | Version | Documentation |
