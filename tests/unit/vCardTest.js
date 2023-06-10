@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { generateVCard } from '../util/vcard.js';
+import { generateVCard } from '../../src/util/vcard.util.js';
 
 const vCardOptions = {
   professional: {

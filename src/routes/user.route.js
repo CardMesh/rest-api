@@ -9,10 +9,10 @@ import {
   updateUserSetting,
   updateUserVCardOptions,
   uploadImage,
-} from '../controllers/userController.js';
-import verifyToken from '../middleware/verify-token.js';
-import roles from '../middleware/roles.js';
-import checkUserAccess from '../middleware/checkUserAccess.js';
+} from '../controllers/user.controller.js';
+import verifyToken from '../middlewares/verify.middleware.js';
+import roles from '../middlewares/role.middleware.js';
+import checkUserAccess from '../middlewares/access.middleware.js';
 
 const router = express.Router();
 

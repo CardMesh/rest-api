@@ -1,6 +1,6 @@
-import saveVCard from '../util/vcard.js';
-import User from '../model/User.js';
-import uploadAndConvertImage from '../util/uploadImage.js';
+import saveVCard from '../util/vcard.util.js';
+import User from '../models/user.model.js';
+import uploadAndConvertImage from '../util/image.util.js';
 
 export const updateUser = async (req, res) => {
   const { name } = req.body;
@@ -110,24 +110,20 @@ export const getAllUsers = async (req, res) => {
       .skip(skipDocs)
       .limit(limit);
 
+    const searchQueries = [
+      { email: searchPattern },
+      { name: searchPattern },
+      { role: searchPattern },
+    ];
+
     if (searchQuery) {
-      query.or([
-        { email: searchPattern },
-        { name: searchPattern },
-        { role: searchPattern },
-        { uuid: searchPattern },
-      ]);
+      query.or(searchQueries);
     }
 
     const users = await query;
 
     const totalUsers = await User.countDocuments({
-      $or: [
-        { email: searchPattern },
-        { name: searchPattern },
-        { role: searchPattern },
-        { uuid: searchPattern },
-      ],
+      $or: searchQueries,
     });
 
     const totalPages = Math.ceil(totalUsers / limit);

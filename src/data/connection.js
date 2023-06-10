@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 
 mongoose.set('strictQuery', true);
 
-export default () => mongoose.connect(
-  process.env.DB_CONNECTION,
+export default (db) => mongoose.connect(
+  db,
   {
     autoIndex: false, // Don't build indexes
     maxPoolSize: 10, // Maintain up to 10 socket connections

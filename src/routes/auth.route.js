@@ -1,13 +1,16 @@
 import { Router } from 'express';
 import {
   login, recover, reset, signup,
-} from '../controllers/authController.js';
-import validate from '../middleware/validate.js';
-import roles from '../middleware/roles.js';
-import verifyToken from '../middleware/verify-token.js';
+} from '../controllers/auth.controller.js';
+import validate from '../middlewares/validate.middleware.js';
+import roles from '../middlewares/role.middleware.js';
+import verifyToken from '../middlewares/verify.middleware.js';
 import {
-  loginRules, recoverRules, resetRules, signupRules,
-} from './validations/authValidation.js';
+  loginRules,
+  recoverRules,
+  resetRules,
+  signupRules,
+} from './validations/auth.validation.js';
 
 const router = Router();
 

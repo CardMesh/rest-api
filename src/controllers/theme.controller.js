@@ -1,5 +1,5 @@
-import Theme from '../model/Theme.js';
-import uploadAndConvertImage from '../util/uploadImage.js';
+import Theme from '../models/theme.model.js';
+import uploadAndConvertImage from '../util/image.util.js';
 
 export const getAllThemes = async (req, res) => {
   try {

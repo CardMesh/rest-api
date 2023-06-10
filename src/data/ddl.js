@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import { faker } from '@faker-js/faker';
-import Theme from '../model/Theme.js';
-import User from '../model/User.js';
+import Theme from '../models/theme.model.js';
+import User from '../models/user.model.js';
 import connectToDatabase from './connection.js';
 
 dotenv.config();

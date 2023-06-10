@@ -4,7 +4,7 @@ import {
   getThemeById,
   updateThemeOptionsById,
   uploadImage,
-} from '../controllers/themeController.js';
+} from '../controllers/theme.controller.js';
 
 const router = express.Router();
 

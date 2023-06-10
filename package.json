@@ -4,7 +4,7 @@
   "description": "CardMesh is an app aimed at modernizing the sharing of business cards within a company. It displays digital business cards in a web browser, accessible via NFC tags, QR codes, or direct URLs.",
   "author": "Mathias Reker",
   "license": "MIT",
-  "main": "app.js",
+  "main": "server.js",
   "type": "module",
   "repository": {
     "type": "git",
@@ -15,15 +15,18 @@
   },
   "homepage": "https://cardmesh-rest-api.fly.dev",
   "scripts": {
-    "start": "node app.js --omit=dev",
-    "dev": "cross-env nodemon app.js",
-    "db:init": "node database/ddl.js",
+    "start": "node server.js --omit=dev",
+    "dev": "cross-env nodemon server.js",
+    "db:init": "node src/database/ddl.js",
     "deploy": "flyctl secrets import < .env.production && flyctl deploy --build-arg NODE_ENV=production --remote-only",
     "format": "eslint . --fix --ext .js",
     "lint": "eslint . --ext .js",
-    "test": "mocha"
+    "test:unit": "mocha ./tests/unit",
+    "test:it": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --testTimeout=5000 --forceExit",
+    "test":  "npm run test:unit && npm run test:it"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.0.2",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
@@ -35,16 +38,17 @@
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "mjml": "^4.14.1",
-    "mongoose": "^7.2.2",
+    "mongoose": "^7.2.3",
     "nodemailer": "^6.9.3",
     "sharp": "^0.32.1"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.0.2",
     "cross-env": "^7.0.3",
     "eslint": "^8.42.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5",
-    "mocha": "^10.2.0"
+    "jest": "^29.5.0",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   }
 }

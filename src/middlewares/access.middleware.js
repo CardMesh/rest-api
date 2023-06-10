@@ -1,6 +1,6 @@
-import User from '../model/User.js';
+import User from '../models/user.model.js';
 
-const checkUserAccess = async (req, res, next) => {
+const accessMiddleware = async (req, res, next) => {
   const user = await User.findOne({ uuid: req.id })
     .exec();
 
@@ -15,4 +15,4 @@ const checkUserAccess = async (req, res, next) => {
   next();
 };
 
-export default checkUserAccess;
+export default accessMiddleware;

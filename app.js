@@ -1,21 +1,17 @@
-import dotenv from 'dotenv';
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import Ddos from 'ddos';
-import connection from './database/connection.js';
-import auth from './routes/authRoute.js';
-import theme from './routes/themeRoute.js';
-import users from './routes/userRoute.js';
-import { notFound } from './middleware/error.js';
-import { corsOptions } from './config/cors-config.js';
-import { ddosConfig } from './config/ddos-config.js';
-import { jsonOptions, urlEncodedOptions } from './config/express-config.js';
-
-dotenv.config();
-connection();
+import health from './src/routes/health.route.js';
+import auth from './src/routes/auth.route.js';
+import theme from './src/routes/theme.route.js';
+import users from './src/routes/user.route.js';
+import { notFound } from './src/middlewares/error.middleware.js';
+import { corsOptions } from './src/configs/cors.config.js';
+import { ddosConfig } from './src/configs/ddos.config.js';
+import { jsonOptions, urlEncodedOptions } from './src/configs/express.config.js';
 
 const app = express();
 const ddos = new Ddos(ddosConfig);
@@ -27,9 +23,10 @@ app.use(compression());
 app.use(helmet());
 app.use(express.urlencoded(urlEncodedOptions));
 app.use(express.json(jsonOptions));
+app.use('/api/health', health);
 app.use('/api/auth', ddos.express, auth);
 app.use('/api/users', users);
 app.use('/api/themes', theme);
 app.use(notFound);
 
-app.listen(+process.env.PORT);
+export default app;

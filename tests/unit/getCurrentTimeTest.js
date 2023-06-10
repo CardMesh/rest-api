@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { getCurrentTime } from '../util/vcard.js';
+import { getCurrentTime } from '../../src/util/vcard.util.js';
 
 describe('getCurrentTime', () => {
   it('should return the current time in UTC format', () => {
