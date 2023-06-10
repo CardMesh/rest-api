@@ -26,7 +26,7 @@ cards in a web browser, accessible via NFC tags, QR codes, or direct URLs.
 
 ### Requirements
 
-- `Node.js` >= 20.0
+- `Node.js` >= 20.x
 
 ## Documentation
 
