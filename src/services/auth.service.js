@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { createHash } from 'crypto';
 import User from '../models/user.model.js';
 import * as passwordService from './password.service.js';
+import * as emailService from './email.service.js';
 
 export const login = async ({
   email,
@@ -47,6 +48,7 @@ export const createUser = async (data) => {
     email,
     name,
     role,
+    sendMail,
   } = data;
 
   const isEmailExist = await User.findOne({ email });
@@ -55,20 +57,24 @@ export const createUser = async (data) => {
   }
 
   // Generate random password
-  const password = passwordService.generatePassword(10);
+  const password = await passwordService.generatePassword(10);
 
   // Hash the password
   const hashedPassword = await passwordService.hashPassword(password);
 
-  const user = new User({
+  const user = await new User({
     name,
     email,
     password: hashedPassword,
     role,
     vCardOptions: {},
-  });
+  }).save();
 
-  return user.save();
+  if (sendMail) {
+    await emailService.sendRecoveryEmail(user.uuid);
+  }
+
+  return user;
 };
 
 export const resetPassword = async (data) => {

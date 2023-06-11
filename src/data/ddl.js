@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { faker } from '@faker-js/faker';
 import Theme from '../models/theme.model.js';
 import User from '../models/user.model.js';
-import connectToDatabase from './connection.js';
+import connection from './connection.js';
 
 dotenv.config();
 
@@ -170,18 +170,18 @@ const generateFakeUser = () => {
 
 (async () => {
   try {
-    await connectToDatabase();
+    await connection(process.env.DB_CONNECTION);
 
     const ThemeCollection = Theme.collection;
     const UserCollection = User.collection;
 
     await ThemeCollection.drop();
-    await UserCollection.drop(); // Drop the User collection if it exists
+    await UserCollection.drop();
 
     await new Theme(theme).save();
-    await new User(adminUser).save(); // Save the admin user
+    await new User(adminUser).save();
 
-    const users = Array.from({ length: 999 }, () => new User(generateFakeUser()));
+    const users = Array.from({ length: 10 }, () => await new User(generateFakeUser()));
     await User.insertMany(users);
 
     console.log('Database setup completed.');
