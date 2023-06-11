@@ -8,7 +8,7 @@ export const updateUser = async (req, res) => {
 
   if (!user) {
     return res.status(404)
-      .json({ message: 'User not found' });
+      .json({ errors: ['User not found.'] });
   }
 
   return res.json({ data: { name: user.name } });
@@ -31,7 +31,7 @@ export const getClickStatistics = async (req, res) => {
 
   if (!user) {
     return res.status(404)
-      .json({ message: 'User not found' });
+      .json({ errors: ['User not found.'] });
   }
 
   const today = new Date();
@@ -112,9 +112,8 @@ export const getAllUsers = async (req, res) => {
         },
       });
   } catch (err) {
-    console.error('Error fetching users:', err);
     res.status(500)
-      .json({ error: 'Error fetching users' });
+      .json({ errors: ['Error fetching users.'] });
   }
 };
 
@@ -124,7 +123,7 @@ export const updateUserSetting = async (req, res) => {
 
   if (setting !== 'theme') {
     return res.status(400)
-      .json({ error: `Invalid setting: ${setting}` });
+      .json({ errors: [`Invalid setting: ${setting}.`] });
   }
 
   const updateField = { 'settings.theme': theme };
@@ -133,7 +132,7 @@ export const updateUserSetting = async (req, res) => {
 
   if (!user) {
     return res.status(404)
-      .json({ error: 'User not found' });
+      .json({ errors: ['User not found.'] });
   }
 
   return res.json({ data: { theme: user.settings.theme } });
@@ -150,7 +149,7 @@ export const updateUserVCardOptions = async (req, res) => {
 
   if (!user) {
     return res.status(404)
-      .json({ message: 'User not found' });
+      .json({ errors: ['User not found.'] });
   }
 
   await userService.saveUserVCard(vCardOptions, uuid);
@@ -165,7 +164,7 @@ export const getVCardOptions = async (req, res) => {
 
   if (!user) {
     return res.status(404)
-      .json({ message: 'User not found' });
+      .json({ errors: ['User not found.'] });
   }
 
   const vCardOptions = {
@@ -183,10 +182,10 @@ export const deleteUser = async (req, res) => {
 
   if (!user) {
     return res.status(404)
-      .json({ message: 'User not found' });
+      .json({ errors: ['User not found.'] });
   }
 
-  return res.json({ data: { message: 'User deleted successfully' } });
+  return res.json({ message: 'User deleted successfully.' });
 };
 
 export const uploadImage = async (req, res) => {
@@ -201,10 +200,10 @@ export const uploadImage = async (req, res) => {
     await userService.uploadUserImage(image, id, imageName, imageHeight);
 
     res.json('Success');
-  } catch (error) {
+  } catch (err) {
     res.status(404)
       .json({
-        errors: ['Error'],
+        errors: ['Error uploading image.'],
       });
   }
 };

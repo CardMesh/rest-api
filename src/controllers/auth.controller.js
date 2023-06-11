@@ -6,7 +6,6 @@ export const signup = async (req, res) => {
     const user = await authService.createUser(req.body);
     res.json({ data: { userId: user.uuid } });
   } catch (err) {
-    console.log(err);
     res.status(400)
       .json({ errors: [err.message] });
   }

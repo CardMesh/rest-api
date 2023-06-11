@@ -32,7 +32,7 @@ const deleteFile = async (filePath) => {
     await unlink(filePath);
   } catch (err) {
     if (err.code !== 'ENOENT') {
-      console.error(`Error deleting file: ${err}`);
+      console.error(`Error deleting file: ${err}.`);
     }
   }
 };

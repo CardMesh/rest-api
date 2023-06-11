@@ -53,7 +53,7 @@ export const createUser = async (data) => {
 
   const isEmailExist = await User.findOne({ email });
   if (isEmailExist) {
-    throw new Error('Email already exists');
+    throw new Error('Email already exists.');
   }
 
   // Generate random password
@@ -87,7 +87,7 @@ export const resetPassword = async (data) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new Error('Email does not exist');
+    throw new Error('Email does not exist.');
   }
 
   const hashedToken = createHash('sha256')
@@ -95,7 +95,7 @@ export const resetPassword = async (data) => {
     .digest('hex');
 
   if (token !== hashedToken) {
-    throw new Error('The token is invalid');
+    throw new Error('The token is invalid.');
   }
 
   const hashedPassword = await passwordService.hashPassword(password);

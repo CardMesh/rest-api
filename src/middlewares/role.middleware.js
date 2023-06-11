@@ -4,7 +4,7 @@ export default (roles) => (req, res, next) => {
   } else {
     res.status(403)
       .send({
-        errors: ['Forbidden'],
+        errors: ['Forbidden.'],
       });
   }
 };

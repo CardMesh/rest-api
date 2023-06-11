@@ -7,7 +7,7 @@ const accessMiddleware = async (req, res, next) => {
   // Check if the user is trying to access someone else's data and is not an admin
   if (req.params.id !== req.id && user.role !== 'admin') {
     return res.status(400)
-      .json({ error: 'You are not allowed to access this user' });
+      .json({ errors: ['You are not allowed to access this user.'] });
   }
 
   // Pass the user object to the next middleware or route handler

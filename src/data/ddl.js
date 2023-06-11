@@ -181,12 +181,12 @@ const generateFakeUser = () => {
     await new Theme(theme).save();
     await new User(adminUser).save();
 
-    const users = Array.from({ length: 10 }, () => await new User(generateFakeUser()));
+    const users = Array.from({ length: 10 }, async () => await new User(generateFakeUser()));
     await User.insertMany(users);
 
     console.log('Database setup completed.');
-  } catch (error) {
-    console.error('Error setting up database:', error);
+  } catch (err) {
+    console.error('Error setting up database:', err);
   } finally {
     process.exit();
   }

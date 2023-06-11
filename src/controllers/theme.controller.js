@@ -6,7 +6,7 @@ export const getAllThemes = async (req, res) => {
     res.json({ data: themes });
   } catch (err) {
     res.status(500)
-      .json({ error: 'Error fetching themes' });
+      .json({ errors: ['Error fetching themes.'] });
   }
 };
 
@@ -16,13 +16,13 @@ export const getThemeById = async (req, res) => {
 
     if (!theme) {
       return res.status(404)
-        .json({ error: 'Theme not found' });
+        .json({ errors: ['Theme not found.'] });
     }
 
-    res.json({ data: theme });
+    return res.json({ data: theme });
   } catch (err) {
-    res.status(500)
-      .json({ error: 'Error fetching theme by ID' });
+    return res.status(500)
+      .json({ errors: ['Error fetching theme.'] });
   }
 };
 
@@ -32,13 +32,13 @@ export const updateThemeOptionsById = async (req, res) => {
 
     if (!theme) {
       return res.status(404)
-        .json({ error: 'Theme not found' });
+        .json({ errors: ['Theme not found.'] });
     }
 
-    res.json({ data: { options: theme } });
-  } catch (error) {
-    res.status(500)
-      .json({ error: 'Server error' });
+    return res.json({ data: { options: theme } });
+  } catch (err) {
+    return res.status(500)
+      .json({ errors: ['Error updating theme options.'] });
   }
 };
 
@@ -52,8 +52,8 @@ export const uploadImage = async (req, res) => {
   try {
     await themeService.uploadThemeImage(req.params.id, image, imageName, imageHeight);
     res.json('Success');
-  } catch (error) {
+  } catch (err) {
     res.status(404)
-      .json({ errors: ['Error'] });
+      .json({ errors: ['Error uploading image.'] });
   }
 };
