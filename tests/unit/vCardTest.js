@@ -39,34 +39,8 @@ const vCardOptions = {
   },
 };
 
-describe('generateVCard', () => {
-  it('should generate a valid vCard v4', () => {
-    const version = 4;
-    const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
-
-    const result = generateVCard(vCardOptions, version, uuid);
-
-    assert.ok(result.includes('FN:Software Engineer John Doe'));
-    assert.ok(result.includes('N:Doe;John;;Software Engineer;'));
-    assert.ok(result.includes('ORG:Example, Inc.'));
-    assert.ok(result.includes('TITLE:Software Engineer'));
-    assert.ok(result.includes('EMAIL;TYPE=work:john.doe@example.com'));
-    assert.ok(result.includes('URL;TYPE=work:www.example.com'));
-    assert.ok(result.includes('REV:'));
-    assert.ok(result.includes('UID:urn:uuid:ac7171f3-9e6b-4099-9812-9ebad504bad5'));
-    assert.ok(result.includes('NOTE:Experienced software engineer'));
-    assert.ok(result.includes('TZ:UTC'));
-    assert.ok(result.includes('ADR;TYPE=work:;;123 Main Street;City;State;12345;Country'));
-    assert.ok(result.includes('GEO:geo:40.7128,-74.006'));
-    assert.ok(result.includes('BDAY:1990-01-01'));
-    assert.ok(result.includes('KIND:organization'));
-    assert.ok(result.includes('TEL;TYPE=work:+4512345678'));
-    assert.ok(!result.includes('PROFILE:vcard'));
-  });
-});
-
-describe('generateVCard', () => {
-  it('should generate a valid vCard v3', () => {
+describe('Generate vCard 3.0', () => {
+  it('should generate a valid vCard 3.0', () => {
     const version = 3;
     const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
 
@@ -88,5 +62,31 @@ describe('generateVCard', () => {
     assert.ok(result.includes('KIND:organization'));
     assert.ok(result.includes('TEL:+4512345678'));
     assert.ok(result.includes('PROFILE:vcard'));
+  });
+});
+
+describe('Generate vCard 4.0', () => {
+  it('should generate a valid vCard 4.0', () => {
+    const version = 4;
+    const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
+
+    const result = generateVCard(vCardOptions, version, uuid);
+
+    assert.ok(result.includes('FN:Software Engineer John Doe'));
+    assert.ok(result.includes('N:Doe;John;;Software Engineer;'));
+    assert.ok(result.includes('ORG:Example, Inc.'));
+    assert.ok(result.includes('TITLE:Software Engineer'));
+    assert.ok(result.includes('EMAIL;TYPE=work:john.doe@example.com'));
+    assert.ok(result.includes('URL;TYPE=work:www.example.com'));
+    assert.ok(result.includes('REV:'));
+    assert.ok(result.includes('UID:urn:uuid:ac7171f3-9e6b-4099-9812-9ebad504bad5'));
+    assert.ok(result.includes('NOTE:Experienced software engineer'));
+    assert.ok(result.includes('TZ:UTC'));
+    assert.ok(result.includes('ADR;TYPE=work:;;123 Main Street;City;State;12345;Country'));
+    assert.ok(result.includes('GEO:geo:40.7128,-74.006'));
+    assert.ok(result.includes('BDAY:1990-01-01'));
+    assert.ok(result.includes('KIND:organization'));
+    assert.ok(result.includes('TEL;TYPE=work:+4512345678'));
+    assert.ok(!result.includes('PROFILE:vcard'));
   });
 });

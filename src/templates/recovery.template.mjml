@@ -1,0 +1,27 @@
+<mjml>
+    <mj-head>
+        <mj-attributes>
+            <mj-text color="#183b56"></mj-text>
+            <mj-font name="Work Sans" href="https://fonts.googleapis.com/css?family=Work+Sans:400,300,600"></mj-font>
+            <mj-all font-size="14px" line-height="26px" font-family="Work Sans,sans-serif,Arial"></mj-all>
+        </mj-attributes>
+    </mj-head>
+    <mj-body background-color="#ebf2fa">
+        <mj-section></mj-section>
+        <mj-section full-width="full-width">
+            <mj-column background-color="#ffffff" css-class="body-section" border-top="4px solid #1c4e80"
+                       padding="15px">
+                <mj-text font-size="24px" align="left">Hello {{name}}</mj-text>
+                <mj-text>Welcome! Your account has been created. To complete your registration, please create a password
+                    by following the link below:
+                </mj-text>
+                <mj-button href="{{resetLink}}" background-color="#1c4e80" color="#ffffff">Create Password</mj-button>
+                <mj-divider border-width="1px" border-color="#1c4e80" border-style="dashed"></mj-divider>
+                <mj-text>Best regards,
+                    <br/>
+                    The CardMesh Team
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>

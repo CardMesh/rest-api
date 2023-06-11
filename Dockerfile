@@ -15,9 +15,8 @@ ENV NODE_ENV=production
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install -y python-is-python3 pkg-config build-essential
+# Update all packages on the OS
+RUN apt update -y && apt full-upgrade -y && apt autoremove -y && apt clean -y && apt autoclean -y
 
 # Install node modules
 COPY --link package.json package-lock.json ./

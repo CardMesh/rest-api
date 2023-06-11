@@ -1,24 +1,17 @@
-import saveVCard from '../util/vcard.util.js';
-import User from '../models/user.model.js';
-import uploadAndConvertImage from '../util/image.util.js';
+import * as userService from '../services/user.service.js';
 
 export const updateUser = async (req, res) => {
   const { name } = req.body;
   const { id } = req.params.id;
 
-  const user = await User.findOneAndUpdate(
-    { uuid: id },
-    { name },
-    { new: true },
-  )
-    .exec();
+  const user = await userService.getUserByIdAndUpdate(id, { name });
 
   if (!user) {
     return res.status(404)
       .json({ message: 'User not found' });
   }
 
-  res.json({ data: { name: user.name } });
+  return res.json({ data: { name: user.name } });
 };
 
 export const addClickStatistics = async (req, res) => {
@@ -28,17 +21,13 @@ export const addClickStatistics = async (req, res) => {
     source = 'web';
   }
 
-  await User.updateOne(
-    { uuid: req.params.id },
-    { $push: { clicks: { source } } },
-  );
+  await userService.updateClickStatistics(req.params.id, source);
 
   res.json({});
 };
 
 export const getClickStatistics = async (req, res) => {
-  const user = await User.findOne({ uuid: req.params.id })
-    .exec();
+  const user = await userService.getUserById(req.params.id);
 
   if (!user) {
     return res.status(404)
@@ -92,7 +81,7 @@ export const getClickStatistics = async (req, res) => {
     totalClicksByType,
   };
 
-  res.json({ data });
+  return res.json({ data });
 };
 
 export const getAllUsers = async (req, res) => {
@@ -101,30 +90,10 @@ export const getAllUsers = async (req, res) => {
     const limit = +req.query.limit || 10;
     const searchQuery = req.query.search || '';
 
-    const skipDocs = (page - 1) * limit;
-
-    const searchPattern = new RegExp(searchQuery, 'i');
-
-    const query = User.find()
-      .select('email name role uuid')
-      .skip(skipDocs)
-      .limit(limit);
-
-    const searchQueries = [
-      { email: searchPattern },
-      { name: searchPattern },
-      { role: searchPattern },
-    ];
-
-    if (searchQuery) {
-      query.or(searchQueries);
-    }
-
-    const users = await query;
-
-    const totalUsers = await User.countDocuments({
-      $or: searchQueries,
-    });
+    const {
+      users,
+      totalUsers,
+    } = await userService.getUserByPageLimitAndSearchQuery(page, limit, searchQuery);
 
     const totalPages = Math.ceil(totalUsers / limit);
     const nextPage = page < totalPages ? page + 1 : null;
@@ -160,48 +129,39 @@ export const updateUserSetting = async (req, res) => {
 
   const updateField = { 'settings.theme': theme };
 
-  const user = await User.findOneAndUpdate(
-    { uuid: req.params.id },
-    updateField,
-    { new: true },
-  )
-    .exec();
+  const user = await userService.getUserByIdAndUpdate(req.params.id, updateField);
 
   if (!user) {
     return res.status(404)
       .json({ error: 'User not found' });
   }
 
-  res.json({ data: { theme: user.settings.theme } });
+  return res.json({ data: { theme: user.settings.theme } });
 };
 
 export const updateUserVCardOptions = async (req, res) => {
   const vCardOptions = req.body;
   const uuid = req.params.id;
 
-  const user = await User.findOneAndUpdate(
-    { uuid },
+  const user = await userService.getUserByIdAndUpdate(
+    uuid,
     { vCardOptions },
-    { new: true },
-  )
-    .exec();
+  );
 
   if (!user) {
     return res.status(404)
       .json({ message: 'User not found' });
   }
 
-  await saveVCard(vCardOptions, uuid, 3);
-  await saveVCard(vCardOptions, uuid, 4);
+  await userService.saveUserVCard(vCardOptions, uuid);
 
-  res.json({ data: { vCardOptionsSchema: user.vCardOptions } });
+  return res.json({ data: { vCardOptionsSchema: user.vCardOptions } });
 };
 
 export const getVCardOptions = async (req, res) => {
   const uuid = req.params.id;
 
-  const user = await User.findOne({ uuid })
-    .exec();
+  const user = await userService.getUserById(uuid);
 
   if (!user) {
     return res.status(404)
@@ -213,21 +173,20 @@ export const getVCardOptions = async (req, res) => {
     uuid,
   };
 
-  res.json({ data: vCardOptions });
+  return res.json({ data: vCardOptions });
 };
 
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
 
-  const user = await User.findOneAndDelete({ uuid: id })
-    .exec();
+  const user = await userService.deleteUserById(id);
 
   if (!user) {
     return res.status(404)
       .json({ message: 'User not found' });
   }
 
-  res.json({ data: { message: 'User deleted successfully' } });
+  return res.json({ data: { message: 'User deleted successfully' } });
 };
 
 export const uploadImage = async (req, res) => {
@@ -238,9 +197,8 @@ export const uploadImage = async (req, res) => {
   } = req.body;
   const { id } = req.params;
 
-  console.log(image);
   try {
-    await uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);
+    await userService.uploadUserImage(image, id, imageName, imageHeight);
 
     res.json('Success');
   } catch (error) {

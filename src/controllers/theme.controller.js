@@ -1,10 +1,8 @@
-import Theme from '../models/theme.model.js';
-import uploadAndConvertImage from '../util/image.util.js';
+import * as themeService from '../services/theme.service.js';
 
 export const getAllThemes = async (req, res) => {
   try {
-    const themes = await Theme.find()
-      .exec();
+    const themes = await themeService.getAllThemes();
     res.json({ data: themes });
   } catch (err) {
     res.status(500)
@@ -13,11 +11,8 @@ export const getAllThemes = async (req, res) => {
 };
 
 export const getThemeById = async (req, res) => {
-  const themeId = req.params.id;
-
   try {
-    const theme = await Theme.findOne({ themeId })
-      .exec();
+    const theme = await themeService.getThemeById(req.params.id);
 
     if (!theme) {
       return res.status(404)
@@ -32,12 +27,8 @@ export const getThemeById = async (req, res) => {
 };
 
 export const updateThemeOptionsById = async (req, res) => {
-  const { id } = req.params;
-
   try {
-    const options = req.body;
-    const theme = await Theme.findOneAndUpdate({ id }, options, { new: true })
-      .exec();
+    const theme = await themeService.updateThemeOptionsById(req.params.id, req.body);
 
     if (!theme) {
       return res.status(404)
@@ -57,16 +48,12 @@ export const uploadImage = async (req, res) => {
     imageName,
     imageHeight,
   } = req.body;
-  const { id } = req.params;
 
   try {
-    await uploadAndConvertImage(image, `uploads/themes/${id}`, imageName, imageHeight);
-
+    await themeService.uploadThemeImage(req.params.id, image, imageName, imageHeight);
     res.json('Success');
   } catch (error) {
     res.status(404)
-      .json({
-        errors: ['Error'],
-      });
+      .json({ errors: ['Error'] });
   }
 };

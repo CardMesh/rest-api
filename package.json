@@ -23,7 +23,7 @@
     "lint": "eslint . --ext .js",
     "test:unit": "mocha ./tests/unit",
     "test:it": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --testTimeout=5000 --forceExit",
-    "test":  "npm run test:unit && npm run test:it"
+    "test": "npm run test:unit && npm run test:it"
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
@@ -39,6 +39,7 @@
     "jsonwebtoken": "^9.0.0",
     "mjml": "^4.14.1",
     "mongoose": "^7.2.3",
+    "mustache": "^4.2.0",
     "nodemailer": "^6.9.3",
     "sharp": "^0.32.1"
   },

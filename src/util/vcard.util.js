@@ -2,8 +2,8 @@ import { mkdir, unlink, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
 import { readFileSync } from 'fs';
 
-export const getCurrentTime = () => {
-  const now = new Date();
+export const formatTimeUTC = (date) => {
+  const now = date;
   const year = now.getUTCFullYear();
   const month = (now.getUTCMonth() + 1).toString()
     .padStart(2, '0');
@@ -112,7 +112,7 @@ ORG:${company}
 TITLE:${title}
 EMAIL${workProp}:${email}
 URL${workProp}:${web}
-REV:${getCurrentTime()}
+REV:${formatTimeUTC(new Date())}
 UID:urn:uuid:${uuid}
 NOTE:${bio}
 TZ:${timeZone}
