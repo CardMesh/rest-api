@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { formatTimeUTC } from '../../src/util/vcard.util.js';
+import { formatTimeUTC } from '../../src/utils/vcard.util.js';
 
 describe('Format time to UTC', () => {
   it('should return the time in UTC format', () => {

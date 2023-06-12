@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import mustache from 'mustache';
 import mjml from 'mjml';
 import { createHash } from 'crypto';
-import sendMail from '../util/mail.util.js';
+import sendMail from '../utils/mail.util.js';
 import User from '../models/user.model.js';
 
 export const sendRecoveryEmail = async (uuid) => {

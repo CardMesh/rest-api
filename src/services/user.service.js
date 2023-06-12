@@ -1,6 +1,6 @@
 import User from '../models/user.model.js';
-import saveVCard from '../util/vcard.util.js';
-import uploadAndConvertImage from '../util/image.util.js';
+import saveVCard from '../utils/vcard.util.js';
+import uploadAndConvertImage from '../utils/image.util.js';
 
 export const getUserByIdAndUpdate = async (id, update) => User.findOneAndUpdate(
   { uuid: id },
