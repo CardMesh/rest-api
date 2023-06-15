@@ -1,27 +1,85 @@
 import mongoose from 'mongoose';
 
 const themeSchema = new mongoose.Schema({
-  fontColor: String,
-  backgroundColor: String,
-  secondaryFontColor: String,
-  socialIconFontColor: String,
-  socialIconBackgroundColor: String,
-  btnFontColor: String,
-  btnBackgroundColor: String,
-  displayPhone: Boolean,
-  displaySms: Boolean,
-  displayEmail: Boolean,
-  displayWeb: Boolean,
-  displayAddress: Boolean,
-  displayMap: Boolean,
-  displayContactBtn: Boolean,
-  buttonText: String,
-  logoHeight: Number,
-  timeZone: String,
   themeId: {
     type: Number,
     required: true,
     unique: true,
+  },
+  color: {
+    font: {
+      secondary: {
+        type: String,
+        default: '',
+      },
+      primary: {
+        type: String,
+        default: '',
+      },
+    },
+    background: {
+      type: String,
+      default: '',
+    },
+    socialIcons: {
+      font: {
+        type: String,
+        default: '',
+      },
+      background: {
+        type: String,
+        default: '',
+      },
+    },
+    vCardBtn: {
+      font: {
+        type: String,
+        default: '',
+      },
+      background: {
+        type: String,
+        default: '',
+      },
+    },
+  },
+  display: {
+    phone: {
+      type: Boolean,
+      default: true,
+    },
+    sms: {
+      type: Boolean,
+      default: true,
+    },
+    email: {
+      type: Boolean,
+      default: true,
+    },
+    web: {
+      type: Boolean,
+      default: true,
+    },
+    address: {
+      type: Boolean,
+      default: true,
+    },
+    map: {
+      type: Boolean,
+      default: true,
+    },
+    vCardBtn: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  logo: {
+    height: Number,
+  },
+  vCardBtn: {
+    text: {
+      type: String,
+      default: '',
+    },
   },
 });
 

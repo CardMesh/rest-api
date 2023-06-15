@@ -149,6 +149,11 @@ const clickSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
+  themeId: {
+    type: Number,
+    default: 1,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -187,11 +192,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['user', 'admin', 'editor'],
     default: 'user',
-  },
-  themeId: {
-    type: Number,
-    default: 1,
-    required: true,
   },
 });
 

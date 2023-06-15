@@ -8,23 +8,37 @@ import connection from './connection.js';
 dotenv.config();
 
 const theme = {
-  fontColor: '#182d30',
-  backgroundColor: '#dee1dd',
-  secondaryFontColor: '#2f575d',
-  socialIconFontColor: '#182d30',
-  socialIconBackgroundColor: '#dee1dd',
-  btnFontColor: '#dee1dd',
-  btnBackgroundColor: '#182d30',
-  displayPhone: true,
-  displaySms: true,
-  displayEmail: true,
-  displayWeb: true,
-  displayAddress: true,
-  displayMap: true,
-  displayContactBtn: true,
-  buttonText: 'Add to contacts',
-  logoHeight: 15,
   themeId: 1,
+  color: {
+    font: {
+      primary: '#182d30',
+      secondary: '#2f575d',
+    },
+    background: '#dee1dd',
+    socialIcons: {
+      font: '#182d30',
+      background: '#dee1dd',
+    },
+    vCardBtn: {
+      font: '#dee1dd',
+      background: '#182d30',
+    },
+  },
+  display: {
+    phone: true,
+    sms: true,
+    email: true,
+    web: true,
+    address: true,
+    map: true,
+    vCardBtn: true,
+  },
+  logo: {
+    height: 15,
+  },
+  vCardBtn: {
+    text: 'Add to contacts',
+  },
 };
 
 const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
@@ -76,11 +90,11 @@ const adminUser = {
     },
     socialMedia: {
       twitter: '',
-      linkedin: '',
+      linkedin: 'https://www.linkedin.com/in/mathiasreker/',
       facebook: '',
       instagram: '',
       pinterest: '',
-      github: '',
+      github: 'https://github.com/MathiasReker',
     },
     personal: {
       birthday: '1992-10-09',
@@ -181,7 +195,8 @@ const generateFakeUser = () => {
     await new Theme(theme).save();
     await new User(adminUser).save();
 
-    const users = Array.from({ length: 10 }, async () => await new User(generateFakeUser()));
+    let users = Array.from({ length: 10 }, generateFakeUser);
+    users = await Promise.all(users.map(async (user) => new User(user)));
     await User.insertMany(users);
 
     console.log('Database setup completed.');

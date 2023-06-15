@@ -33,6 +33,4 @@ export const resetRules = [
       min: 8,
       max: 255,
     }),
-  body('token')
-    .isUUID(),
 ];

@@ -93,7 +93,6 @@ export const resetPassword = async (data) => {
   const hashedToken = createHash('sha256')
     .update(user.password)
     .digest('hex');
-
   if (token !== hashedToken) {
     throw new Error('The token is invalid.');
   }
