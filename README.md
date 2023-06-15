@@ -55,7 +55,7 @@ The app defines the following CRUD APIs.
 | POST   | /api/users/:id/statistics/clicks | Create click statistics for specific user | 
 | PUT    | /api/users/:id/settings/:setting | Update setting for specific user          |
 | PUT    | /api/users/:id/vcard-options     | Update vcard options for specific user    |
-| DELETE | /api/users                       | Delete specific user                      |
+| DELETE | /api/users/:id                   | Delete specific user                      |
 
 ### Themes
 
@@ -74,7 +74,7 @@ The app defines the following CRUD APIs.
 git clone git@github.com:CardMesh/rest-api.git && cd rest-api
 ```
 
-**2. Configure your private `.env` file, following the `.env-sample sample`**
+**2. Configure your private `.env` file, following the `.env.example` sample**
 
 **3. Initialize the database**
 
