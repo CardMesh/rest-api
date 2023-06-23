@@ -16,7 +16,7 @@ import checkUserAccess from '../middlewares/access.middleware.js';
 
 const router = express.Router();
 
-router.get('/', verifyToken, roles('admin'), getAllUsers);
+router.get('/', verifyToken, roles(['admin']), getAllUsers);
 router.get('/:id/statistics/clicks', verifyToken, getClickStatistics);
 router.get('/:id/vcard-options', getVCardOptions);
 router.post('/:id/statistics/clicks', addClickStatistics);
