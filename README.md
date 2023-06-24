@@ -78,7 +78,7 @@ git clone git@github.com:CardMesh/rest-api.git && cd rest-api
 
 **3. Initialize the database**
 
-This will install the program with a lot of test users. To change this, you can modify `./database/ddl.js`.
+This will install the program with a lot of test users. To change this, you can modify `./src/data/ddl.js`.
 
 ```bash
 npm run db:init
