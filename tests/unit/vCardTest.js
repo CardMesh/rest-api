@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { generateVCard } from '../../src/utils/vcard.util.js';
 
-const vCardOptions = {
+const vCard = {
   professional: {
     title: 'Software Engineer',
     bio: 'Experienced software engineer',
@@ -44,7 +44,7 @@ describe('Generate vCard 3.0', () => {
     const version = 3;
     const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
 
-    const result = generateVCard(vCardOptions, version, uuid);
+    const result = generateVCard(vCard, version, uuid);
 
     assert.ok(result.includes('FN:Software Engineer John Doe'));
     assert.ok(result.includes('N:Doe;John;;Software Engineer;'));
@@ -70,7 +70,7 @@ describe('Generate vCard 4.0', () => {
     const version = 4;
     const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
 
-    const result = generateVCard(vCardOptions, version, uuid);
+    const result = generateVCard(vCard, version, uuid);
 
     assert.ok(result.includes('FN:Software Engineer John Doe'));
     assert.ok(result.includes('N:Doe;John;;Software Engineer;'));

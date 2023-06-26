@@ -37,7 +37,7 @@ const deleteFile = async (filePath) => {
   }
 };
 
-export const generateVCard = (vCardOptions, version, uuid) => {
+export const generateVCard = (vCard, version, uuid) => {
   let workProp = '';
   let vCardVersion = '3.0';
 
@@ -62,30 +62,30 @@ export const generateVCard = (vCardOptions, version, uuid) => {
     logoData = '';
   }
 
-  const vCardOptionsName = vCardOptions.person;
-  const vCardOptionsProfessional = vCardOptions.professional;
-  const vCardOptionsLocation = vCardOptions.location;
-  const vCardOptionsContact = vCardOptions.contact;
-  const vCardOptionsPersonal = vCardOptions.personal;
+  const vCardName = vCard.person;
+  const vCardProfessional = vCard.professional;
+  const vCardLocation = vCard.location;
+  const vCardContact = vCard.contact;
+  const vCardPersonal = vCard.personal;
 
   const {
     title,
     company,
     bio,
-  } = vCardOptionsProfessional;
+  } = vCardProfessional;
 
   const {
     firstName,
     lastName,
     middleName,
     suffix,
-  } = vCardOptionsName;
+  } = vCardName;
 
   const {
     email,
     web,
     phone,
-  } = vCardOptionsContact;
+  } = vCardContact;
 
   const {
     countryCode,
@@ -101,7 +101,7 @@ export const generateVCard = (vCardOptions, version, uuid) => {
     country,
     coordinates,
     timeZone,
-  } = vCardOptionsLocation;
+  } = vCardLocation;
 
   return `BEGIN:VCARD
 VERSION:${vCardVersion}
@@ -119,20 +119,20 @@ ADR${workProp}:;;${street}${storey ? `, ${storey}` : ''};${city};${state};${post
 PHOTO;${version === 3 ? `TYPE=PNG;ENCODING=b:${avatarData}` : `ENCODING=BASE64;TYPE=PNG:${avatarData}`}
 LOGO;${version === 3 ? `TYPE=PNG;ENCODING=b:${logoData}` : `ENCODING=BASE64;TYPE=PNG:${logoData}`}
 GEO:geo:${coordinates.latitude},${coordinates.longitude}
-BDAY:${vCardOptionsPersonal.birthday}
+BDAY:${vCardPersonal.birthday}
 KIND:organization
 TEL${workProp}:+${countryCode}${number}
 ${version === 3 ? 'PROFILE:vcard' : ''}
 END:VCARD`;
 };
 
-export const saveVCard = async (vCardOptions, uuid, version = 3) => {
+export const saveVCard = async (vCard, uuid, version = 3) => {
   const uploadsDirectory = await createUploadsDirectory(`users/${uuid}`);
 
   const vcardPath = join(uploadsDirectory, `vcard${version}.vcf`);
   await deleteFile(vcardPath);
 
-  const vCardData = generateVCard(vCardOptions, version, uuid);
+  const vCardData = generateVCard(vCard, version, uuid);
   await writeFile(vcardPath, vCardData, { encoding: 'utf8' });
 };
 

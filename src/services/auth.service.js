@@ -67,7 +67,7 @@ export const createUser = async (data) => {
     email,
     password: hashedPassword,
     role,
-    vCardOptions: {},
+    vCard: {},
   }).save();
 
   if (sendMail) {

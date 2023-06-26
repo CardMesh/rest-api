@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { randomUUID } from 'crypto';
 
-const vCardOptionsSchema = new mongoose.Schema({
+const vCardSchema = new mongoose.Schema({
   person: {
     firstName: {
       type: String,
@@ -174,7 +174,7 @@ const userSchema = new mongoose.Schema({
     maxlength: 1024,
   },
   clicks: [clickSchema],
-  vCardOptions: vCardOptionsSchema,
+  vCard: vCardSchema,
   settings: {
     theme: {
       type: String,

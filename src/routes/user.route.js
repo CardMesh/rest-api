@@ -4,10 +4,10 @@ import {
   deleteUser,
   getAllUsers,
   getClickStatistics,
-  getVCardOptions,
+  getVCard,
   updateUser,
   updateUserSetting,
-  updateUserVCardOptions,
+  updateUserVCard,
   uploadImage,
 } from '../controllers/user.controller.js';
 import verifyToken from '../middlewares/verify.middleware.js';
@@ -18,12 +18,12 @@ const router = express.Router();
 
 router.get('/', verifyToken, roles(['admin']), getAllUsers);
 router.get('/:id/statistics/clicks', verifyToken, getClickStatistics);
-router.get('/:id/vcard-options', getVCardOptions);
+router.get('/:id/vcard-options', getVCard);
 router.post('/:id/statistics/clicks', addClickStatistics);
 router.post('/:id/images', verifyToken, checkUserAccess, uploadImage);
 router.put('/:id', verifyToken, roles(['admin']), checkUserAccess, updateUser);
 router.put('/:id/settings/:setting', verifyToken, checkUserAccess, updateUserSetting);
-router.put('/:id/vcard-options', verifyToken, checkUserAccess, updateUserVCardOptions);
+router.put('/:id/vcard-options', verifyToken, checkUserAccess, updateUserVCard);
 router.delete('/:id', verifyToken, roles(['admin']), deleteUser);
 
 export default router;

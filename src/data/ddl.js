@@ -53,7 +53,7 @@ const adminUser = {
     theme: 'dark',
   },
   role: 'admin',
-  vCardOptions: {
+  vCard: {
     name: {
       firstName: 'Mathias',
       middleName: '',
@@ -121,7 +121,7 @@ const generateFakeUser = () => {
       theme: 'dark',
     },
     role: 'user',
-    vCardOptions: {
+    vCard: {
       name: {
         firstName,
         middleName: faker.person.middleName(),

@@ -138,13 +138,13 @@ export const updateUserSetting = async (req, res) => {
   return res.json({ data: { theme: user.settings.theme } });
 };
 
-export const updateUserVCardOptions = async (req, res) => {
-  const vCardOptions = req.body;
+export const updateUserVCard = async (req, res) => {
+  const vCard = req.body;
   const uuid = req.params.id;
 
   const user = await userService.getUserByIdAndUpdate(
     uuid,
-    { vCardOptions },
+    { vCard },
   );
 
   if (!user) {
@@ -152,12 +152,12 @@ export const updateUserVCardOptions = async (req, res) => {
       .json({ errors: ['User not found.'] });
   }
 
-  await userService.saveUserVCard(vCardOptions, uuid);
+  await userService.saveUserVCard(vCard, uuid);
 
-  return res.json({ data: { vCardOptionsSchema: user.vCardOptions } });
+  return res.json({ data: { vCardSchema: user.vCard } });
 };
 
-export const getVCardOptions = async (req, res) => {
+export const getVCard = async (req, res) => {
   const uuid = req.params.id;
 
   const user = await userService.getUserById(uuid);
@@ -167,12 +167,12 @@ export const getVCardOptions = async (req, res) => {
       .json({ errors: ['User not found.'] });
   }
 
-  const vCardOptions = {
-    ...user.vCardOptions.toObject(),
+  const vCard = {
+    ...user.vCard.toObject(),
     uuid,
   };
 
-  return res.json({ data: vCardOptions });
+  return res.json({ data: vCard });
 };
 
 export const deleteUser = async (req, res) => {
@@ -201,7 +201,7 @@ export const uploadImage = async (req, res) => {
 
     const user = await userService.getUserById(id);
 
-    await userService.saveUserVCard(user.vCardOptions, id);
+    await userService.saveUserVCard(user.vCard, id);
 
     res.json('Success');
   } catch (err) {

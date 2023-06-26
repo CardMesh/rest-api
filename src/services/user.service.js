@@ -49,7 +49,7 @@ export const uploadUserImage = async (image, id, imageName, imageHeight) => {
   await uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);
 };
 
-export const saveUserVCard = async (vCardOptions, uuid) => {
-  await saveVCard(vCardOptions, uuid, 3);
-  await saveVCard(vCardOptions, uuid, 4);
+export const saveUserVCard = async (vCard, uuid) => {
+  await saveVCard(vCard, uuid, 3);
+  await saveVCard(vCard, uuid, 4);
 };
