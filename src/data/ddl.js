@@ -36,9 +36,6 @@ const theme = {
   logo: {
     height: 15,
   },
-  vCardBtn: {
-    text: 'Add to contacts',
-  },
 };
 
 const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);

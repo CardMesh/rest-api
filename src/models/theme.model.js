@@ -75,12 +75,6 @@ const themeSchema = new mongoose.Schema({
   logo: {
     height: Number,
   },
-  vCardBtn: {
-    text: {
-      type: String,
-      default: '',
-    },
-  },
 });
 
 export default mongoose.model('Theme', themeSchema);

@@ -7,7 +7,7 @@ const vCard = {
     bio: 'Experienced software engineer',
     company: 'Example, Inc.',
   },
-  name: {
+  person: {
     firstName: 'John',
     lastName: 'Doe',
     middleName: '',
