@@ -199,6 +199,10 @@ export const uploadImage = async (req, res) => {
   try {
     await userService.uploadUserImage(image, id, imageName, imageHeight);
 
+    const user = await userService.getUserById(id);
+
+    await userService.saveUserVCard(user.vCardOptions, id);
+
     res.json('Success');
   } catch (err) {
     res.status(404)

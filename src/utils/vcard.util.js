@@ -62,7 +62,7 @@ export const generateVCard = (vCardOptions, version, uuid) => {
     logoData = '';
   }
 
-  const vCardOptionsName = vCardOptions.name;
+  const vCardOptionsName = vCardOptions.person;
   const vCardOptionsProfessional = vCardOptions.professional;
   const vCardOptionsLocation = vCardOptions.location;
   const vCardOptionsContact = vCardOptions.contact;

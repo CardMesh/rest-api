@@ -45,7 +45,9 @@ export const getUserByPageLimitAndSearchQuery = async (page, limit, searchQuery)
 export const deleteUserById = async (id) => User.findOneAndDelete({ uuid: id })
   .exec();
 
-export const uploadUserImage = async (image, id, imageName, imageHeight) => uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);
+export const uploadUserImage = async (image, id, imageName, imageHeight) => {
+  await uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);
+};
 
 export const saveUserVCard = async (vCardOptions, uuid) => {
   await saveVCard(vCardOptions, uuid, 3);
