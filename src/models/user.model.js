@@ -128,6 +128,12 @@ const UserSchema = new mongoose.Schema({
     enum: ['user', 'admin', 'editor'],
     default: 'user',
   },
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
+  },
 });
 
 export default mongoose.model('User', UserSchema);

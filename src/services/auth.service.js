@@ -1,8 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { createHash } from 'crypto';
+import argon2 from 'argon2';
 import User from '../models/user.model.js';
 import * as passwordService from './password.service.js';
 import * as emailService from './email.service.js';
+import { argon2Options } from '../configs/argon2.config.js';
 
 export const login = async ({
   email,
@@ -90,18 +92,26 @@ export const resetPassword = async (data) => {
     throw new Error('Email does not exist.');
   }
 
-  const hashedToken = createHash('sha256')
-    .update(user.password)
-    .digest('hex');
-  if (token !== hashedToken) {
+  // Check if the token has expired
+  if (!user.resetPasswordExpires || Date.now() > user.resetPasswordExpires) {
+    throw new Error('The token has expired.');
+  }
+
+  // Check if the provided token matches the stored hashed token
+  const isTokenValid = await argon2.verify(user.resetPasswordToken, token);
+  if (!isTokenValid) {
     throw new Error('The token is invalid.');
   }
 
-  const hashedPassword = await passwordService.hashPassword(password);
+  const hashedPassword = await argon2.hash(password, argon2Options);
 
-  return User.findOneAndUpdate(
-    { email: user.email },
-    { password: hashedPassword },
-    { new: true },
-  );
+  // Reset the token and expiry
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+
+  // Update the user's password and save the user
+  user.password = hashedPassword;
+  await user.save();
+
+  return user;
 };
