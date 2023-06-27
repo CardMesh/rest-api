@@ -12,6 +12,7 @@ const vCard = {
     lastName: 'Doe',
     middleName: '',
     suffix: '',
+    birthday: '1990-01-01',
   },
   contact: {
     email: 'john.doe@example.com',
@@ -33,9 +34,6 @@ const vCard = {
       latitude: 40.7128,
       longitude: -74.0060,
     },
-  },
-  personal: {
-    birthday: '1990-01-01',
   },
 };
 

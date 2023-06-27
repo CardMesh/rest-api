@@ -66,7 +66,6 @@ export const generateVCard = (vCard, version, uuid) => {
   const vCardProfessional = vCard.professional;
   const vCardLocation = vCard.location;
   const vCardContact = vCard.contact;
-  const vCardPersonal = vCard.personal;
 
   const {
     title,
@@ -79,6 +78,7 @@ export const generateVCard = (vCard, version, uuid) => {
     lastName,
     middleName,
     suffix,
+    birthday,
   } = vCardName;
 
   const {
@@ -119,7 +119,7 @@ ADR${workProp}:;;${street}${storey ? `, ${storey}` : ''};${city};${state};${post
 PHOTO;${version === 3 ? `TYPE=PNG;ENCODING=b:${avatarData}` : `ENCODING=BASE64;TYPE=PNG:${avatarData}`}
 LOGO;${version === 3 ? `TYPE=PNG;ENCODING=b:${logoData}` : `ENCODING=BASE64;TYPE=PNG:${logoData}`}
 GEO:geo:${coordinates.latitude},${coordinates.longitude}
-BDAY:${vCardPersonal.birthday}
+BDAY:${birthday}
 KIND:organization
 TEL${workProp}:+${countryCode}${number}
 ${version === 3 ? 'PROFILE:vcard' : ''}

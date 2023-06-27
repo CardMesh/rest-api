@@ -19,7 +19,10 @@ export const sendRecoveryEmail = async (uuid) => {
   const resetLink = `${process.env.BASE_URL_FRONT}/reset?uuid=${user.uuid}&token=${token}&email=${user.email}`;
 
   const template = readFileSync('./src/templates/recovery.template.mjml', 'utf8');
-  const mjmlContent = mustache.render(template, { name: user.name, resetLink });
+  const mjmlContent = mustache.render(template, {
+    name: user.name,
+    resetLink,
+  });
   const htmlOutput = mjml(mjmlContent).html;
 
   return sendMail(user.email, 'Reset password', htmlOutput);

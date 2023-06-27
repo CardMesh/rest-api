@@ -1,5 +1,27 @@
 import mongoose from 'mongoose';
 
+const defaultTrue = {
+  type: Boolean,
+  default: true,
+};
+
+const DisplaySchema = new mongoose.Schema({
+  phone: defaultTrue,
+  sms: defaultTrue,
+  email: defaultTrue,
+  web: defaultTrue,
+  address: defaultTrue,
+  map: defaultTrue,
+  vCardBtn: defaultTrue,
+}, { _id: false });
+
+const defaultColor = {
+  type: String,
+  trim: true,
+  required: true,
+  match: [/^#(?:[0-9a-fA-F]{3}){1,2}$/, 'Please fill a valid hex color.'],
+};
+
 const themeSchema = new mongoose.Schema({
   themeId: {
     type: Number,
@@ -8,72 +30,47 @@ const themeSchema = new mongoose.Schema({
   },
   color: {
     font: {
-      secondary: {
-        type: String,
-        default: '',
-      },
       primary: {
-        type: String,
-        default: '',
+        ...defaultColor,
+        default: '#182d30',
+      },
+      secondary: {
+        ...defaultColor,
+        default: '#2f575d',
       },
     },
     background: {
-      type: String,
-      default: '',
+      ...defaultColor,
+      default: '#dee1dd',
     },
     socialIcons: {
       font: {
-        type: String,
-        default: '',
+        ...defaultColor,
+        default: '#182d30',
       },
       background: {
-        type: String,
-        default: '',
+        ...defaultColor,
+        default: '#dee1dd',
       },
     },
     vCardBtn: {
       font: {
-        type: String,
-        default: '',
+        ...defaultColor,
+        default: '#dee1dd',
       },
       background: {
-        type: String,
-        default: '',
+        ...defaultColor,
+        default: '#182d30',
       },
     },
   },
-  display: {
-    phone: {
-      type: Boolean,
-      default: true,
-    },
-    sms: {
-      type: Boolean,
-      default: true,
-    },
-    email: {
-      type: Boolean,
-      default: true,
-    },
-    web: {
-      type: Boolean,
-      default: true,
-    },
-    address: {
-      type: Boolean,
-      default: true,
-    },
-    map: {
-      type: Boolean,
-      default: true,
-    },
-    vCardBtn: {
-      type: Boolean,
-      default: true,
-    },
-  },
+  display: DisplaySchema,
   logo: {
-    height: Number,
+    height: {
+      type: Number,
+      default: 20,
+      required: true,
+    },
   },
 });
 

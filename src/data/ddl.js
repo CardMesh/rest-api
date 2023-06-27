@@ -8,50 +8,6 @@ import * as userService from '../services/user.service.js';
 
 dotenv.config();
 
-const theme = {
-  themeId: 1,
-  color: {
-    font: {
-      primary: '#182d30',
-      secondary: '#2f575d',
-    },
-    background: '#dee1dd',
-    socialIcons: {
-      font: '#182d30',
-      background: '#dee1dd',
-    },
-    vCardBtn: {
-      font: '#dee1dd',
-      background: '#182d30',
-    },
-  },
-  display: {
-    phone: true,
-    sms: true,
-    email: true,
-    web: true,
-    address: true,
-    map: true,
-    vCardBtn: true,
-  },
-  logo: {
-    height: 15,
-  },
-};
-
-const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS, 10);
-const salt = await bcrypt.genSalt(saltRounds);
-
-const hashPassword = (password) => bcrypt.hashSync(password, salt);
-
-const adminUser = (inputName, inputPassword, inputEmail) => ({
-  name: inputName,
-  email: inputEmail,
-  password: hashPassword(inputPassword),
-  role: 'admin',
-  vCard: {},
-});
-
 const promptUser = (question) => {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -66,6 +22,24 @@ const promptUser = (question) => {
   });
 };
 
+const adminUser = async (inputName, inputPassword, inputEmail) => {
+  const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
+
+  return {
+    name: inputName,
+    email: inputEmail,
+    password: bcrypt.hashSync(inputPassword, salt),
+    role: 'admin',
+    vCard: {
+      person: {},
+      professional: {},
+      contact: {},
+      location: {},
+      socialMedia: {},
+    },
+  };
+};
+
 async function installUser() {
   console.log('\n\x1b[1mCreate admin user:\x1b[0m');
   const username = await promptUser('\tEnter name:');
@@ -74,11 +48,16 @@ async function installUser() {
 
   console.log('\n\x1b[32mUser installation complete!\x1b[0m');
 
-  const newUser = await new User(adminUser(username, password, email)).save();
+  const newUser = await new User(await adminUser(username, password, email)).save();
   await userService.saveUserVCard(newUser.vCard, newUser.uuid);
 }
 
 async function installTheme() {
+  const theme = {
+    themeId: 1,
+    display: {},
+  };
+
   await new Theme(theme).save();
   console.log('\n\x1b[32mTheme setup complete!\x1b[0m');
 }
@@ -87,8 +66,10 @@ async function installTheme() {
   try {
     await connection(process.env.DB_CONNECTION);
 
-    await Theme.collection.drop();
-    await User.collection.drop();
+    await Promise.all([
+      Theme.collection.drop(),
+      User.collection.drop(),
+    ]);
 
     await installTheme();
     await installUser();
