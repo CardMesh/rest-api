@@ -15,7 +15,8 @@ export const sendRecoveryEmail = async (uuid) => {
   }
 
   // Generate a random 32-byte token
-  const token = randomBytes(32).toString('hex');
+  const token = randomBytes(32)
+    .toString('hex');
 
   // Hash the token and store it in the user record for later verification
   user.resetPasswordToken = await argon2.hash(token, argon2Options);

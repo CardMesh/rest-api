@@ -5,7 +5,8 @@ export const getAllThemes = async () => Theme.find()
   .exec();
 
 export const getThemeById = async (id) => {
-  const theme = await Theme.findOne({ uuid: id }).exec();
+  const theme = await Theme.findOne({ uuid: id })
+    .exec();
 
   if (!theme) {
     throw new Error('Theme not found.');
@@ -19,7 +20,8 @@ export const updateThemeOptionsById = async (id, options) => {
     throw new Error('Invalid options provided.');
   }
 
-  const updatedTheme = await Theme.findOneAndUpdate({ uuid: id }, options, { new: true }).exec();
+  const updatedTheme = await Theme.findOneAndUpdate({ uuid: id }, options, { new: true })
+    .exec();
 
   if (!updatedTheme) {
     throw new Error('Theme not found.');

@@ -43,7 +43,8 @@ export const getUserByPageLimitAndSearchQuery = async (page, limit, searchQuery)
   };
 };
 
-export const deleteUserById = async (id) => User.findOneAndDelete({ uuid: { $eq: id } }).exec();
+export const deleteUserById = async (id) => User.findOneAndDelete({ uuid: { $eq: id } })
+  .exec();
 
 export const uploadUserImage = async (image, id, imageName, imageHeight) => {
   await uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);

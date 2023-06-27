@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import { createHash } from 'crypto';
 import argon2 from 'argon2';
 import User from '../models/user.model.js';
 import * as passwordService from './password.service.js';
