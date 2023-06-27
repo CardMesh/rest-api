@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
-import bcrypt from 'bcryptjs';
 import readline from 'readline';
+import argon2 from 'argon2';
 import Theme from '../models/theme.model.js';
 import User from '../models/user.model.js';
 import connection from './connection.js';
 import * as userService from '../services/user.service.js';
+import { argon2Options } from '../configs/argon2.config.js';
 
 dotenv.config();
 
@@ -23,12 +24,12 @@ const promptUser = (question) => {
 };
 
 const adminUser = async (inputName, inputPassword, inputEmail) => {
-  const salt = await bcrypt.genSalt(+process.env.BCRYPT_SALT_ROUNDS);
+  const hash = await argon2.hash(inputPassword, argon2Options);
 
   return {
     name: inputName,
     email: inputEmail,
-    password: bcrypt.hashSync(inputPassword, salt),
+    password: hash,
     role: 'admin',
     vCard: {
       person: {},
