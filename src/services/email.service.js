@@ -6,7 +6,7 @@ import sendMail from '../utils/mail.util.js';
 import User from '../models/user.model.js';
 
 export const sendRecoveryEmail = async (uuid) => {
-  const user = await User.findOne({ uuid });
+  const user = await User.findOne({ uuid: { $eq: uuid } });
 
   if (!user) {
     throw new Error('User does not exist.');

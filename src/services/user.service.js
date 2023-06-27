@@ -3,23 +3,24 @@ import saveVCard from '../utils/vcard.util.js';
 import uploadAndConvertImage from '../utils/image.util.js';
 
 export const getUserByIdAndUpdate = async (id, update) => User.findOneAndUpdate(
-  { uuid: id },
+  { uuid: { $eq: id } },
   update,
   { new: true },
 )
   .exec();
 
-export const getUserById = async (id) => User.findOne({ uuid: id })
+export const getUserById = async (id) => User.findOne({ uuid: { $eq: id } })
   .exec();
 
 export const updateClickStatistics = async (id, source) => User.updateOne(
-  { uuid: id },
+  { uuid: { $eq: id } },
   { $push: { clicks: { source } } },
 );
 
 export const getUserByPageLimitAndSearchQuery = async (page, limit, searchQuery) => {
   const skipDocs = (page - 1) * limit;
-  const searchPattern = new RegExp(searchQuery, 'i');
+  const escapedSearchQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const searchPattern = new RegExp(escapedSearchQuery, 'i');
   const query = User.find()
     .select('email name role uuid')
     .skip(skipDocs)
@@ -42,8 +43,7 @@ export const getUserByPageLimitAndSearchQuery = async (page, limit, searchQuery)
   };
 };
 
-export const deleteUserById = async (id) => User.findOneAndDelete({ uuid: id })
-  .exec();
+export const deleteUserById = async (id) => User.findOneAndDelete({ uuid: { $eq: id } }).exec();
 
 export const uploadUserImage = async (image, id, imageName, imageHeight) => {
   await uploadAndConvertImage(image, `uploads/users/${id}`, imageName, imageHeight);

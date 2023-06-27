@@ -8,7 +8,7 @@ export const login = async ({
   email,
   password,
 }) => {
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: { $eq: email } });
 
   const loginError = 'A user with this combination of credentials was not found.';
 
@@ -51,7 +51,7 @@ export const createUser = async (data) => {
     sendMail,
   } = data;
 
-  const isEmailExist = await User.findOne({ email });
+  const isEmailExist = await User.findOne({ email: { $eq: email } });
   if (isEmailExist) {
     throw new Error('Email already exists.');
   }
@@ -84,7 +84,7 @@ export const resetPassword = async (data) => {
     password,
   } = data;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: { $eq: email } });
 
   if (!user) {
     throw new Error('Email does not exist.');
