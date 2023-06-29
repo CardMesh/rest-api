@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 
 const verifyMiddleware = (req, res, next) => {
-  const token = req.header('Authorization');
+  const authorizationHeader = req.header('Authorization');
+  const token = authorizationHeader.split(' ')[1];
 
   if (!token) {
     return res.status(401)

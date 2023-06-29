@@ -4,7 +4,7 @@ import * as emailService from '../services/email.service.js';
 export const signup = async (req, res) => {
   try {
     const user = await authService.createUser(req.body);
-    res.json({ data: { userId: user.uuid } });
+    res.status(201).json({ data: { userId: user.uuid } });
   } catch (err) {
     res.status(400)
       .json({ errors: [err.message] });
@@ -15,7 +15,7 @@ export const login = async (req, res) => {
   try {
     const user = await authService.login(req.body);
     res
-      .header('Authorization', user.token)
+      .header('Authorization', `Bearer ${user.token}`)
       .json({ data: user });
   } catch (err) {
     res.status(400)
