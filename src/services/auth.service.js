@@ -10,7 +10,6 @@ export const login = async ({
   password,
 }) => {
   const user = await User.findOne({ email: { $eq: email } });
-
   const loginError = 'A user with this combination of credentials was not found.';
 
   if (!user) {
