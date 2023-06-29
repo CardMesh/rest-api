@@ -14,7 +14,7 @@ const verifyMiddleware = (req, res, next) => {
     req.id = data.id;
     req.role = data.role;
     next();
-  } catch (error) {
+  } catch (err) {
     res.status(400)
       .json({ errors: ['Token is invalid'] });
   }

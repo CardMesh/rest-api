@@ -45,7 +45,7 @@ const saveImage = async (image, directory, imageName, imageHeight) => {
       .toFile(pngImagePath);
 
     fs.unlinkSync(uploadPath); // Synchronously delete the file
-  } catch (error) {
+  } catch (err) {
     throw new Error('Error uploading and converting file.');
   }
 };
