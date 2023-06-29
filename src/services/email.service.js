@@ -21,9 +21,8 @@ export const sendRecoveryEmail = async (uuid) => {
   // Hash the token and store it in the user record for later verification
   user.resetPasswordToken = await argon2.hash(token, argon2Options);
 
-  // Set token expiry date to 1 hour from now
+  // Set token expiry date
   user.resetPasswordExpires = Date.now() + (60 * 60 * +process.env.RESET_PASSWORD_EXPIRES_HOURS);
-
   await user.save();
 
   const resetLink = `${process.env.BASE_URL_FRONT}/reset?uuid=${user.uuid}&token=${token}&email=${user.email}`;

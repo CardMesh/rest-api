@@ -28,6 +28,11 @@ export const recoverRules = [
 export const resetRules = [
   body('email')
     .isEmail(),
+  body('token')
+    .isLength({
+      min: 64,
+      max: 64,
+    }),
   body('password')
     .isLength({
       min: 8,
