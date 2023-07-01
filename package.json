@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/cardmesh/rest-api/issues"
   },
-  "homepage": "https://cardmesh-rest-api.fly.dev",
+  "homepage": "https://github.com/cardmesh/rest-api",
   "scripts": {
     "start": "node server.js --omit=dev",
     "dev": "cross-env nodemon server.js",
