@@ -24,7 +24,6 @@ const deleteFile = async (filePath) => {
 };
 
 export const generateVCard = (uuid, vCard, theme, version = 3) => {
-  console.log(1, vCard);
   const workProp = version === 4 ? ';TYPE=work' : '';
   let vCardString = `BEGIN:VCARD
 VERSION:${version === 4 ? '4.0' : '3.0'}
