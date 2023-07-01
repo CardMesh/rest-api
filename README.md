@@ -49,6 +49,7 @@ The app defines the following CRUD APIs.
 |--------|----------------------------------|-------------------------------------------|
 | GET    | /api/users                       | Get all users                             |
 | GET    | /api/users/:id                   | Get specific user                         |
+| GET    | /api/users/:id/vcf               | Get vcf file for specific user            |
 | GET    | /api/users/:id/vcards            | Get vcard options for specific user       |
 | GET    | /api/users/:id/statistics/clicks | Get click statistics for specific user    |
 | POST   | /api/users/:id/images            | Upload image for specific user            |
