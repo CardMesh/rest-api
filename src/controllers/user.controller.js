@@ -1,4 +1,5 @@
 import * as userService from '../services/user.service.js';
+import * as themeService from '../services/theme.service.js';
 
 export const updateUser = async (req, res) => {
   const { name } = req.body;
@@ -139,20 +140,33 @@ export const updateUserSetting = async (req, res) => {
 };
 
 export const updateUserVCard = async (req, res) => {
-  const vCard = req.body;
-  const uuid = req.params.id;
+  const {
+    contact,
+    location,
+    person,
+    professional,
+    socialMedia,
+  } = req.body;
+  const { id: uuid } = req.params;
 
-  const user = await userService.getUserByIdAndUpdate(
-    uuid,
-    { vCard },
-  );
+  const updateField = {
+    'vCard.contact': contact,
+    'vCard.location': location,
+    'vCard.person': person,
+    'vCard.professional': professional,
+    'vCard.socialMedia': socialMedia,
+  };
+
+  const user = await userService.getUserByIdAndUpdate(uuid, updateField, { new: true });
 
   if (!user) {
     return res.status(404)
       .json({ errors: ['User not found.'] });
   }
 
-  await userService.saveUserVCard(vCard, uuid);
+  const theme = await themeService.getThemeById(user.themeId);
+
+  await userService.saveUserVCard(uuid, user.vCard, theme);
 
   return res.json({ data: { vCardSchema: user.vCard } });
 };
@@ -191,17 +205,18 @@ export const deleteUser = async (req, res) => {
 export const uploadImage = async (req, res) => {
   const { image } = req.files;
   const {
-    imageName,
     imageHeight,
   } = req.body;
   const { id } = req.params;
 
   try {
-    await userService.uploadUserImage(image, id, imageName, imageHeight);
+    await userService.uploadAvatarById(id, image, imageHeight);
 
     const user = await userService.getUserById(id);
 
-    await userService.saveUserVCard(user.vCard, id);
+    const theme = await themeService.getThemeById(user.themeId);
+
+    await userService.saveUserVCard(id, user.vCard, theme);
 
     res.json('Success');
   } catch (err) {

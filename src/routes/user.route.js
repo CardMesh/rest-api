@@ -26,7 +26,7 @@ router.post('/:id/statistics/clicks', validate(userIdRules), addClickStatistics)
 router.post('/:id/images', verifyToken, checkUserAccess, validate(userIdRules), validate(imageRules), uploadImage);
 router.put('/:id', verifyToken, roles(['admin']), checkUserAccess, validate(userIdRules), updateUser); // TODO not yet in use
 router.put('/:id/settings/:setting', verifyToken, checkUserAccess, validate(userIdRules), updateUserSetting); // TODO not yet in use
-router.put('/:id/vcard-options', verifyToken, checkUserAccess, validate(vCardRules), validate(userIdRules), updateUserVCard);
+router.put('/:id/vcard-options', verifyToken, checkUserAccess, validate(userIdRules), validate(vCardRules), updateUserVCard);
 router.delete('/:id', verifyToken, roles(['admin']), validate(userIdRules), deleteUser);
 
 export default router;

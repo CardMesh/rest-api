@@ -35,6 +35,29 @@ const vCard = {
       longitude: -74.0060,
     },
   },
+  avatar: {
+    format: {
+      png: 'x',
+      webp: 'y',
+    },
+    size: {
+      height: 130,
+      width: 130,
+    },
+  },
+};
+
+const theme = {
+  logo: {
+    format: {
+      png: 'x',
+      webp: 'y',
+    },
+    size: {
+      height: 50,
+      width: 20,
+    },
+  },
 };
 
 describe('Generate vCard 3.0', () => {
@@ -42,7 +65,7 @@ describe('Generate vCard 3.0', () => {
     const version = 3;
     const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
 
-    const result = generateVCard(vCard, version, uuid);
+    const result = generateVCard(uuid, vCard, theme, version);
 
     assert.ok(result.includes('FN:Software Engineer John Doe'));
     assert.ok(result.includes('N:Doe;John;;Software Engineer;'));
@@ -68,7 +91,7 @@ describe('Generate vCard 4.0', () => {
     const version = 4;
     const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
 
-    const result = generateVCard(vCard, version, uuid);
+    const result = generateVCard(uuid, vCard, theme, version);
 
     assert.ok(result.includes('FN:Software Engineer John Doe'));
     assert.ok(result.includes('N:Doe;John;;Software Engineer;'));

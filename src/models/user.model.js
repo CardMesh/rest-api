@@ -72,12 +72,32 @@ const ClickSchema = new mongoose.Schema({
   source: { type: String },
 }, { _id: false });
 
+const AvatarSchema = new mongoose.Schema({
+  size: {
+    height: {
+      type: Number,
+    },
+    width: {
+      type: Number,
+    },
+  },
+  format: {
+    png: {
+      type: String,
+    },
+    webp: {
+      type: String,
+    },
+  },
+}, { _id: false });
+
 const vCardSchema = new mongoose.Schema({
   person: PersonSchema,
   professional: ProfessionalSchema,
   contact: ContactSchema,
   location: LocationSchema,
   socialMedia: SocialMediaSchema,
+  avatar: AvatarSchema,
 }, { _id: false });
 
 const UserSchema = new mongoose.Schema({

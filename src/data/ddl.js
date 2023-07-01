@@ -37,8 +37,21 @@ const adminUser = async (inputName, inputPassword, inputEmail) => {
       contact: {},
       location: {},
       socialMedia: {},
+      avatar: {
+        size: {},
+        format: {},
+      },
     },
   };
+};
+
+const theme = {
+  themeId: 1,
+  display: {},
+  logo: {
+    size: {},
+    format: {},
+  },
 };
 
 async function installUser() {
@@ -50,15 +63,10 @@ async function installUser() {
   console.log('\n\x1b[32mUser installation complete!\x1b[0m');
 
   const newUser = await new User(await adminUser(username, password, email)).save();
-  await userService.saveUserVCard(newUser.vCard, newUser.uuid);
+  await userService.saveUserVCard(newUser.uuid, newUser.vCard, theme);
 }
 
 async function installTheme() {
-  const theme = {
-    themeId: 1,
-    display: {},
-  };
-
   await new Theme(theme).save();
   console.log('\n\x1b[32mTheme setup complete!\x1b[0m');
 }

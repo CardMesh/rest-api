@@ -22,6 +22,28 @@ const defaultColor = {
   match: [/^#(?:[0-9a-fA-F]{3}){1,2}$/, 'Please fill a valid hex color.'],
 };
 
+const LogoSchema = new mongoose.Schema({
+  size: {
+    height: {
+      type: Number,
+      default: 30,
+    },
+    width: {
+      type: Number,
+    },
+  },
+  format: {
+    png: {
+      type: String,
+      default: '',
+    },
+    webp: {
+      type: String,
+      default: '',
+    },
+  },
+}, { _id: false });
+
 const themeSchema = new mongoose.Schema({
   themeId: {
     type: Number,
@@ -65,13 +87,7 @@ const themeSchema = new mongoose.Schema({
     },
   },
   display: DisplaySchema,
-  logo: {
-    height: {
-      type: Number,
-      default: 20,
-      required: true,
-    },
-  },
+  logo: LogoSchema,
 });
 
 export default mongoose.model('Theme', themeSchema);

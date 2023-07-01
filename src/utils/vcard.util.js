@@ -1,29 +1,15 @@
 import { mkdir, unlink, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
-import { readFileSync } from 'fs';
 
-export const formatTimeUTC = (date) => {
-  const year = date.getUTCFullYear();
-  const month = (date.getUTCMonth() + 1).toString()
-    .padStart(2, '0');
-  const day = date.getUTCDate()
-    .toString()
-    .padStart(2, '0');
-  const hours = date.getUTCHours()
-    .toString()
-    .padStart(2, '0');
-  const minutes = date.getUTCMinutes()
-    .toString()
-    .padStart(2, '0');
-  const seconds = date.getUTCSeconds()
-    .toString()
-    .padStart(2, '0');
-  return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
-};
+const padStartTwo = (num) => num.toString()
+  .padStart(2, '0');
 
-const createUploadsDirectory = async (uuid) => {
-  const uploadsDirectory = resolve(`uploads/${uuid}`);
+export const formatTimeUTC = (date) => `${date.getUTCFullYear()}${padStartTwo(date.getUTCMonth() + 1)}${padStartTwo(date.getUTCDate())}T${padStartTwo(date.getUTCHours())}${padStartTwo(date.getUTCMinutes())}${padStartTwo(date.getUTCSeconds())}Z`;
+
+const createUploadsDirectory = async (directory) => {
+  const uploadsDirectory = resolve(`uploads/${directory}`);
   await mkdir(uploadsDirectory, { recursive: true });
+
   return uploadsDirectory;
 };
 
@@ -37,103 +23,47 @@ const deleteFile = async (filePath) => {
   }
 };
 
-export const generateVCard = (vCard, version, uuid) => {
-  let workProp = '';
-  let vCardVersion = '3.0';
-
-  if (version === 4) {
-    workProp = ';TYPE=work';
-    vCardVersion = '4.0';
-  }
-
-  let avatarData;
-  const avatarPath = `./uploads/users/${uuid}/avatar.png`;
-  try {
-    avatarData = readFileSync(avatarPath, { encoding: 'base64' });
-  } catch (err) {
-    avatarData = '';
-  }
-
-  let logoData;
-  const logoPath = './uploads/themes/1/logo.png';
-  try {
-    logoData = readFileSync(logoPath, { encoding: 'base64' });
-  } catch (err) {
-    logoData = '';
-  }
-
-  const vCardName = vCard.person;
-  const vCardProfessional = vCard.professional;
-  const vCardLocation = vCard.location;
-  const vCardContact = vCard.contact;
-
-  const {
-    title,
-    company,
-    bio,
-  } = vCardProfessional;
-
-  const {
-    firstName,
-    lastName,
-    middleName,
-    suffix,
-    birthday,
-  } = vCardName;
-
-  const {
-    email,
-    web,
-    phone,
-  } = vCardContact;
-
-  const {
-    countryCode,
-    number,
-  } = phone;
-
-  const {
-    street,
-    storey,
-    city,
-    state,
-    postalCode,
-    country,
-    coordinates,
-    timeZone,
-  } = vCardLocation;
-
-  return `BEGIN:VCARD
-VERSION:${vCardVersion}
-FN:${title} ${firstName} ${lastName}
-N:${lastName};${firstName};${middleName};${title};${suffix}
-ORG:${company}
-TITLE:${title}
-EMAIL${workProp}:${email}
-URL${workProp}:${web}
+export const generateVCard = (uuid, vCard, theme, version = 3) => {
+  console.log(1, vCard);
+  const workProp = version === 4 ? ';TYPE=work' : '';
+  let vCardString = `BEGIN:VCARD
+VERSION:${version === 4 ? '4.0' : '3.0'}
+FN:${vCard.professional.title} ${vCard.person.firstName} ${vCard.person.lastName}
+N:${vCard.person.lastName};${vCard.person.firstName};${vCard.person.middleName};${vCard.professional.title};${vCard.person.suffix}
+ORG:${vCard.professional.company}
+TITLE:${vCard.professional.title}
+EMAIL${workProp}:${vCard.contact.email}
+URL${workProp}:${vCard.contact.web}
 REV:${formatTimeUTC(new Date())}
 UID:urn:uuid:${uuid}
-NOTE:${bio}
-TZ:${timeZone}
-ADR${workProp}:;;${street}${storey ? `, ${storey}` : ''};${city};${state};${postalCode};${country}
-PHOTO;${version === 3 ? `TYPE=PNG;ENCODING=b:${avatarData}` : `ENCODING=BASE64;TYPE=PNG:${avatarData}`}
-LOGO;${version === 3 ? `TYPE=PNG;ENCODING=b:${logoData}` : `ENCODING=BASE64;TYPE=PNG:${logoData}`}
-GEO:geo:${coordinates.latitude},${coordinates.longitude}
-BDAY:${birthday}
+NOTE:${vCard.professional.bio}
+TZ:${vCard.location.timeZone}
+ADR${workProp}:;;${vCard.location.street}${vCard.location.storey ? `, ${vCard.location.storey}` : ''};${vCard.location.city};${vCard.location.state};${vCard.location.postalCode};${vCard.location.country}
+GEO:geo:${vCard.location.coordinates.latitude},${vCard.location.coordinates.longitude}
+BDAY:${vCard.person.birthday}
 KIND:organization
-TEL${workProp}:+${countryCode}${number}
-${version === 3 ? 'PROFILE:vcard' : ''}
-END:VCARD`;
+TEL${workProp}:${vCard.contact.phone.countryCode ? `+${vCard.contact.phone.countryCode}${vCard.contact.phone.number}` : ''}
+${version === 3 ? 'PROFILE:vcard' : ''}`;
+
+  if (vCard?.avatar?.format?.png) {
+    vCardString += `\nPHOTO;${version === 3 ? `TYPE=PNG;ENCODING=b:${vCard.avatar.format.png}` : `ENCODING=BASE64;TYPE=PNG:${vCard.avatar.format.png}`}`;
+  }
+
+  if (vCard?.logo?.format?.png) {
+    vCardString += `\nLOGO;${version === 3 ? `TYPE=PNG;ENCODING=b:${vCard.logo.format.png}` : `ENCODING=BASE64;TYPE=PNG:${vCard.logo.format.png}`}`;
+  }
+
+  vCardString += '\nEND:VCARD';
+
+  return vCardString;
 };
 
-export const saveVCard = async (vCard, uuid, version = 3) => {
+export const saveVCard = async (uuid, vCard, theme, version = 3) => {
   const uploadsDirectory = await createUploadsDirectory(`users/${uuid}`);
-
   const vcardPath = join(uploadsDirectory, `vcard${version}.vcf`);
-  await deleteFile(vcardPath);
 
-  const vCardData = generateVCard(vCard, version, uuid);
-  await writeFile(vcardPath, vCardData, { encoding: 'utf8' });
+  await deleteFile(vcardPath);
+  await writeFile(vcardPath, generateVCard(uuid, vCard, theme, version), { encoding: 'utf8' });
 };
 
 export default saveVCard;

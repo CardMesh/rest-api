@@ -45,12 +45,11 @@ export const updateThemeOptionsById = async (req, res) => {
 export const uploadImage = async (req, res) => {
   const { image } = req.files;
   const {
-    imageName,
     imageHeight,
   } = req.body;
 
   try {
-    await themeService.uploadThemeImage(req.params.id, image, imageName, imageHeight);
+    await themeService.updateThemeLogoById(req.params.id, image, imageHeight);
     res.json('Success');
   } catch (err) {
     res.status(404)

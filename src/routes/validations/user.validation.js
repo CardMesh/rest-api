@@ -3,8 +3,6 @@ import { body } from 'express-validator';
 export const imageRules = [
   body('imageHeight')
     .isInt({ min: 1 }),
-  body('imageName')
-    .isString(),
 ];
 
 export const vCardRules = [
@@ -41,9 +39,6 @@ export const vCardRules = [
     .isString(),
 
   body('contact.phone.number')
-    .optional()
-    .isString(),
-  body('contact.phone.countryCode')
     .optional()
     .isString(),
   body('contact.phone.extension')

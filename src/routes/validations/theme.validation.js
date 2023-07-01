@@ -3,8 +3,6 @@ import { body } from 'express-validator';
 export const imageRules = [
   body('imageHeight')
     .isInt({ min: 1 }),
-  body('imageName')
-    .isString(),
 ];
 
 export const themeOptionsRules = [ // TODO add missing color..
@@ -12,7 +10,7 @@ export const themeOptionsRules = [ // TODO add missing color..
     .isInt({ min: 1 }),
   body('color.background')
     .isHexColor(),
-  body('logo.height')
+  body('logo.size.height')
     .isInt({ min: 1 }),
   body('display.phone')
     .isBoolean(),

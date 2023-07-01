@@ -1,8 +1,6 @@
-import fs from 'fs';
-import path from 'path';
 import sharp from 'sharp';
 
-const saveImage = async (image, directory, imageName, imageHeight) => {
+const saveImage = async (image, height) => {
   if (!image || image.size === 0) {
     throw new Error('No files were uploaded.');
   }
@@ -12,39 +10,43 @@ const saveImage = async (image, directory, imageName, imageHeight) => {
     throw new Error('File type not supported.');
   }
 
-  const uploadsDirectory = path.resolve(directory);
-
-  if (!fs.existsSync(uploadsDirectory)) {
-    fs.mkdirSync(uploadsDirectory, { recursive: true });
-  }
-
-  const webpImagePath = path.join(uploadsDirectory, `${imageName}.webp`);
-  const pngImagePath = path.join(uploadsDirectory, `${imageName}.png`);
-
-  if (fs.existsSync(webpImagePath)) {
-    fs.unlinkSync(webpImagePath);
-  }
-
-  if (fs.existsSync(pngImagePath)) {
-    fs.unlinkSync(pngImagePath);
-  }
-
-  const uploadPath = path.join(uploadsDirectory, image.name);
-
   try {
-    await image.mv(uploadPath);
+    const imageResizer = sharp(image.data);
 
-    await sharp(uploadPath)
-      .resize({ height: +imageHeight })
+    const metadata = await imageResizer.metadata();
+    const aspectRatio = metadata.width / metadata.height;
+    const width = Math.round(height * aspectRatio);
+
+    const resizeOptions = {
+      width,
+      height,
+    };
+
+    const webpImageBufferPromise = imageResizer.resize(resizeOptions)
       .webp()
-      .toFile(webpImagePath);
-
-    await sharp(uploadPath)
-      .resize({ height: +imageHeight })
+      .toBuffer();
+    const pngImageBufferPromise = imageResizer.resize(resizeOptions)
       .png()
-      .toFile(pngImagePath);
+      .toBuffer();
 
-    fs.unlinkSync(uploadPath); // Synchronously delete the file
+    const [webpImageBuffer, pngImageBuffer] = await Promise.all([
+      webpImageBufferPromise,
+      pngImageBufferPromise,
+    ]);
+
+    const webpBase64 = webpImageBuffer.toString('base64');
+    const pngBase64 = pngImageBuffer.toString('base64');
+
+    return {
+      size: {
+        height,
+        width,
+      },
+      format: {
+        png: pngBase64,
+        webp: webpBase64,
+      },
+    };
   } catch (err) {
     throw new Error('Error uploading and converting file.');
   }
