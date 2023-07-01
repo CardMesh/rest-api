@@ -66,6 +66,8 @@ export const uploadAvatarById = async (id, image, imageHeight) => {
 };
 
 export const saveUserVCard = async (uuid, vCard, theme) => {
-  await saveVCard(uuid, vCard, theme, 3); // todo use map map?
-  await saveVCard(uuid, vCard, theme, 4);
+  await Promise.all([
+    saveVCard(uuid, vCard, theme, 3),
+    saveVCard(uuid, vCard, theme, 4),
+  ]);
 };
