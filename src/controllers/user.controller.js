@@ -1,5 +1,6 @@
 import * as userService from '../services/user.service.js';
 import * as themeService from '../services/theme.service.js';
+import { generateVCard } from '../utils/vcard.util.js';
 
 export const updateUser = async (req, res) => {
   const { name } = req.body;
@@ -166,7 +167,10 @@ export const updateUserVCard = async (req, res) => {
 
   const theme = await themeService.getThemeById(user.themeId);
 
-  await userService.saveUserVCard(uuid, user.vCard, theme);
+  if (!theme) {
+    return res.status(404)
+      .json({ errors: ['Theme not found.'] });
+  }
 
   return res.json({ data: { vCardSchema: user.vCard } });
 };
@@ -187,6 +191,35 @@ export const getVCard = async (req, res) => {
   };
 
   return res.json({ data: vCard });
+};
+
+export const getVcf = async (req, res) => {
+  const uuid = req.params.id;
+
+  const user = await userService.getUserById(uuid);
+
+  if (!user) {
+    return res.status(404)
+      .json({ errors: ['User not found.'] });
+  }
+
+  const vCard = user.vCard.toObject();
+
+  const theme = await themeService.getThemeById(user.themeId);
+
+  if (!theme) {
+    return res.status(404)
+      .json({ errors: ['Theme not found.'] });
+  }
+
+  const version = req.query.v;
+
+  const fullName = `${vCard.person.firstName} ${vCard.person.lastName}`;
+
+  res.setHeader('Content-Type', 'text/vcard');
+  res.setHeader('Content-Disposition', `attachment; filename="${fullName}"`);
+
+  return res.send(generateVCard(uuid, vCard, theme, version));
 };
 
 export const deleteUser = async (req, res) => {
@@ -216,7 +249,10 @@ export const uploadImage = async (req, res) => {
 
     const theme = await themeService.getThemeById(user.themeId);
 
-    await userService.saveUserVCard(id, user.vCard, theme);
+    if (!theme) {
+      return res.status(404)
+        .json({ errors: ['Theme not found.'] });
+    }
 
     res.json('Success');
   } catch (err) {

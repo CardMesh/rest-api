@@ -49,12 +49,12 @@ The app defines the following CRUD APIs.
 |--------|----------------------------------|-------------------------------------------|
 | GET    | /api/users                       | Get all users                             |
 | GET    | /api/users/:id                   | Get specific user                         |
-| GET    | /api/users/:id/vcard-options     | Get vcard options for specific user       |
+| GET    | /api/users/:id/vcards            | Get vcard options for specific user       |
 | GET    | /api/users/:id/statistics/clicks | Get click statistics for specific user    |
 | POST   | /api/users/:id/images            | Upload image for specific user            |
 | POST   | /api/users/:id/statistics/clicks | Create click statistics for specific user | 
 | PUT    | /api/users/:id/settings/:setting | Update setting for specific user          |
-| PUT    | /api/users/:id/vcard-options     | Update vcard options for specific user    |
+| PUT    | /api/users/:id/vcards            | Update vcard options for specific user    |
 | DELETE | /api/users/:id                   | Delete specific user                      |
 
 ### Themes

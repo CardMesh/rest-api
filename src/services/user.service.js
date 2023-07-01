@@ -1,5 +1,4 @@
 import User from '../models/user.model.js';
-import saveVCard from '../utils/vcard.util.js';
 import convertImage from '../utils/image.util.js';
 
 export const getUserByIdAndUpdate = async (id, update) => User.findOneAndUpdate(
@@ -63,11 +62,4 @@ export const uploadAvatarById = async (id, image, imageHeight) => {
   } catch (err) {
     throw new Error('Error uploading avatar.');
   }
-};
-
-export const saveUserVCard = async (uuid, vCard, theme) => {
-  await Promise.all([
-    saveVCard(uuid, vCard, theme, 3),
-    saveVCard(uuid, vCard, theme, 4),
-  ]);
 };

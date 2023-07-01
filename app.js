@@ -15,7 +15,6 @@ import { limiterOptions } from './src/configs/limiter.config.js';
 
 const app = express();
 
-app.use('/uploads', express.static('uploads'));
 app.use(fileUpload());
 app.use(cors(corsOptions));
 app.use(compression());

@@ -32,7 +32,8 @@ export const updateThemeOptionsById = async (id, options) => {
     update['logo.size'] = sanitizedLogo.size;
   }
 
-  const updatedTheme = await Theme.findOneAndUpdate({ uuid: id }, update, { new: true }).exec();
+  const updatedTheme = await Theme.findOneAndUpdate({ uuid: id }, update, { new: true })
+    .exec();
   if (!updatedTheme) {
     throw new Error('Theme not found.');
   }
@@ -51,7 +52,8 @@ export const updateThemeLogoById = async (id, image, imageHeight) => {
     };
 
     const sanitizedId = sanitize(id);
-    const updatedTheme = await Theme.findOneAndUpdate({ uuid: sanitizedId }, update, { new: true }).exec();
+    const updatedTheme = await Theme.findOneAndUpdate({ uuid: sanitizedId }, update, { new: true })
+      .exec();
     if (!updatedTheme) {
       throw new Error('Theme not found.');
     }

@@ -4,7 +4,6 @@ import argon2 from 'argon2';
 import Theme from '../models/theme.model.js';
 import User from '../models/user.model.js';
 import connection from './connection.js';
-import * as userService from '../services/user.service.js';
 import { argon2Options } from '../configs/argon2.config.js';
 
 dotenv.config();
@@ -62,8 +61,7 @@ async function installUser() {
 
   console.log('\n\x1b[32mUser installation complete!\x1b[0m');
 
-  const newUser = await new User(await adminUser(username, password, email)).save();
-  await userService.saveUserVCard(newUser.uuid, newUser.vCard, theme);
+  await new User(await adminUser(username, password, email)).save();
 }
 
 async function installTheme() {

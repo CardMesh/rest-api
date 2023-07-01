@@ -1,27 +1,7 @@
-import { mkdir, unlink, writeFile } from 'fs/promises';
-import { join, resolve } from 'path';
-
 const padStartTwo = (num) => num.toString()
   .padStart(2, '0');
 
 export const formatTimeUTC = (date) => `${date.getUTCFullYear()}${padStartTwo(date.getUTCMonth() + 1)}${padStartTwo(date.getUTCDate())}T${padStartTwo(date.getUTCHours())}${padStartTwo(date.getUTCMinutes())}${padStartTwo(date.getUTCSeconds())}Z`;
-
-const createUploadsDirectory = async (directory) => {
-  const uploadsDirectory = resolve(`uploads/${directory}`);
-  await mkdir(uploadsDirectory, { recursive: true });
-
-  return uploadsDirectory;
-};
-
-const deleteFile = async (filePath) => {
-  try {
-    await unlink(filePath);
-  } catch (err) {
-    if (err.code !== 'ENOENT') {
-      console.error(`Error deleting file: ${err}.`);
-    }
-  }
-};
 
 export const generateVCard = (uuid, vCard, theme, version = 3) => {
   const workProp = version === 4 ? ';TYPE=work' : '';
@@ -56,13 +36,3 @@ ${version === 3 ? 'PROFILE:vcard' : ''}`;
 
   return vCardString;
 };
-
-export const saveVCard = async (uuid, vCard, theme, version = 3) => {
-  const uploadsDirectory = await createUploadsDirectory(`users/${uuid}`);
-  const vcardPath = join(uploadsDirectory, `vcard${version}.vcf`);
-
-  await deleteFile(vcardPath);
-  await writeFile(vcardPath, generateVCard(uuid, vCard, theme, version), { encoding: 'utf8' });
-};
-
-export default saveVCard;
