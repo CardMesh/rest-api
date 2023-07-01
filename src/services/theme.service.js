@@ -1,3 +1,4 @@
+import sanitize from 'mongo-sanitize';
 import Theme from '../models/theme.model.js';
 import convertImage from '../utils/image.util.js';
 
@@ -23,13 +24,15 @@ export const updateThemeOptionsById = async (id, options) => {
     ...updatedOptions
   } = options;
 
-  const update = { ...updatedOptions };
-  if (logo) {
-    update['logo.size'] = logo.size;
+  const sanitizedLogo = sanitize(logo);
+  const sanitizedOptions = sanitize(updatedOptions);
+
+  const update = { ...sanitizedOptions };
+  if (sanitizedLogo) {
+    update['logo.size'] = sanitizedLogo.size;
   }
 
-  const updatedTheme = await Theme.findOneAndUpdate({ uuid: id }, update, { new: true })
-    .exec();
+  const updatedTheme = await Theme.findOneAndUpdate({ uuid: id }, update, { new: true }).exec();
   if (!updatedTheme) {
     throw new Error('Theme not found.');
   }
@@ -41,19 +44,20 @@ export const updateThemeLogoById = async (id, image, imageHeight) => {
   try {
     const { format } = await convertImage(image, +imageHeight);
 
+    const sanitizedFormat = sanitize(format);
+
     const update = {
-      'logo.format': format,
+      'logo.format': sanitizedFormat,
     };
 
-    const updatedTheme = await Theme.findOneAndUpdate({ uuid: id }, update, { new: true })
-      .exec();
+    const sanitizedId = sanitize(id);
+    const updatedTheme = await Theme.findOneAndUpdate({ uuid: sanitizedId }, update, { new: true }).exec();
     if (!updatedTheme) {
       throw new Error('Theme not found.');
     }
 
     return updatedTheme;
   } catch (err) {
-    console.log(err);
     throw new Error('Error uploading theme image.');
   }
 };
