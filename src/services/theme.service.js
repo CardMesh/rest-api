@@ -2,15 +2,54 @@ import sanitize from 'mongo-sanitize';
 import Theme from '../models/theme.model.js';
 import convertImage from '../utils/image.util.js';
 
-export const getAllThemes = () => Theme.find()
-  .exec();
+export const getThemesByPageLimitAndSearchQuery = async (page, limit, searchQuery) => {
+  const skipDocs = (page - 1) * limit;
+  const escapedSearchQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const searchPattern = new RegExp(escapedSearchQuery, 'i');
+  const query = Theme.find()
+    .select('name themeId')
+    .skip(skipDocs)
+    .limit(limit);
+  const searchQueries = [
+    { name: searchPattern },
+  ];
+  if (searchQuery) {
+    query.or(searchQueries);
+  }
+  const themes = await query;
+  const totalThemes = await Theme.countDocuments({
+    $or: searchQueries,
+  });
+  return {
+    themes,
+    totalThemes,
+  };
+};
 
 export const getThemeById = async (id) => {
-  const theme = await Theme.findOne({ uuid: id })
+  const theme = await Theme.findOne({ themeId: id })
     .exec();
+
   if (!theme) {
     throw new Error('Theme not found.');
   }
+  return theme;
+};
+
+export const createTheme = async (options) => {
+  const theme = await new Theme({
+    name: options.name,
+    display: {},
+    logo: {
+      size: {},
+      format: {},
+    },
+  }).save();
+
+  if (!theme) {
+    throw new Error('Theme not found.');
+  }
+
   return theme;
 };
 
@@ -32,8 +71,9 @@ export const updateThemeOptionsById = async (id, options) => {
     update['logo.size'] = sanitizedLogo.size;
   }
 
-  const updatedTheme = await Theme.findOneAndUpdate({ uuid: id }, update, { new: true })
+  const updatedTheme = await Theme.findOneAndUpdate({ themeId: id }, update, { new: true })
     .exec();
+
   if (!updatedTheme) {
     throw new Error('Theme not found.');
   }
@@ -52,8 +92,9 @@ export const updateThemeLogoById = async (id, image, imageHeight) => {
     };
 
     const sanitizedId = sanitize(id);
-    const updatedTheme = await Theme.findOneAndUpdate({ uuid: sanitizedId }, update, { new: true })
+    const updatedTheme = await Theme.findOneAndUpdate({ themeId: sanitizedId }, update, { new: true })
       .exec();
+
     if (!updatedTheme) {
       throw new Error('Theme not found.');
     }
@@ -63,3 +104,6 @@ export const updateThemeLogoById = async (id, image, imageHeight) => {
     throw new Error('Error uploading theme image.');
   }
 };
+
+export const deleteThemeById = async (id) => Theme.findOneAndDelete({ themeId: { $eq: id } })
+  .exec();

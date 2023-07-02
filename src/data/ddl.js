@@ -22,7 +22,7 @@ const promptUser = (question) => {
   });
 };
 
-const adminUser = async (inputName, inputPassword, inputEmail) => {
+const adminUser = async (inputName, inputPassword, inputEmail, themeId) => {
   const hash = await argon2.hash(inputPassword, argon2Options);
 
   return {
@@ -30,6 +30,7 @@ const adminUser = async (inputName, inputPassword, inputEmail) => {
     email: inputEmail,
     password: hash,
     role: 'admin',
+    themeId,
     vCard: {
       person: {},
       professional: {},
@@ -45,7 +46,7 @@ const adminUser = async (inputName, inputPassword, inputEmail) => {
 };
 
 const theme = {
-  themeId: 1,
+  name: 'CardMesh',
   display: {},
   logo: {
     size: {},
@@ -53,7 +54,7 @@ const theme = {
   },
 };
 
-async function installUser() {
+async function installUser(themeId) {
   console.log('\n\x1b[1mCreate admin user:\x1b[0m');
   const username = await promptUser('\tEnter name:');
   const email = await promptUser('\tEnter e-mail:');
@@ -61,12 +62,7 @@ async function installUser() {
 
   console.log('\n\x1b[32mUser installation complete!\x1b[0m');
 
-  await new User(await adminUser(username, password, email)).save();
-}
-
-async function installTheme() {
-  await new Theme(theme).save();
-  console.log('\n\x1b[32mTheme setup complete!\x1b[0m');
+  await new User(await adminUser(username, password, email, themeId)).save();
 }
 
 (async () => {
@@ -78,8 +74,10 @@ async function installTheme() {
       User.collection.drop(),
     ]);
 
-    await installTheme();
-    await installUser();
+    const newTheme = await new Theme(theme).save();
+    console.log('\n\x1b[32mTheme setup complete!\x1b[0m');
+
+    await installUser(newTheme.themeId);
 
     console.log('\n\x1b[32mDatabase setup completed.\x1b[0m');
   } catch (err) {

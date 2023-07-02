@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { randomUUID } from 'crypto';
 
 const defaultTrue = {
   type: Boolean,
@@ -46,9 +47,17 @@ const LogoSchema = new mongoose.Schema({
 
 const themeSchema = new mongoose.Schema({
   themeId: {
-    type: Number,
+    type: String,
     required: true,
+    default: () => randomUUID(),
     unique: true,
+    index: true,
+  },
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    index: true,
   },
   color: {
     font: {

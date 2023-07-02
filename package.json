@@ -18,7 +18,6 @@
     "start": "node server.js --omit=dev",
     "dev": "cross-env nodemon server.js",
     "db:init": "node src/data/ddl.js",
-    "deploy": "flyctl secrets import < .env.production && flyctl deploy --build-arg NODE_ENV=production --remote-only",
     "format": "eslint . --fix --ext .js",
     "lint": "eslint . --ext .js",
     "test:unit": "mocha ./tests/unit",

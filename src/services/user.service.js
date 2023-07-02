@@ -1,12 +1,21 @@
+import sanitize from 'mongo-sanitize';
 import User from '../models/user.model.js';
 import convertImage from '../utils/image.util.js';
 
-export const getUserByIdAndUpdate = async (id, update) => User.findOneAndUpdate(
-  { uuid: { $eq: id } },
-  update,
-  { new: true },
-)
-  .exec();
+export const getUserByIdAndUpdate = async (id, options) => {
+  if (!options || typeof options !== 'object') {
+    throw new Error('Invalid options provided.');
+  }
+
+  const sanitizedOptions = sanitize(options);
+
+  return User.findOneAndUpdate(
+    { uuid: { $eq: id } },
+    sanitizedOptions,
+    { new: true },
+  )
+    .exec();
+};
 
 export const getUserById = async (id) => User.findOne({ uuid: { $eq: id } })
   .exec();
@@ -16,12 +25,12 @@ export const updateClickStatistics = async (id, source) => User.updateOne(
   { $push: { clicks: { source } } },
 );
 
-export const getUserByPageLimitAndSearchQuery = async (page, limit, searchQuery) => {
+export const getUsersByPageLimitAndSearchQuery = async (page, limit, searchQuery) => {
   const skipDocs = (page - 1) * limit;
   const escapedSearchQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const searchPattern = new RegExp(escapedSearchQuery, 'i');
   const query = User.find()
-    .select('email name role uuid')
+    .select('email name role uuid themeId')
     .skip(skipDocs)
     .limit(limit);
   const searchQueries = [

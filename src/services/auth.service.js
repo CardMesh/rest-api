@@ -45,6 +45,7 @@ export const login = async ({
 
 export const createUser = async (data) => {
   const {
+    themeId,
     email,
     name,
     role,
@@ -63,11 +64,22 @@ export const createUser = async (data) => {
   const hashedPassword = await passwordService.hashPassword(password);
 
   const user = await new User({
+    themeId, // TODO theme UUID
     name,
     email,
     password: hashedPassword,
     role,
-    vCard: {},
+    vCard: {
+      person: {},
+      professional: {},
+      contact: {},
+      location: {},
+      socialMedia: {},
+      avatar: {
+        size: {},
+        format: {},
+      },
+    },
   }).save();
 
   if (sendMail) {

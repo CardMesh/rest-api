@@ -6,8 +6,6 @@ export const imageRules = [
 ];
 
 export const themeOptionsRules = [ // TODO add missing color..
-  body('themeId')
-    .isInt({ min: 1 }),
   body('color.background')
     .isHexColor(),
   body('logo.size.height')

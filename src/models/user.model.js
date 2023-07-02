@@ -102,9 +102,15 @@ const vCardSchema = new mongoose.Schema({
 
 const UserSchema = new mongoose.Schema({
   themeId: {
-    type: Number,
-    default: 1,
+    type: String,
     required: true,
+  },
+  uuid: {
+    type: String,
+    required: true,
+    default: () => randomUUID(),
+    unique: true,
+    index: true,
   },
   name: {
     type: String,
@@ -136,12 +142,6 @@ const UserSchema = new mongoose.Schema({
       default: 'dark',
       enum: ['dark', 'light'],
     },
-  },
-  uuid: {
-    type: String,
-    required: true,
-    default: () => randomUUID(),
-    unique: true,
   },
   role: {
     type: String,

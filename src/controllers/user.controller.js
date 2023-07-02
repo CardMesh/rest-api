@@ -3,10 +3,10 @@ import * as themeService from '../services/theme.service.js';
 import { generateVCard } from '../utils/vcard.util.js';
 
 export const updateUser = async (req, res) => {
-  const { name } = req.body;
-  const { id } = req.params.id;
+  const options = req.body;
+  const { id } = req.params;
 
-  const user = await userService.getUserByIdAndUpdate(id, { name });
+  const user = await userService.getUserByIdAndUpdate(id, options);
 
   if (!user) {
     return res.status(404)
@@ -95,7 +95,7 @@ export const getAllUsers = async (req, res) => {
     const {
       users,
       totalUsers,
-    } = await userService.getUserByPageLimitAndSearchQuery(page, limit, searchQuery);
+    } = await userService.getUsersByPageLimitAndSearchQuery(page, limit, searchQuery);
 
     const totalPages = Math.ceil(totalUsers / limit);
     const nextPage = page < totalPages ? page + 1 : null;
@@ -177,7 +177,6 @@ export const updateUserVCard = async (req, res) => {
 
 export const getVCard = async (req, res) => {
   const uuid = req.params.id;
-
   const user = await userService.getUserById(uuid);
 
   if (!user) {
