@@ -7,8 +7,8 @@ import sendMail from '../utils/mail.util.js';
 import User from '../models/user.model.js';
 import { argon2Options } from '../configs/argon2.config.js';
 
-export const sendRecoveryEmail = async (uuid) => {
-  const user = await User.findOne({ uuid: { $eq: uuid } });
+export const sendRecoveryEmail = async (userId) => {
+  const user = await User.findOne({ userId: { $eq: userId } });
 
   if (!user) {
     throw new Error('User does not exist.');
@@ -25,7 +25,7 @@ export const sendRecoveryEmail = async (uuid) => {
   user.resetPasswordExpires = Date.now() + (60 * 60 * +process.env.RESET_PASSWORD_EXPIRES_HOURS);
   await user.save();
 
-  const resetLink = `${process.env.BASE_URL_FRONT}/reset?uuid=${user.uuid}&token=${token}&email=${user.email}`;
+  const resetLink = `${process.env.BASE_URL_FRONT}/reset?userId=${user.userId}&token=${token}&email=${user.email}`;
 
   const template = readFileSync('./src/templates/recovery.template.mjml', 'utf8');
   const mjmlContent = mustache.render(template, {

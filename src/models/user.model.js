@@ -105,7 +105,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  uuid: {
+  userId: {
     type: String,
     required: true,
     default: () => randomUUID(),

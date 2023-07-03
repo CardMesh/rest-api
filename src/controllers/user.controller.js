@@ -16,7 +16,7 @@ export const updateUser = async (req, res) => {
   const newUser = {
     name: user.name,
     email: user.email,
-    uuid: user.uuid,
+    userId: user.userId,
     role: user.role,
     themeId: user.themeId,
   };
@@ -156,7 +156,7 @@ export const updateUserVCard = async (req, res) => {
     professional,
     socialMedia,
   } = req.body;
-  const { id: uuid } = req.params;
+  const { id: userId } = req.params;
 
   const updateField = {
     'vCard.contact': contact,
@@ -166,7 +166,7 @@ export const updateUserVCard = async (req, res) => {
     'vCard.socialMedia': socialMedia,
   };
 
-  const user = await userService.getUserByIdAndUpdate(uuid, updateField, { new: true });
+  const user = await userService.getUserByIdAndUpdate(userId, updateField, { new: true });
 
   if (!user) {
     return res.status(404)
@@ -184,8 +184,8 @@ export const updateUserVCard = async (req, res) => {
 };
 
 export const getVCard = async (req, res) => {
-  const uuid = req.params.id;
-  const user = await userService.getUserById(uuid);
+  const userId = req.params.id;
+  const user = await userService.getUserById(userId);
 
   if (!user) {
     return res.status(404)
@@ -194,16 +194,16 @@ export const getVCard = async (req, res) => {
 
   const vCard = {
     ...user.vCard.toObject(),
-    uuid,
+    userId,
   };
 
   return res.json({ data: vCard });
 };
 
 export const getVcf = async (req, res) => {
-  const uuid = req.params.id;
+  const userId = req.params.id;
 
-  const user = await userService.getUserById(uuid);
+  const user = await userService.getUserById(userId);
 
   if (!user) {
     return res.status(404)
@@ -226,7 +226,7 @@ export const getVcf = async (req, res) => {
   res.setHeader('Content-Type', 'text/vcard');
   res.setHeader('Content-Disposition', `attachment; filename="${fullName}"`);
 
-  return res.send(generateVCard(uuid, vCard, theme, version));
+  return res.send(generateVCard(userId, vCard, theme, version));
 };
 
 export const deleteUser = async (req, res) => {

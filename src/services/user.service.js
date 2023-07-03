@@ -10,18 +10,18 @@ export const getUserByIdAndUpdate = async (id, options) => {
   const sanitizedOptions = sanitize(options);
 
   return User.findOneAndUpdate(
-    { uuid: { $eq: id } },
+    { userId: { $eq: id } },
     sanitizedOptions,
     { new: true },
   )
     .exec();
 };
 
-export const getUserById = async (id) => User.findOne({ uuid: { $eq: id } })
+export const getUserById = async (id) => User.findOne({ userId: { $eq: id } })
   .exec();
 
 export const updateClickStatistics = async (id, source) => User.updateOne(
-  { uuid: { $eq: id } },
+  { userId: { $eq: id } },
   { $push: { clicks: { source } } },
 );
 
@@ -30,7 +30,7 @@ export const getUsersByPageLimitAndSearchQuery = async (page, limit, searchQuery
   const escapedSearchQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const searchPattern = new RegExp(escapedSearchQuery, 'i');
   const query = User.find()
-    .select('email name role uuid themeId')
+    .select('email name role userId themeId')
     .skip(skipDocs)
     .limit(limit);
   const searchQueries = [
@@ -51,7 +51,7 @@ export const getUsersByPageLimitAndSearchQuery = async (page, limit, searchQuery
   };
 };
 
-export const deleteUserById = async (id) => User.findOneAndDelete({ uuid: { $eq: id } })
+export const deleteUserById = async (id) => User.findOneAndDelete({ userId: { $eq: id } })
   .exec();
 
 export const uploadAvatarById = async (id, image, imageHeight) => {
@@ -66,7 +66,7 @@ export const uploadAvatarById = async (id, image, imageHeight) => {
       'vCard.avatar.format': format,
     };
 
-    return await User.findOneAndUpdate({ uuid: id }, avatar, { new: true })
+    return await User.findOneAndUpdate({ userId: id }, avatar, { new: true })
       .exec();
   } catch (err) {
     throw new Error('Error uploading avatar.');

@@ -3,7 +3,7 @@ const padStartTwo = (num) => num.toString()
 
 export const formatTimeUTC = (date) => `${date.getUTCFullYear()}${padStartTwo(date.getUTCMonth() + 1)}${padStartTwo(date.getUTCDate())}T${padStartTwo(date.getUTCHours())}${padStartTwo(date.getUTCMinutes())}${padStartTwo(date.getUTCSeconds())}Z`;
 
-export const generateVCard = (uuid, vCard, theme, version = 3) => {
+export const generateVCard = (userId, vCard, theme, version = 3) => {
   const workProp = version === 4 ? ';TYPE=work' : '';
   let vCardString = `BEGIN:VCARD
 VERSION:${version === 4 ? '4.0' : '3.0'}
@@ -14,7 +14,7 @@ TITLE:${vCard.professional.title}
 EMAIL${workProp}:${vCard.contact.email}
 URL${workProp}:${vCard.contact.web}
 REV:${formatTimeUTC(new Date())}
-UID:urn:uuid:${uuid}
+UID:urn:uuid:${userId}
 NOTE:${vCard.professional.bio}
 TZ:${vCard.location.timeZone}
 ADR${workProp}:;;${vCard.location.street}${vCard.location.storey ? `, ${vCard.location.storey}` : ''};${vCard.location.city};${vCard.location.state};${vCard.location.postalCode};${vCard.location.country}

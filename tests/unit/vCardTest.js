@@ -63,9 +63,9 @@ const theme = {
 describe('Generate vCard 3.0', () => {
   it('should generate a valid vCard 3.0', () => {
     const version = 3;
-    const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
+    const userId = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
 
-    const result = generateVCard(uuid, vCard, theme, version);
+    const result = generateVCard(userId, vCard, theme, version);
 
     assert.ok(result.includes('FN:Software Engineer John Doe'));
     assert.ok(result.includes('N:Doe;John;;Software Engineer;'));
@@ -89,9 +89,9 @@ describe('Generate vCard 3.0', () => {
 describe('Generate vCard 4.0', () => {
   it('should generate a valid vCard 4.0', () => {
     const version = 4;
-    const uuid = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
+    const userId = 'ac7171f3-9e6b-4099-9812-9ebad504bad5';
 
-    const result = generateVCard(uuid, vCard, theme, version);
+    const result = generateVCard(userId, vCard, theme, version);
 
     assert.ok(result.includes('FN:Software Engineer John Doe'));
     assert.ok(result.includes('N:Doe;John;;Software Engineer;'));

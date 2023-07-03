@@ -21,7 +21,7 @@ export const loginRules = [
 ];
 
 export const recoverRules = [
-  body('uuid')
+  body('userId')
     .isUUID(),
 ];
 

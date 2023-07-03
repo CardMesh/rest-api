@@ -5,7 +5,7 @@ export const signup = async (req, res) => {
   try {
     const user = await authService.createUser(req.body);
     res.status(201)
-      .json({ data: { userId: user.uuid } });
+      .json({ data: { userId: user.userId } });
   } catch (err) {
     res.status(400)
       .json({ errors: [err.message] });
@@ -26,7 +26,7 @@ export const login = async (req, res) => {
 
 export const recover = async (req, res) => {
   try {
-    const mail = await emailService.sendRecoveryEmail(req.body.uuid);
+    const mail = await emailService.sendRecoveryEmail(req.body.userId);
     res.json({ data: { mail } });
   } catch (err) {
     res.status(400)

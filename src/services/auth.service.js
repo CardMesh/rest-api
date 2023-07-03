@@ -25,7 +25,7 @@ export const login = async ({
   // create token
   const token = jwt.sign(
     {
-      id: user.uuid,
+      id: user.userId,
       role: user.role,
     },
     process.env.JWT_SECRET_KEY,
@@ -35,7 +35,7 @@ export const login = async ({
   return {
     name: user.name,
     email: user.email,
-    uuid: user.uuid,
+    userId: user.userId,
     token,
     createdAt: user._id.getTimestamp(),
     role: user.role,
@@ -64,7 +64,7 @@ export const createUser = async (data) => {
   const hashedPassword = await passwordService.hashPassword(password);
 
   const user = await new User({
-    themeId, // TODO theme UUID
+    themeId,
     name,
     email,
     password: hashedPassword,
@@ -83,7 +83,7 @@ export const createUser = async (data) => {
   }).save();
 
   if (sendMail) {
-    await emailService.sendRecoveryEmail(user.uuid);
+    await emailService.sendRecoveryEmail(user.userId);
   }
 
   return user;

@@ -1,7 +1,7 @@
 import User from '../models/user.model.js';
 
 const accessMiddleware = async (req, res, next) => {
-  const user = await User.findOne({ uuid: req.id })
+  const user = await User.findOne({ userId: req.id })
     .exec();
 
   // Check if the user is trying to access someone else's data and is not an admin
