@@ -13,7 +13,15 @@ export const updateUser = async (req, res) => {
       .json({ errors: ['User not found.'] });
   }
 
-  return res.json({ data: { name: user.name } });
+  const newUser = {
+    name: user.name,
+    email: user.email,
+    uuid: user.uuid,
+    role: user.role,
+    themeId: user.themeId,
+  };
+
+  return res.json({ data: newUser });
 };
 
 export const addClickStatistics = async (req, res) => {
