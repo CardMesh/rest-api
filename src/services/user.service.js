@@ -72,3 +72,6 @@ export const uploadAvatarById = async (id, image, imageHeight) => {
     throw new Error('Error uploading avatar.');
   }
 };
+
+export const getUsersByThemeId = async (themeId) => await User.find({ themeId })
+  .exec();

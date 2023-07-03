@@ -1,4 +1,5 @@
 import * as themeService from '../services/theme.service.js';
+import * as userService from '../services/user.service.js';
 
 export const getAllThemes = async (req, res) => {
   try {
@@ -94,12 +95,25 @@ export const uploadLogo = async (req, res) => {
 export const deleteTheme = async (req, res) => {
   const { id } = req.params;
 
-  const theme = await themeService.deleteThemeById(id);
+  // Check if any users are using the theme.
+  const usersWithTheme = await userService.getUsersByThemeId(id);
 
-  if (!theme) {
-    return res.status(404)
-      .json({ errors: ['User not found.'] });
+  if (usersWithTheme.length > 0) {
+    return res.status(400)
+      .json({
+        errors: ['Cannot delete the theme. It is currently in use by one or more users.'],
+      });
   }
 
-  return res.json({ message: 'User deleted successfully.' });
+  // Delete the theme if it is not used by any users.
+  const deletedTheme = await themeService.deleteThemeById(id);
+
+  if (!deletedTheme) {
+    return res.status(404)
+      .json({
+        errors: ['Theme not found.'],
+      });
+  }
+
+  return res.json({ message: 'Theme deleted successfully.' });
 };
