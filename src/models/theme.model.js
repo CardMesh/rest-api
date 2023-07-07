@@ -7,6 +7,7 @@ const defaultTrue = {
 };
 
 const DisplaySchema = new mongoose.Schema({
+  logo: defaultTrue,
   phone: defaultTrue,
   sms: defaultTrue,
   email: defaultTrue,
