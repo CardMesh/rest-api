@@ -1,6 +1,7 @@
 import sanitize from 'mongo-sanitize';
 import Theme from '../models/theme.model.js';
 import convertImage from '../utils/image.util.js';
+import { themeDTO, themesByPageLimitAndSearchQueryDTO } from '../dto/theme.dto.js';
 
 export const getThemesByPageLimitAndSearchQuery = async (page, limit, searchQuery) => {
   const skipDocs = (page - 1) * limit;
@@ -20,10 +21,18 @@ export const getThemesByPageLimitAndSearchQuery = async (page, limit, searchQuer
   const totalThemes = await Theme.countDocuments({
     $or: searchQueries,
   });
-  return {
+
+  const totalPages = Math.ceil(totalThemes / limit);
+  const nextPage = page < totalPages ? page + 1 : null;
+  const prevPage = page > 1 ? page - 1 : null;
+
+  return themesByPageLimitAndSearchQueryDTO(
     themes,
     totalThemes,
-  };
+    totalPages,
+    nextPage,
+    prevPage,
+  );
 };
 
 export const getThemeById = async (id) => {
@@ -33,7 +42,8 @@ export const getThemeById = async (id) => {
   if (!theme) {
     throw new Error('Theme not found.');
   }
-  return theme;
+
+  return themeDTO(theme);
 };
 
 export const createTheme = async (options) => {
@@ -50,7 +60,7 @@ export const createTheme = async (options) => {
     throw new Error('Theme not found.');
   }
 
-  return theme;
+  return themeDTO(theme);
 };
 
 export const updateThemeOptionsById = async (id, options) => {
@@ -78,7 +88,7 @@ export const updateThemeOptionsById = async (id, options) => {
     throw new Error('Theme not found.');
   }
 
-  return updatedTheme;
+  return themeDTO(updatedTheme);
 };
 
 export const updateThemeLogoById = async (id, image, imageHeight) => {
@@ -99,7 +109,7 @@ export const updateThemeLogoById = async (id, image, imageHeight) => {
       throw new Error('Theme not found.');
     }
 
-    return updatedTheme;
+    return themeDTO(updatedTheme);
   } catch (err) {
     throw new Error('Error uploading theme image.');
   }

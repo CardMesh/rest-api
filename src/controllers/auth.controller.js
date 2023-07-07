@@ -5,7 +5,7 @@ export const signup = async (req, res) => {
   try {
     const user = await authService.createUser(req.body);
     res.status(201)
-      .json({ data: { userId: user.userId } });
+      .json({ data: { user } });
   } catch (err) {
     res.status(400)
       .json({ errors: [err.message] });
@@ -15,11 +15,10 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const user = await authService.login(req.body);
-    res
-      .header('Authorization', `Bearer ${user.token}`)
+    res.header('Authorization', `Bearer ${user.token}`)
       .json({ data: user });
   } catch (err) {
-    res.status(400)
+    res.status(401)
       .json({ errors: [err.message] });
   }
 };

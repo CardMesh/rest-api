@@ -3,37 +3,34 @@ import * as themeService from '../services/theme.service.js';
 import { generateVCard } from '../utils/vcard.util.js';
 
 export const updateUser = async (req, res) => {
-  const options = req.body;
-  const { id } = req.params;
+  try {
+    const options = req.body;
+    const { id } = req.params;
 
-  const user = await userService.getUserByIdAndUpdate(id, options);
+    const newUser = await userService.updateUser(id, options);
 
-  if (!user) {
-    return res.status(404)
-      .json({ errors: ['User not found.'] });
+    return res.json({ data: newUser });
+  } catch (error) {
+    return res.status(500)
+      .json({ errors: [error.message] });
   }
-
-  const newUser = {
-    name: user.name,
-    email: user.email,
-    userId: user.userId,
-    role: user.role,
-    themeId: user.themeId,
-  };
-
-  return res.json({ data: newUser });
 };
 
 export const addClickStatistics = async (req, res) => {
-  let { source } = req.body;
+  try {
+    let { source } = req.body;
 
-  if (!['nfc', 'qr'].includes(source)) {
-    source = 'web';
+    if (!['nfc', 'qr'].includes(source)) {
+      source = 'web';
+    }
+
+    await userService.addClickStatistics(req.params.id, source);
+
+    res.json({});
+  } catch (error) {
+    res.status(500)
+      .json({ errors: [error.message] });
   }
-
-  await userService.updateClickStatistics(req.params.id, source);
-
-  res.json({});
 };
 
 export const getClickStatistics = async (req, res) => {
@@ -103,24 +100,22 @@ export const getAllUsers = async (req, res) => {
     const {
       users,
       totalUsers,
+      totalPages,
+      nextPage,
+      prevPage,
     } = await userService.getUsersByPageLimitAndSearchQuery(page, limit, searchQuery);
 
-    const totalPages = Math.ceil(totalUsers / limit);
-    const nextPage = page < totalPages ? page + 1 : null;
-    const prevPage = page > 1 ? page - 1 : null;
-
-    res.status(200)
-      .json({
-        data: users,
-        pagination: {
-          page,
-          limit,
-          totalUsers,
-          totalPages,
-          nextPage,
-          prevPage,
-        },
-      });
+    res.json({
+      data: users,
+      pagination: {
+        page,
+        limit,
+        totalUsers,
+        totalPages,
+        nextPage,
+        prevPage,
+      },
+    });
   } catch (err) {
     res.status(500)
       .json({ errors: ['Error fetching users.'] });
@@ -244,9 +239,7 @@ export const deleteUser = async (req, res) => {
 
 export const uploadImage = async (req, res) => {
   const { image } = req.files;
-  const {
-    imageHeight,
-  } = req.body;
+  const { imageHeight } = req.body;
   const { id } = req.params;
 
   try {
@@ -263,9 +256,7 @@ export const uploadImage = async (req, res) => {
 
     res.json('Success');
   } catch (err) {
-    res.status(404)
-      .json({
-        errors: ['Error uploading image.'],
-      });
+    res.status(500)
+      .json({ errors: ['Error uploading image.'] });
   }
 };

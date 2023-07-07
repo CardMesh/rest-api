@@ -4,6 +4,8 @@ import User from '../models/user.model.js';
 import * as passwordService from './password.service.js';
 import * as emailService from './email.service.js';
 import { argon2Options } from '../configs/argon2.config.js';
+import { loginDTO } from '../dto/auth.dto.js';
+import { userDTO } from '../dto/user.dto.js';
 
 export const login = async ({
   email,
@@ -22,8 +24,7 @@ export const login = async ({
     throw new Error(loginError);
   }
 
-  // create token
-  const token = jwt.sign(
+  user.token = jwt.sign(
     {
       id: user.userId,
       role: user.role,
@@ -32,15 +33,7 @@ export const login = async ({
     { expiresIn: +process.env.JWT_EXPIRATION_INTERVAL },
   );
 
-  return {
-    name: user.name,
-    email: user.email,
-    userId: user.userId,
-    token,
-    //  createdAt: user._id.getTimestamp(),
-    role: user.role,
-    themeId: user.themeId,
-  };
+  return loginDTO(user);
 };
 
 export const createUser = async (data) => {
@@ -57,10 +50,8 @@ export const createUser = async (data) => {
     throw new Error('Email already exists.');
   }
 
-  // Generate random password
   const password = await passwordService.generatePassword(10);
 
-  // Hash the password
   const hashedPassword = await passwordService.hashPassword(password);
 
   const user = await new User({
@@ -86,7 +77,7 @@ export const createUser = async (data) => {
     await emailService.sendRecoveryEmail(user.userId);
   }
 
-  return user;
+  return userDTO(user);
 };
 
 export const resetPassword = async (data) => {
@@ -123,5 +114,5 @@ export const resetPassword = async (data) => {
   user.password = hashedPassword;
   await user.save();
 
-  return user;
+  return userDTO(user);
 };

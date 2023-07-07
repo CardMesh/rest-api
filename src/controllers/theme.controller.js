@@ -10,24 +10,22 @@ export const getAllThemes = async (req, res) => {
     const {
       themes,
       totalThemes,
+      totalPages,
+      nextPage,
+      prevPage,
     } = await themeService.getThemesByPageLimitAndSearchQuery(page, limit, searchQuery);
 
-    const totalPages = Math.ceil(totalThemes / limit);
-    const nextPage = page < totalPages ? page + 1 : null;
-    const prevPage = page > 1 ? page - 1 : null;
-
-    res.status(200)
-      .json({
-        data: themes,
-        pagination: {
-          page,
-          limit,
-          totalThemes,
-          totalPages,
-          nextPage,
-          prevPage,
-        },
-      });
+    res.json({
+      data: themes,
+      pagination: {
+        page,
+        limit,
+        totalThemes,
+        totalPages,
+        nextPage,
+        prevPage,
+      },
+    });
   } catch (err) {
     res.status(500)
       .json({ errors: ['Error fetching themes.'] });
@@ -54,10 +52,11 @@ export const createTheme = async (req, res) => {
   try {
     const theme = await themeService.createTheme(req.body);
 
-    return res.json({ data: theme });
+    return res.status(201)
+      .json({ data: theme });
   } catch (err) {
     return res.status(500)
-      .json({ errors: ['error creating theme.'] });
+      .json({ errors: ['Error creating theme.'] });
   }
 };
 
@@ -79,15 +78,13 @@ export const updateThemeOptionsById = async (req, res) => {
 
 export const uploadLogo = async (req, res) => {
   const { image } = req.files;
-  const {
-    imageHeight,
-  } = req.body;
+  const { imageHeight } = req.body;
 
   try {
     await themeService.updateThemeLogoById(req.params.id, image, imageHeight);
     res.json('Success');
   } catch (err) {
-    res.status(404)
+    res.status(500)
       .json({ errors: ['Error uploading image.'] });
   }
 };
@@ -110,9 +107,7 @@ export const deleteTheme = async (req, res) => {
 
   if (!deletedTheme) {
     return res.status(404)
-      .json({
-        errors: ['Theme not found.'],
-      });
+      .json({ errors: ['Theme not found.'] });
   }
 
   return res.json({ message: 'Theme deleted successfully.' });
