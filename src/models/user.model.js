@@ -1,27 +1,31 @@
 import mongoose from 'mongoose';
 import { randomUUID } from 'crypto';
 
+const schemaOptions = { _id: false };
+
 const defaultTrimmedString = {
   type: String,
   trim: true,
   default: '',
 };
 
-const PersonSchema = new mongoose.Schema({
+const createSchema = (definition) => new mongoose.Schema(definition, schemaOptions);
+
+const PersonSchema = createSchema({
   firstName: defaultTrimmedString,
   middleName: defaultTrimmedString,
   lastName: defaultTrimmedString,
   suffix: defaultTrimmedString,
   birthday: defaultTrimmedString,
   pronouns: defaultTrimmedString,
-}, { _id: false });
+});
 
-const ProfessionalSchema = new mongoose.Schema({
+const ProfessionalSchema = createSchema({
   title: defaultTrimmedString,
   company: defaultTrimmedString,
   role: defaultTrimmedString,
   bio: defaultTrimmedString,
-}, { _id: false });
+});
 
 const defaultContactInfo = {
   number: defaultTrimmedString,
@@ -29,13 +33,13 @@ const defaultContactInfo = {
   extension: defaultTrimmedString,
 };
 
-const ContactSchema = new mongoose.Schema({
+const ContactSchema = createSchema({
   phone: defaultContactInfo,
   email: defaultTrimmedString,
   web: defaultTrimmedString,
-}, { _id: false });
+});
 
-const LocationSchema = new mongoose.Schema({
+const LocationSchema = createSchema({
   street: defaultTrimmedString,
   storey: defaultTrimmedString,
   city: defaultTrimmedString,
@@ -53,52 +57,44 @@ const LocationSchema = new mongoose.Schema({
       default: 0,
     },
   },
-}, { _id: false });
+});
 
-const SocialMediaSchema = new mongoose.Schema({
+const SocialMediaSchema = createSchema({
   twitter: defaultTrimmedString,
   linkedin: defaultTrimmedString,
   facebook: defaultTrimmedString,
   instagram: defaultTrimmedString,
   pinterest: defaultTrimmedString,
   github: defaultTrimmedString,
-}, { _id: false });
+});
 
-const ClickSchema = new mongoose.Schema({
+const ClickSchema = createSchema({
   timestamp: {
     type: Date,
     default: Date.now,
   },
   source: { type: String },
-}, { _id: false });
+});
 
-const AvatarSchema = new mongoose.Schema({
+const AvatarSchema = createSchema({
   size: {
-    height: {
-      type: Number,
-    },
-    width: {
-      type: Number,
-    },
+    height: { type: Number },
+    width: { type: Number },
   },
   format: {
-    png: {
-      type: String,
-    },
-    webp: {
-      type: String,
-    },
+    png: { type: String },
+    webp: { type: String },
   },
-}, { _id: false });
+});
 
-const vCardSchema = new mongoose.Schema({
+const vCardSchema = createSchema({
   person: PersonSchema,
   professional: ProfessionalSchema,
   contact: ContactSchema,
   location: LocationSchema,
   socialMedia: SocialMediaSchema,
   avatar: AvatarSchema,
-}, { _id: false });
+});
 
 const UserSchema = new mongoose.Schema({
   themeId: {
@@ -148,12 +144,8 @@ const UserSchema = new mongoose.Schema({
     enum: ['user', 'admin', 'editor'],
     default: 'user',
   },
-  resetPasswordToken: {
-    type: String,
-  },
-  resetPasswordExpires: {
-    type: Date,
-  },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
 });
 
 export default mongoose.model('User', UserSchema);

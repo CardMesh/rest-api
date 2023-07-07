@@ -16,6 +16,34 @@ const DisplaySchema = new mongoose.Schema({
   vCardBtn: defaultTrue,
 }, { _id: false });
 
+const AlignSchema = new mongoose.Schema({
+  logo: {
+    type: String,
+    enum: ['start', 'center', 'end'],
+    default: 'start',
+  },
+  avatar: {
+    type: String,
+    enum: ['start', 'center', 'end'],
+    default: 'center',
+  },
+  heading: {
+    type: String,
+    enum: ['start', 'center', 'end'],
+    default: 'center',
+  },
+  bio: {
+    type: String,
+    enum: ['start', 'center', 'end'],
+    default: 'center',
+  },
+  socialIcons: {
+    type: String,
+    enum: ['start', 'center', 'end'],
+    default: 'start',
+  },
+}, { _id: false });
+
 const defaultColor = {
   type: String,
   trim: true,
@@ -74,7 +102,7 @@ const themeSchema = new mongoose.Schema({
       ...defaultColor,
       default: '#dee1dd',
     },
-    socialIcons: {
+    contactIcons: {
       font: {
         ...defaultColor,
         default: '#182d30',
@@ -82,6 +110,18 @@ const themeSchema = new mongoose.Schema({
       background: {
         ...defaultColor,
         default: '#dee1dd',
+      },
+    },
+    socialIcons: {
+      font: {
+        type: String,
+        trim: true,
+        default: '',
+      },
+      background: {
+        type: String,
+        trim: true,
+        default: '',
       },
     },
     vCardBtn: {
@@ -96,6 +136,7 @@ const themeSchema = new mongoose.Schema({
     },
   },
   display: DisplaySchema,
+  align: AlignSchema,
   logo: LogoSchema,
 });
 

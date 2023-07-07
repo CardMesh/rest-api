@@ -48,6 +48,7 @@ const adminUser = async (inputName, inputPassword, inputEmail, themeId) => {
 const theme = {
   name: 'CardMesh',
   display: {},
+  align: {},
   logo: {
     size: {},
     format: {},
