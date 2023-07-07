@@ -37,6 +37,10 @@ const ContactSchema = createSchema({
   phone: defaultContactInfo,
   email: defaultTrimmedString,
   web: defaultTrimmedString,
+  file: {
+    url: defaultTrimmedString,
+    name: defaultTrimmedString,
+  },
 });
 
 const LocationSchema = createSchema({
