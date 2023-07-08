@@ -8,23 +8,21 @@ export const getAllThemes = async (req, res) => {
     const limit = +req.query.limit || paginationOptions.limit;
     const searchQuery = req.query.search || '';
 
-    const {
-      themes,
-      totalThemes,
-      totalPages,
-      nextPage,
-      prevPage,
-    } = await themeService.getThemesByPageLimitAndSearchQuery(page, limit, searchQuery);
+    const themesData = await themeService.getThemesByPageLimitAndSearchQuery(
+      page,
+      limit,
+      searchQuery,
+    );
 
     res.json({
-      data: themes,
+      data: themesData.themes,
       pagination: {
-        page,
-        limit,
-        totalThemes,
-        totalPages,
-        nextPage,
-        prevPage,
+        page: themesData.page,
+        limit: themesData.limit,
+        totalThemes: themesData.totalThemes,
+        totalPages: themesData.totalPages,
+        nextPage: themesData.nextPage,
+        prevPage: themesData.prevPage,
       },
     });
   } catch (err) {
@@ -93,23 +91,21 @@ export const uploadLogo = async (req, res) => {
 export const deleteTheme = async (req, res) => {
   const { id } = req.params;
 
-  // Check if any users are using the theme.
-  const usersWithTheme = await userService.getUsersByThemeId(id);
+  try {
+    const usersWithTheme = await userService.getUsersByThemeId(id);
 
-  if (usersWithTheme.length > 0) {
-    return res.status(400)
-      .json({
-        errors: ['Cannot delete the theme. It is currently in use by one or more users.'],
-      });
-  }
+    if (usersWithTheme.length > 0) {
+      return res.status(400)
+        .json({
+          errors: ['Cannot delete the theme. It is currently in use by one or more users.'],
+        });
+    }
 
-  // Delete the theme if it is not used by any users.
-  const deletedTheme = await themeService.deleteThemeById(id);
+    await themeService.deleteThemeById(id);
 
-  if (!deletedTheme) {
+    return res.json({ message: 'Theme deleted successfully.' });
+  } catch (err) {
     return res.status(404)
       .json({ errors: ['Theme not found.'] });
   }
-
-  return res.json({ message: 'Theme deleted successfully.' });
 };

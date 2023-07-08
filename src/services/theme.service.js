@@ -7,20 +7,15 @@ export const getThemesByPageLimitAndSearchQuery = async (page, limit, searchQuer
   const skipDocs = (page - 1) * limit;
   const escapedSearchQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const searchPattern = new RegExp(escapedSearchQuery, 'i');
-  const query = Theme.find()
+  const query = Theme.find({ name: searchPattern })
     .select('name themeId')
     .skip(skipDocs)
     .limit(limit);
-  const searchQueries = [
-    { name: searchPattern },
-  ];
-  if (searchQuery) {
-    query.or(searchQueries);
-  }
-  const themes = await query;
-  const totalThemes = await Theme.countDocuments({
-    $or: searchQueries,
-  });
+
+  const [themes, totalThemes] = await Promise.all([
+    query.exec(),
+    Theme.countDocuments({ name: searchPattern }),
+  ]);
 
   const totalPages = Math.ceil(totalThemes / limit);
   const nextPage = page < totalPages ? page + 1 : null;
@@ -47,8 +42,10 @@ export const getThemeById = async (id) => {
 };
 
 export const createTheme = async (options) => {
-  const theme = await new Theme({
-    name: options.name,
+  const sanitizedOptions = sanitize(options);
+
+  const theme = await Theme.create({
+    name: sanitizedOptions.name,
     color: {},
     align: {},
     display: {},
@@ -56,11 +53,7 @@ export const createTheme = async (options) => {
       size: {},
       format: {},
     },
-  }).save();
-
-  if (!theme) {
-    throw new Error('Theme not found.');
-  }
+  });
 
   return themeDTO(theme);
 };
@@ -70,20 +63,18 @@ export const updateThemeOptionsById = async (id, options) => {
     throw new Error('Invalid options provided.');
   }
 
+  const sanitizedOptions = sanitize(options);
+
   const {
     logo,
     ...updatedOptions
-  } = options;
+  } = sanitizedOptions;
 
-  const sanitizedLogo = sanitize(logo);
-  const sanitizedOptions = sanitize(updatedOptions);
-
-  const update = { ...sanitizedOptions };
-  if (sanitizedLogo) {
-    update['logo.size'] = sanitizedLogo.size;
-  }
-
-  const updatedTheme = await Theme.findOneAndUpdate({ themeId: id }, update, { new: true })
+  const updatedTheme = await Theme.findOneAndUpdate(
+    { themeId: id },
+    updatedOptions,
+    { new: true },
+  )
     .exec();
 
   if (!updatedTheme) {
@@ -96,17 +87,11 @@ export const updateThemeOptionsById = async (id, options) => {
 export const updateThemeLogoById = async (id, image, imageHeight) => {
   try {
     const { format } = await convertImage(image, +imageHeight);
-
     const sanitizedFormat = sanitize(format);
 
-    const update = {
-      'logo.format': sanitizedFormat,
-    };
-
-    const sanitizedId = sanitize(id);
     const updatedTheme = await Theme.findOneAndUpdate(
-      { themeId: sanitizedId },
-      update,
+      { themeId: id },
+      { 'logo.format': sanitizedFormat },
       { new: true },
     )
       .exec();
@@ -121,5 +106,11 @@ export const updateThemeLogoById = async (id, image, imageHeight) => {
   }
 };
 
-export const deleteThemeById = async (id) => Theme.findOneAndDelete({ themeId: { $eq: id } })
-  .exec();
+export const deleteThemeById = async (id) => {
+  const deletedTheme = await Theme.findOneAndDelete({ themeId: id })
+    .exec();
+
+  if (!deletedTheme) {
+    throw new Error('Theme not found.');
+  }
+};
