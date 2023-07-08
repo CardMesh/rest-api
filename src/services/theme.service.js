@@ -104,7 +104,11 @@ export const updateThemeLogoById = async (id, image, imageHeight) => {
     };
 
     const sanitizedId = sanitize(id);
-    const updatedTheme = await Theme.findOneAndUpdate({ themeId: sanitizedId }, update, { new: true })
+    const updatedTheme = await Theme.findOneAndUpdate(
+      { themeId: sanitizedId },
+      update,
+      { new: true },
+    )
       .exec();
 
     if (!updatedTheme) {

@@ -8,7 +8,13 @@ export const userDTO = (user) => ({
 
 export const usersDTO = (users) => users.map((user) => userDTO(user));
 
-export const usersByPageLimitAndSearchQueryDTO = (users, totalUsers, totalPages, nextPage, prevPage) => ({
+export const usersByPageLimitAndSearchQueryDTO = (
+  users,
+  totalUsers,
+  totalPages,
+  nextPage,
+  prevPage,
+) => ({
   users: users.map((user) => userDTO(user)),
   totalUsers,
   totalPages,

@@ -1,5 +1,6 @@
 import User from '../models/user.model.js';
 
+// eslint-disable-next-line consistent-return
 const accessMiddleware = async (req, res, next) => {
   const user = await User.findOne({ userId: req.id })
     .exec();

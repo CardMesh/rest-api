@@ -8,4 +8,7 @@ export const generatePassword = (length) => randomBytes(length)
 
 export const hashPassword = async (password) => argon2.hash(password, argon2Options);
 
-export const comparePasswords = async (password, hashedPassword) => argon2.verify(hashedPassword, password);
+export const comparePasswords = async (
+  password,
+  hashedPassword,
+) => argon2.verify(hashedPassword, password);

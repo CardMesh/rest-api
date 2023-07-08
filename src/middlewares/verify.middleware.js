@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 
+// eslint-disable-next-line consistent-return
 const verifyMiddleware = (req, res, next) => {
   const authorizationHeader = req.header('Authorization');
   const token = authorizationHeader.split(' ')[1];

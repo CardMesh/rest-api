@@ -49,7 +49,13 @@ export const themeDTO = (theme) => ({
   themeId: theme.themeId,
 });
 
-export const themesByPageLimitAndSearchQueryDTO = (themes, totalThemes, totalPages, nextPage, prevPage) => ({
+export const themesByPageLimitAndSearchQueryDTO = (
+  themes,
+  totalThemes,
+  totalPages,
+  nextPage,
+  prevPage,
+) => ({
   themes: themes.map((theme) => ({
     name: theme.name,
     themeId: theme.themeId,

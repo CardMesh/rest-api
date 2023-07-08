@@ -56,11 +56,13 @@ const theme = {
 };
 
 async function installUser(themeId) {
+  // eslint-disable-next-line no-console
   console.log('\n\x1b[1mCreate admin user:\x1b[0m');
   const username = await promptUser('\tEnter name:');
   const email = await promptUser('\tEnter e-mail:');
   const password = await promptUser('\tEnter password:');
 
+  // eslint-disable-next-line no-console
   console.log('\n\x1b[32mUser installation complete!\x1b[0m');
 
   await new User(await adminUser(username, password, email, themeId)).save();
@@ -76,12 +78,15 @@ async function installUser(themeId) {
     ]);
 
     const newTheme = await new Theme(theme).save();
+    // eslint-disable-next-line no-console
     console.log('\n\x1b[32mTheme setup complete!\x1b[0m');
 
     await installUser(newTheme.themeId);
 
+    // eslint-disable-next-line no-console
     console.log('\n\x1b[32mDatabase setup completed.\x1b[0m');
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error('\n\x1b[31mError setting up database:', err, '\x1b[0m');
   } finally {
     process.exit();

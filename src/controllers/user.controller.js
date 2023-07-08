@@ -12,8 +12,7 @@ export const updateUser = async (req, res) => {
 
     return res.json({ data: newUser });
   } catch (error) {
-    return res.status(500)
-      .json({ errors: [error.message] });
+    return res.status(500).json({ errors: [error.message] });
   }
 };
 
@@ -29,8 +28,7 @@ export const addClickStatistics = async (req, res) => {
 
     res.json({});
   } catch (error) {
-    res.status(500)
-      .json({ errors: [error.message] });
+    res.status(500).json({ errors: [error.message] });
   }
 };
 
@@ -38,41 +36,26 @@ export const getClickStatistics = async (req, res) => {
   const user = await userService.getUserById(req.params.id);
 
   if (!user) {
-    return res.status(404)
-      .json({ errors: ['User not found.'] });
+    return res.status(404).json({ errors: ['User not found.'] });
   }
 
   const today = new Date();
-
   const clickCountsByDate = {};
-  const totalClicksByType = {
-    qr: 0,
-    nfc: 0,
-    web: 0,
-  };
+  const totalClicksByType = { qr: 0, nfc: 0, web: 0 };
 
   for (let i = 0; i < 7; i++) {
     const currentDate = new Date(today);
     currentDate.setDate(currentDate.getDate() - i);
-    const dateString = currentDate.toISOString()
-      .split('T')[0];
+    const dateString = currentDate.toISOString().split('T')[0];
 
-    clickCountsByDate[dateString] = {
-      qr: 0,
-      nfc: 0,
-      web: 0,
-    };
+    clickCountsByDate[dateString] = { qr: 0, nfc: 0, web: 0 };
   }
 
   user.clicks.forEach((click) => {
-    const {
-      source,
-      timestamp,
-    } = click;
+    const { source, timestamp } = click;
     const clickDate = new Date(timestamp);
     clickDate.setUTCHours(0, 0, 0, 0);
-    const dateString = clickDate.toISOString()
-      .split('T')[0];
+    const dateString = clickDate.toISOString().split('T')[0];
 
     if (dateString in clickCountsByDate) {
       clickCountsByDate[dateString][source]++;
@@ -82,12 +65,7 @@ export const getClickStatistics = async (req, res) => {
   });
 
   const totalClicks = user.clicks.length;
-
-  const data = {
-    clickCountsByDate,
-    totalClicks,
-    totalClicksByType,
-  };
+  const data = { clickCountsByDate, totalClicks, totalClicksByType };
 
   return res.json({ data });
 };
@@ -118,8 +96,7 @@ export const getAllUsers = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500)
-      .json({ errors: ['Error fetching users.'] });
+    res.status(500).json({ errors: ['Error fetching users.'] });
   }
 };
 
@@ -128,8 +105,7 @@ export const updateUserSetting = async (req, res) => {
   const { theme } = req.body;
 
   if (setting !== 'theme') {
-    return res.status(400)
-      .json({ errors: [`Invalid setting: ${setting}.`] });
+    return res.status(400).json({ errors: [`Invalid setting: ${setting}.`] });
   }
 
   const updateField = { 'settings.theme': theme };
@@ -137,8 +113,7 @@ export const updateUserSetting = async (req, res) => {
   const user = await userService.getUserByIdAndUpdate(req.params.id, updateField);
 
   if (!user) {
-    return res.status(404)
-      .json({ errors: ['User not found.'] });
+    return res.status(404).json({ errors: ['User not found.'] });
   }
 
   return res.json({ data: { theme: user.settings.theme } });
@@ -165,15 +140,13 @@ export const updateUserVCard = async (req, res) => {
   const user = await userService.getUserByIdAndUpdate(userId, updateField, { new: true });
 
   if (!user) {
-    return res.status(404)
-      .json({ errors: ['User not found.'] });
+    return res.status(404).json({ errors: ['User not found.'] });
   }
 
   const theme = await themeService.getThemeById(user.themeId);
 
   if (!theme) {
-    return res.status(404)
-      .json({ errors: ['Theme not found.'] });
+    return res.status(404).json({ errors: ['Theme not found.'] });
   }
 
   return res.json({ data: { vCardSchema: user.vCard } });
@@ -184,8 +157,7 @@ export const getVCard = async (req, res) => {
   const user = await userService.getUserById(userId);
 
   if (!user) {
-    return res.status(404)
-      .json({ errors: ['User not found.'] });
+    return res.status(404).json({ errors: ['User not found.'] });
   }
 
   const vCard = {
@@ -198,21 +170,17 @@ export const getVCard = async (req, res) => {
 
 export const getVcf = async (req, res) => {
   const userId = req.params.id;
-
   const user = await userService.getUserById(userId);
 
   if (!user) {
-    return res.status(404)
-      .json({ errors: ['User not found.'] });
+    return res.status(404).json({ errors: ['User not found.'] });
   }
 
   const vCard = user.vCard.toObject();
-
   const theme = await themeService.getThemeById(user.themeId);
 
   if (!theme) {
-    return res.status(404)
-      .json({ errors: ['Theme not found.'] });
+    return res.status(404).json({ errors: ['Theme not found.'] });
   }
 
   const version = +req.query.v;
@@ -231,8 +199,7 @@ export const deleteUser = async (req, res) => {
   const user = await userService.deleteUserById(id);
 
   if (!user) {
-    return res.status(404)
-      .json({ errors: ['User not found.'] });
+    return res.status(404).json({ errors: ['User not found.'] });
   }
 
   return res.json({ message: 'User deleted successfully.' });
@@ -247,17 +214,14 @@ export const uploadImage = async (req, res) => {
     await userService.uploadAvatarById(id, image, imageHeight);
 
     const user = await userService.getUserById(id);
-
     const theme = await themeService.getThemeById(user.themeId);
 
     if (!theme) {
-      return res.status(404)
-        .json({ errors: ['Theme not found.'] });
+      return res.status(404).json({ errors: ['Theme not found.'] });
     }
 
-    res.json('Success');
+    return res.json('Success');
   } catch (err) {
-    res.status(500)
-      .json({ errors: ['Error uploading image.'] });
+    return res.status(500).json({ errors: ['Error uploading image.'] });
   }
 };
