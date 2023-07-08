@@ -17,7 +17,7 @@
   "scripts": {
     "start": "node server.js --omit=dev",
     "dev": "cross-env nodemon server.js",
-    "db:init": "node src/data/ddl.js",
+    "db:init": "node src/scripts/ddl.js",
     "format": "eslint . --fix --ext .js",
     "lint": "eslint . --ext .js",
     "test:unit": "mocha ./tests/unit",

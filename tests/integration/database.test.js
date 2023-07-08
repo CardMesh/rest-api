@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import connection from '../../src/data/connection.js';
+import connection from '../../src/data/connection.data.js';
 
 dotenv.config();
 

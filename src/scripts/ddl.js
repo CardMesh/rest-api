@@ -3,7 +3,7 @@ import readline from 'readline';
 import argon2 from 'argon2';
 import Theme from '../models/theme.model.js';
 import User from '../models/user.model.js';
-import connection from './connection.js';
+import connection from '../data/connection.data.js';
 import { argon2Options } from '../configs/argon2.config.js';
 
 dotenv.config();
