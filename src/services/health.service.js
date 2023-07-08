@@ -1,7 +1,7 @@
-import { healthDTO } from '../dto/healthDTO.js';
+import { healthDto } from '../dto/health.dto.js';
 
 export const checkHealth = async () => {
   const health = { message: 'Success' };
 
-  return healthDTO(health);
+  return healthDto(health);
 };
