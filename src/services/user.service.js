@@ -122,7 +122,9 @@ export const getUsersByPageLimitAndSearchQuery = async (page, limit, searchQuery
 };
 
 export const updateUserSetting = async (id, theme) => {
-  const updateField = { 'settings.theme': theme };
+  const sanitizedTheme = sanitize(theme);
+
+  const updateField = { 'settings.theme': sanitizedTheme };
 
   const user = await User.findOneAndUpdate({ userId: { $eq: id } }, updateField)
     .exec();
@@ -135,12 +137,14 @@ export const updateUserSetting = async (id, theme) => {
 };
 
 export const updateUserVCard = async (userId, vCardData) => {
+  const sanitizedVCardData = sanitize(vCardData);
+
   const updateField = {
-    'vCard.contact': vCardData.contact,
-    'vCard.location': vCardData.location,
-    'vCard.person': vCardData.person,
-    'vCard.professional': vCardData.professional,
-    'vCard.socialMedia': vCardData.socialMedia,
+    'vCard.contact': sanitizedVCardData.contact,
+    'vCard.location': sanitizedVCardData.location,
+    'vCard.person': sanitizedVCardData.person,
+    'vCard.professional': sanitizedVCardData.professional,
+    'vCard.socialMedia': sanitizedVCardData.socialMedia,
   };
 
   const user = await User.findOneAndUpdate({ userId }, updateField, { new: true })
