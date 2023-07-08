@@ -1,10 +1,11 @@
 import * as themeService from '../services/theme.service.js';
 import * as userService from '../services/user.service.js';
+import { paginationOptions } from '../configs/pagination.config.js';
 
 export const getAllThemes = async (req, res) => {
   try {
-    const page = +req.query.page || 1;
-    const limit = +req.query.limit || 10;
+    const page = +req.query.page || paginationOptions.page;
+    const limit = +req.query.limit || paginationOptions.limit;
     const searchQuery = req.query.search || '';
 
     const {
