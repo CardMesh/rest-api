@@ -53,7 +53,7 @@ export const getAllUsers = async (req, res) => {
     res.json({
       data: usersData.users,
       pagination: {
-        page: usersData.page,
+        page,
         limit: usersData.limit,
         totalUsers: usersData.totalUsers,
         totalPages: usersData.totalPages,

@@ -23,6 +23,7 @@ export const getThemesByPageLimitAndSearchQuery = async (page, limit, searchQuer
 
   return themesByPageLimitAndSearchQueryDTO(
     themes,
+    page,
     totalThemes,
     totalPages,
     nextPage,

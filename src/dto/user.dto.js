@@ -1,9 +1,9 @@
 export const userDTO = (user) => ({
+  userId: user.userId,
+  themeId: user.themeId,
   name: user.name,
   email: user.email,
-  userId: user.userId,
   role: user.role,
-  themeId: user.themeId,
 });
 
 export const usersDTO = (users) => users.map((user) => userDTO(user));
@@ -15,7 +15,7 @@ export const usersByPageLimitAndSearchQueryDTO = (
   nextPage,
   prevPage,
 ) => ({
-  users: users.map((user) => userDTO(user)),
+  users: usersDTO(users),
   totalUsers,
   totalPages,
   nextPage,

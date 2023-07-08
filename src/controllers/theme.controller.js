@@ -17,7 +17,7 @@ export const getAllThemes = async (req, res) => {
     res.json({
       data: themesData.themes,
       pagination: {
-        page: themesData.page,
+        page,
         limit: themesData.limit,
         totalThemes: themesData.totalThemes,
         totalPages: themesData.totalPages,

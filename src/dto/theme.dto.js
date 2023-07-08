@@ -51,6 +51,7 @@ export const themeDTO = (theme) => ({
 
 export const themesByPageLimitAndSearchQueryDTO = (
   themes,
+  page,
   totalThemes,
   totalPages,
   nextPage,
@@ -61,6 +62,7 @@ export const themesByPageLimitAndSearchQueryDTO = (
     themeId: theme.themeId,
   })),
   totalThemes,
+  page,
   totalPages,
   nextPage,
   prevPage,
