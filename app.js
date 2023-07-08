@@ -15,13 +15,13 @@ import { limiterOptions } from './src/configs/limiter.config.js';
 import { apiOptions } from './src/configs/api.config.js';
 import { fileUploadOptions } from './src/configs/fileupload.config.js';
 import { compressionOptions } from './src/configs/compression.config.js';
-//import { helmetOptions } from './src/configs/helmet.config.js';
+import { helmetOptions } from './src/configs/helmet.config.js';
 
 const app = express();
 
 app.use(cors(corsOptions));
 app.use(compression(compressionOptions));
-app.use(helmet());
+app.use(helmet(helmetOptions));
 app.use(fileUpload(fileUploadOptions));
 app.use(express.urlencoded(urlEncodedOptions));
 app.use(express.json(jsonOptions));
