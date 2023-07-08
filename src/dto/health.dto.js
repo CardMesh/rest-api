@@ -1,3 +1,3 @@
-export const healthDto = (health) => {
+export const healthDTO = (health) => {
   health.message;
 };
