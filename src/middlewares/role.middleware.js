@@ -3,7 +3,7 @@ export default (roles) => (req, res, next) => {
     next();
   } else {
     res.status(403)
-      .send({
+      .json({
         errors: ['Forbidden.'],
       });
   }
