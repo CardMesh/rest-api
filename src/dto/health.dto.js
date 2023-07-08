@@ -1,3 +1,3 @@
-export const healthDTO = (health) => {
-  health.message;
-};
+export const healthDTO = (health) => ({
+  message: health.message,
+});

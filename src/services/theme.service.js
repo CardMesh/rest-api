@@ -49,6 +49,8 @@ export const getThemeById = async (id) => {
 export const createTheme = async (options) => {
   const theme = await new Theme({
     name: options.name,
+    color: {},
+    align: {},
     display: {},
     logo: {
       size: {},

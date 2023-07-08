@@ -215,7 +215,7 @@ export const getVcf = async (req, res) => {
       .json({ errors: ['Theme not found.'] });
   }
 
-  const version = req.query.v;
+  const version = +req.query.v;
 
   const fullName = `${vCard.person.firstName} ${vCard.person.lastName}`;
 
