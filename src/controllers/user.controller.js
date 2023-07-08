@@ -1,5 +1,7 @@
+import sanitizeHtml from 'sanitize-html';
 import * as userService from '../services/user.service.js';
 import { paginationOptions } from '../configs/pagination.config.js';
+import { sanitizeOptions } from '../configs/sanitize.config.js';
 
 export const updateUser = async (req, res) => {
   try {
@@ -96,18 +98,22 @@ export const updateUserVCard = async (req, res) => {
   const { id: userId } = req.params;
 
   try {
+    const sanitizedBio = sanitizeHtml(professional.bio, sanitizeOptions);
+
     const updatedUser = await userService.updateUserVCard(userId, {
       contact,
       location,
       person,
-      professional,
+      professional: {
+        ...professional,
+        bio: sanitizedBio,
+      },
       socialMedia,
     });
 
     return res.json({ data: { vCardSchema: updatedUser.vCard } });
   } catch (err) {
-    return res.status(500)
-      .json({ errors: [err.message] });
+    return res.status(500).json({ errors: [err.message] });
   }
 };
 

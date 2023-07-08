@@ -1,10 +1,14 @@
-const padStartTwo = (num) => num.toString()
-  .padStart(2, '0');
+import sanitizeHtml from 'sanitize-html';
+
+const padStartTwo = (num) => num.toString().padStart(2, '0');
 
 export const formatTimeUTC = (date) => `${date.getUTCFullYear()}${padStartTwo(date.getUTCMonth() + 1)}${padStartTwo(date.getUTCDate())}T${padStartTwo(date.getUTCHours())}${padStartTwo(date.getUTCMinutes())}${padStartTwo(date.getUTCSeconds())}Z`;
 
 export const generateVCard = (userId, vCard, theme, version = 3) => {
   const workProp = version === 4 ? ';TYPE=work' : '';
+
+  const sanitizedBio = sanitizeHtml(vCard.professional.bio);
+
   let vCardString = `BEGIN:VCARD
 VERSION:${version === 4 ? '4.0' : '3.0'}
 FN:${vCard.professional.title} ${vCard.person.firstName} ${vCard.person.lastName}
@@ -15,7 +19,7 @@ EMAIL${workProp}:${vCard.contact.email}
 URL${workProp}:${vCard.contact.web}
 REV:${formatTimeUTC(new Date())}
 UID:urn:uuid:${userId}
-NOTE:${vCard.professional.bio}
+NOTE:${sanitizedBio}
 TZ:${vCard.location.timeZone}
 ADR${workProp}:;;${vCard.location.street}${vCard.location.storey ? `, ${vCard.location.storey}` : ''};${vCard.location.city};${vCard.location.state};${vCard.location.postalCode};${vCard.location.country}
 GEO:geo:${vCard.location.coordinates.latitude},${vCard.location.coordinates.longitude}
