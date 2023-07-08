@@ -1,7 +1,7 @@
 import sanitize from 'mongo-sanitize';
 import User from '../models/user.model.js';
 import convertImage from '../utils/image.util.js';
-import { userDTO, usersByPageLimitAndSearchQueryDTO } from '../dto/user.dto.js';
+import { userDTO, usersByPageLimitAndSearchQueryDTO, usersDTO } from '../dto/user.dto.js';
 import { generateVCard } from '../utils/vcard.util.js';
 
 export const updateUser = async (id, options) => {
@@ -213,4 +213,11 @@ export const uploadImage = async (id, image, imageHeight) => {
   } catch (err) {
     throw new Error('Error uploading avatar.');
   }
+};
+
+export const getUsersByThemeId = async (themeId) => {
+  const users = await User.find({ themeId })
+    .exec();
+
+  return usersDTO(users);
 };
