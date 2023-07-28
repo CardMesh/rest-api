@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
 import { randomUUID } from 'crypto';
+import mongoose from 'mongoose';
 
 const defaultTrue = {
   type: Boolean,
