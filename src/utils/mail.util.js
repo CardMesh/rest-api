@@ -25,7 +25,7 @@ const sendMail = async (to, subject, html) => {
     },
   });
 
-  const from = `"${FROM_NAME}" <${FROM_EMAIL}>"`;
+  const from = `${FROM_NAME} <${FROM_EMAIL}>`;
 
   await transporter.sendMail({
     from,
