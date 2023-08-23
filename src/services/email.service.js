@@ -27,5 +27,5 @@ export const sendRecoveryEmail = async (userId) => {
 
   const emailData = createRecoveryEmailDTO(user, resetLink);
 
-  return sendMail(emailData);
+  return sendMail(emailData.recipient, emailData.subject, emailData.content);
 };
