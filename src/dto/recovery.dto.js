@@ -1,9 +1,14 @@
 import { readFileSync } from 'fs';
+import { join } from 'path';
 import mustache from 'mustache';
 import mjml from 'mjml';
 
+const basePath = join(process.cwd(), 'src');
+
 export const generateRecoveryEmailContent = (name, resetLink) => {
-  const template = readFileSync('./src/templates/recovery.template.mjml', 'utf8');
+  const templatePath = join(basePath, 'templates', 'recovery.template.mjml');
+  const template = readFileSync(templatePath, 'utf8');
+
   const mjmlContent = mustache.render(template, {
     name,
     resetLink,
