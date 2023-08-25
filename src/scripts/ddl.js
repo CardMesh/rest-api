@@ -72,10 +72,13 @@ async function installUser(themeId) {
   try {
     await connection(process.env.DB_CONNECTION);
 
-    await Promise.all([
-      Theme.collection.drop(),
-      User.collection.drop(),
-    ]);
+    if (await Theme.exists()) {
+      await Theme.collection.drop();
+    }
+
+    if (await User.exists()) {
+      await User.collection.drop();
+    }
 
     const newTheme = await new Theme(theme).save();
     // eslint-disable-next-line no-console
