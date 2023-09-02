@@ -39,7 +39,6 @@ export const themeDTO = (theme) => ({
   logo: {
     size: {
       height: theme.logo.size.height,
-      width: theme.logo.size.width,
     },
     format: {
       png: theme.logo.format.png,

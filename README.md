@@ -22,11 +22,11 @@ cards in a web browser, accessible via NFC tags, QR codes, or direct URLs.
 
 | Version | Documentation |
 |---------|---------------|
-| 1.0.0   | current       |
+| 1.0.3   | current       |
 
 ### Requirements
 
-- `Node.js` >= 20.x
+- `Node.js` >= 18.x
 
 ## Documentation
 

@@ -71,12 +71,20 @@ export const updateThemeOptionsById = async (id, options) => {
     ...updatedOptions
   } = sanitizedOptions;
 
+  if (logo && logo.size && logo.size.height) {
+    logo.size.height = +logo.size.height;
+  }
+
+  const updateQuery = {
+    ...updatedOptions,
+    'logo.size': logo.size,
+  };
+
   const updatedTheme = await Theme.findOneAndUpdate(
     { themeId: id },
-    updatedOptions,
+    updateQuery,
     { new: true },
-  )
-    .exec();
+  ).exec();
 
   if (!updatedTheme) {
     throw new Error('Theme not found.');
