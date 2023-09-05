@@ -9,6 +9,8 @@ export const generateVCard = (userId, vCard, theme, version = 3) => {
 
   const sanitizedBio = sanitizeHtml(vCard.professional.bio);
 
+  const cleanBio = sanitizedBio.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ');
+
   let vCardString = `BEGIN:VCARD
 VERSION:${version === 4 ? '4.0' : '3.0'}
 FN:${vCard.professional.title} ${vCard.person.firstName} ${vCard.person.lastName}
@@ -19,7 +21,7 @@ EMAIL${workProp}:${vCard.contact.email}
 URL${workProp}:${vCard.contact.web}
 REV:${formatTimeUTC(new Date())}
 UID:urn:uuid:${userId}
-NOTE:${sanitizedBio}
+NOTE:${cleanBio}
 TZ:${vCard.location.timeZone}
 ADR${workProp}:;;${vCard.location.street}${vCard.location.storey ? `, ${vCard.location.storey}` : ''};${vCard.location.city};${vCard.location.state};${vCard.location.postalCode};${vCard.location.country}
 GEO:geo:${vCard.location.coordinates.latitude},${vCard.location.coordinates.longitude}
