@@ -6,10 +6,7 @@ import validate from '../middlewares/validate.middleware.js';
 import roles from '../middlewares/role.middleware.js';
 import verifyToken from '../middlewares/verify.middleware.js';
 import {
-  loginRules,
-  recoverRules,
-  resetRules,
-  signupRules,
+  loginRules, recoverRules, resetRules, signupRules,
 } from './validations/auth.validation.js';
 
 const router = Router();
