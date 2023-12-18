@@ -41,7 +41,7 @@
     "mustache": "^4.2.0",
     "nodemailer": "^6.9.7",
     "sanitize-html": "^2.11.0",
-    "sharp": "^0.33.0"
+    "sharp": "^0.33.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
