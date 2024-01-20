@@ -1,11 +1,11 @@
 <h1 align="center">Restful CRUD API for CardMesh</h1>
 
-[![CI status](https://github.com/CardMesh/rest-api/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/CardMesh/rest-api/actions/workflows/ci.yml)
-[![Contributors](https://img.shields.io/github/contributors/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/graphs/contributors)
-[![Forks](https://img.shields.io/github/forks/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/network/members)
-[![Stargazers](https://img.shields.io/github/stars/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/stargazers)
-[![Issues](https://img.shields.io/github/issues/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/issues)
-[![MIT License](https://img.shields.io/github/license/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/blob/main/LICENSE)
+[![CI status](https://github.com/CardMesh/rest-api/v1/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/CardMesh/rest-api/v1/actions/workflows/ci.yml)
+[![Contributors](https://img.shields.io/github/contributors/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/v1/graphs/contributors)
+[![Forks](https://img.shields.io/github/forks/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/v1/network/members)
+[![Stargazers](https://img.shields.io/github/stars/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/v1/stargazers)
+[![Issues](https://img.shields.io/github/issues/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/v1/issues)
+[![MIT License](https://img.shields.io/github/license/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/v1/blob/main/LICENSE)
 
 CardMesh is an app aimed at modernizing the sharing of business cards within a company. It displays digital business
 cards in a web browser, accessible via NFC tags, QR codes, or direct URLs.
@@ -38,34 +38,34 @@ The app defines the following CRUD APIs.
 
 | Method | Url               | Description | 
 |--------|-------------------|-------------|
-| POST   | /api/auth/signup  | Sign up     |
-| POST   | /api/auth/login   | Log in      |
-| POST   | /api/auth/recover | Recover     |
-| PUT    | /api/auth/reset   | Reset       |
+| POST   | /api/v1/auth/signup  | Sign up     |
+| POST   | /api/v1/auth/login   | Log in      |
+| POST   | /api/v1/auth/recover | Recover     |
+| PUT    | /api/v1/auth/reset   | Reset       |
 
 ### Users
 
 | Method | Url                              | Description                               |
 |--------|----------------------------------|-------------------------------------------|
-| GET    | /api/users                       | Get all users                             |
-| GET    | /api/users/:id                   | Get specific user                         |
-| GET    | /api/users/:id/vcf               | Get vcf file for specific user            |
-| GET    | /api/users/:id/vcards            | Get vcard options for specific user       |
-| GET    | /api/users/:id/statistics/clicks | Get click statistics for specific user    |
-| POST   | /api/users/:id/images            | Upload image for specific user            |
-| POST   | /api/users/:id/statistics/clicks | Create click statistics for specific user | 
-| PUT    | /api/users/:id/settings/:setting | Update setting for specific user          |
-| PUT    | /api/users/:id/vcards            | Update vcard options for specific user    |
-| DELETE | /api/users/:id                   | Delete specific user                      |
+| GET    | /api/v1/users                       | Get all users                             |
+| GET    | /api/v1/users/:id                   | Get specific user                         |
+| GET    | /api/v1/users/:id/vcf               | Get vcf file for specific user            |
+| GET    | /api/v1/users/:id/vcards            | Get vcard options for specific user       |
+| GET    | /api/v1/users/:id/statistics/clicks | Get click statistics for specific user    |
+| POST   | /api/v1/users/:id/images            | Upload image for specific user            |
+| POST   | /api/v1/users/:id/statistics/clicks | Create click statistics for specific user | 
+| PUT    | /api/v1/users/:id/settings/:setting | Update setting for specific user          |
+| PUT    | /api/v1/users/:id/vcards            | Update vcard options for specific user    |
+| DELETE | /api/v1/users/:id                   | Delete specific user                      |
 
 ### Themes
 
 | Method | Url                    | Description                      | 
 |--------|------------------------|----------------------------------|
-| GET    | /api/themes            | Get all themes                   |
-| GET    | /api/themes/:id        | Get specific theme               |
-| POST   | /api/themes/:id/images | Upload images for specific theme |
-| PUT    | /api/themes/:id        | Update specific theme            |
+| GET    | /api/v1/themes            | Get all themes                   |
+| GET    | /api/v1/themes/:id        | Get specific theme               |
+| POST   | /api/v1/themes/:id/images | Upload images for specific theme |
+| PUT    | /api/v1/themes/:id        | Update specific theme            |
 
 ## Steps to setup
 
@@ -105,7 +105,7 @@ docker-compose up -d
 
 ### Roadmap
 
-See the [open issues](https://github.com/CardMesh/rest-api/issues) for a complete list of proposed
+See the [open issues](https://github.com/CardMesh/rest-api/v1/issues) for a complete list of proposed
 features (and known issues).
 
 ### Contributing
