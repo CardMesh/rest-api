@@ -1,11 +1,11 @@
 <h1 align="center">Restful CRUD API for CardMesh</h1>
 
-[![CI status](https://github.com/CardMesh/rest-api/v1/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/CardMesh/rest-api/v1/actions/workflows/ci.yml)
-[![Contributors](https://img.shields.io/github/contributors/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/v1/graphs/contributors)
-[![Forks](https://img.shields.io/github/forks/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/v1/network/members)
-[![Stargazers](https://img.shields.io/github/stars/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/v1/stargazers)
-[![Issues](https://img.shields.io/github/issues/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/v1/issues)
-[![MIT License](https://img.shields.io/github/license/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/v1/blob/main/LICENSE)
+[![CI status](https://github.com/CardMesh/rest-api/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/CardMesh/rest-api/actions/workflows/ci.yml)
+[![Contributors](https://img.shields.io/github/contributors/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/graphs/contributors)
+[![Forks](https://img.shields.io/github/forks/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/network/members)
+[![Stargazers](https://img.shields.io/github/stars/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/stargazers)
+[![Issues](https://img.shields.io/github/issues/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/issues)
+[![MIT License](https://img.shields.io/github/license/CardMesh/rest-api.svg)](https://github.com/CardMesh/rest-api/blob/main/LICENSE)
 
 CardMesh is an app aimed at modernizing the sharing of business cards within a company. It displays digital business
 cards in a web browser, accessible via NFC tags, QR codes, or direct URLs.
@@ -105,7 +105,7 @@ docker-compose up -d
 
 ### Roadmap
 
-See the [open issues](https://github.com/CardMesh/rest-api/v1/issues) for a complete list of proposed
+See the [open issues](https://github.com/CardMesh/rest-api/issues) for a complete list of proposed
 features (and known issues).
 
 ### Contributing
