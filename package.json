@@ -35,7 +35,7 @@
     "express-validator": "^7.0.1",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mjml": "^4.14.1",
+    "mjml": "^4.15.2",
     "mongo-sanitize": "^1.1.0",
     "mongoose": "^8.1.1",
     "mustache": "^4.2.0",
