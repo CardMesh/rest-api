@@ -39,7 +39,7 @@
     "mongo-sanitize": "^1.1.0",
     "mongoose": "^8.6.2",
     "mustache": "^4.2.0",
-    "nodemailer": "^6.9.14",
+    "nodemailer": "^6.9.15",
     "sanitize-html": "^2.13.0",
     "sharp": "^0.33.5"
   },
